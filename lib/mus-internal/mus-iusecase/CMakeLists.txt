@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(mus-iusecase INTERFACE)
 
-target_link_libraries(mus-iusecase mus-dto mus-irepo)
+target_link_libraries(mus-iusecase INTERFACE mus-dto mus-irepo)
 target_include_directories(mus-iusecase INTERFACE include/)

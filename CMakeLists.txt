@@ -33,6 +33,7 @@ if(WITH_TESTS)
     add_subdirectory(tests)
 endif()
 
-add_executable(mus_run ${SOURCES})
+add_executable(run_mus ${SOURCES})
 
-target_include_directories(mus_run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(run_mus PUBLIC http-server ws-server mus-controller)
+target_include_directories(run_mus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
