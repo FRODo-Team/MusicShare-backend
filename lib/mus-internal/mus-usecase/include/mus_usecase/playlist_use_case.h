@@ -2,13 +2,13 @@
 #define MUS_INTERNAL_MUS_USECASE_PLAYLIST_USE_CASE_H_
 
 #include "iplaylist_use_case.h"
-#include "iplaylist_reprository.h"
+#include "iplaylist_repository.h"
 
 class PlaylistUseCase : IPlaylistUseCase {
 public:
     PlaylistUseCase() = delete;
 
-    PlaylistUseCase(IPlaylistReprository& playlist_rep);
+    PlaylistUseCase(IPlaylistRepository& playlist_rep);
 
     PlaylistUseCase(const PlaylistUseCase& playlist_use_case);
 
@@ -33,7 +33,7 @@ public:
     vector<SongResponseDTO> GetSongs(uint32_t id_playlist) override;
 
 private:
-    IPlaylistReprository& m_playlist_rep;
+    IPlaylistRepository& m_playlist_rep;
 };
 
 #endif  // MUS_INTERNAL_MUS_USECASE_PLAYLIST_USE_CASE_H_

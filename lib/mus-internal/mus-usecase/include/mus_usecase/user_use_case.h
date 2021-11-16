@@ -2,13 +2,13 @@
 #define MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 
 #include "iuser_use_case.h"
-#include "iuser_reprository.h"
+#include "iuser_repository.h"
 
 class UserUseCase : IUserUseCase {
 public:
     UserUseCase() = delete;
 
-    UserUseCase(IUserReprository& user_rep);
+    UserUseCase(IUserRepository& user_rep);
 
     UserUseCase(const UserUseCase& user_use_case);
 
@@ -27,7 +27,7 @@ public:
     ~UserUseCase();
 
 private:
-    IUserReprository& m_user_rep;
+    IUserRepository& m_user_rep;
 };
 
 #endif   // MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
