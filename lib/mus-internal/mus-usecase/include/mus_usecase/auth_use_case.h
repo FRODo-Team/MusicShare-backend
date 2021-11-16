@@ -6,7 +6,7 @@
 
 class AuthUseCase : IAuthUseCase {
 public:
-    AuthUseCase();
+    AuthUseCase() = delete;
 
     AuthUseCase(IAuthReprository& auth_rep);
 

@@ -12,9 +12,9 @@ public:
     ChatUseCase(const IChatReprository& chat_rep,
                 const IChatMessageRepository& chat_message_rep);
 
-    ChatUseCase(const ChatUseCase& chat_use_case) = default;
+    ChatUseCase(const ChatUseCase& chat_use_case);
 
-    ChatUseCase& operator=(const ChatUseCase& chat_use_case) = default;
+    ChatUseCase& operator=(const ChatUseCase& chat_use_case);
 
     std::optional<uint32_t> Create(ChatRequestDTO chat) override;
 
