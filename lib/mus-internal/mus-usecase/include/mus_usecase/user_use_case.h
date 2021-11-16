@@ -2,7 +2,7 @@
 #define MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 
 #include "iuser_use_case.h"
-#include "iuser_reprositoriy.h"
+#include "iuser_reprository.h"
 
 class UserUseCase : IUserUseCase {
 public:
@@ -14,22 +14,20 @@ public:
 
     UserUseCase& operator=(const UserUseCase& user_use_case);
 
-    bool Create(UserRequestDTO user) override;
+    std::optional<uint32_t> Create(UserRequestDTO user) override;
 
     std::optional<UserResponseDTO> Update(UserRequestDTO user) override;
 
-    std::vector<UserResponseDTO> GetByName(std::string name) override;
-
-    std::vector<UserResponseDTO> GetBySurname(strd::string surname) override;
+    std::vector<UserResponseDTO> GetByUsername(std::string username) override;
 
     UserResponseDTO GetByNickname(std::string nickname) override;
 
-    std::optional<UserResponseDTO> GetById(int id) override;
+    std::optional<UserResponseDTO> GetById(uint32_t id) override;
 
     ~UserUseCase();
 
 private:
-    IUserReprositoriy& m_user_rep;
+    IUserReprository& m_user_rep;
 };
 
 #endif   // MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
