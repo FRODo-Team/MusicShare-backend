@@ -38,6 +38,12 @@ compile_commands.json
 
 # Build
 build/
+cmake-build-debug/
 
 # PVS-Studio
 PVS-Studio.log
+
+# IDE
+.vscode/
+.idea/
+
