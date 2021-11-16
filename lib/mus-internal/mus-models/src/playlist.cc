@@ -44,10 +44,9 @@ void Playlist::AppendSong(uint32_t song_id) {
 
 void Playlist::RemoveSong(uint32_t song_id) {
     auto iter = std::find(m_song_ids.begin(), m_song_ids.end(), song_id);
-    if (iter == m_song_ids.end()) {
+    if (iter != m_song_ids.end()) {
         m_song_ids.erase(iter);
     }
-    std::remove(m_song_ids.begin(), m_song_ids.end(), )
 }
 
 } // namespace music_share
