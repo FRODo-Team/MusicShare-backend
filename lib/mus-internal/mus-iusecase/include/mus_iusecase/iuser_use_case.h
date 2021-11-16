@@ -1,6 +1,7 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 
+#include <cstdint>
 #include <vector>
 #include <string>
 
@@ -15,17 +16,15 @@ public:
 
     IUserUseCase& operator=(const IUserUseCase& user_use_case) = default;
 
-    virtual bool Create(UserRequestDTO user) = 0;
+    virtual std::optional<uint32_t> Create(UserRequestDTO user) = 0;
 
     virtual std::optional<UserResponseDTO> Update(UserRequestDTO user) = 0;
 
-    virtual std::vector<UserResponseDTO> GetByName(std::string name) = 0;
-
-    virtual std::vector<UserResponseDTO> GetBySurname(strd::string surname) = 0;
+    virtual std::vector<UserResponseDTO> GetByUsername(std::string username) = 0;
 
     virtual UserResponseDTO GetByNickname(std::string nickname) = 0;
 
-    virtual std::optional<UserResponseDTO> GetById(int id) = 0;
+    virtual std::optional<UserResponseDTO> GetById(uint32_t id) = 0;
 
     virtual ~IUserUseCase() {};
 };

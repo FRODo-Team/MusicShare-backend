@@ -1,6 +1,7 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_ICHAT_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_ICHAT_USE_CASE_H_
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -19,15 +20,16 @@ public:
 
     virtual bool Create(ChatRequestDTO chat) = 0;
 
-    virtual bool SendMessage(MessageRequestDTO message, int id_chat,
-                             int id_user) = 0;
+    virtual bool SendMessage(MessageRequestDTO message, uint32_t id_chat,
+                             uint32_t id_user) = 0;
 
-    virtual std::vector<MessageResponseDTO> GetUserMessages(int user_id,
-                                                            int chat_id) = 0;
+    virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
+                                                            uint32_t chat_id) = 0;
 
-    virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(int id) = 0;
+    virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) = 0;
 
-    virtual std::optional<ChatResponseDTO> GetByIdOfTwoUser(int first_id, int second_id) = 0;
+    virtual std::optional<ChatResponseDTO> GetByIdOfTwoUser(uint32_t first_id,
+                                                            uint32_t second_id) = 0;
 
     virtual ~IChatUseCase() {};
 };
