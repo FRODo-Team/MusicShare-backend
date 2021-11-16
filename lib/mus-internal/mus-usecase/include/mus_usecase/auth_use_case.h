@@ -2,13 +2,13 @@
 #define MUS_INTERNAL_MUS_USECASE_AUTH_USE_CASE_H_
 
 #include "iauth_use_case.h"
-#include "iauth_reprository.h"
+#include "iauth_repository.h"
 
 class AuthUseCase : IAuthUseCase {
 public:
     AuthUseCase() = delete;
 
-    AuthUseCase(IAuthReprository& auth_rep);
+    AuthUseCase(IAuthRepository& auth_rep);
 
     AuthUseCase(const AuthUseCase& auth_use_case);
 
@@ -21,7 +21,7 @@ public:
     ~AuthUseCase();
 
 private:
-    IAuthReprository& m_auth_rep;
+    IAuthRepository& m_auth_rep;
 };
 
 #endif  // MUS_INTERNAL_MUS_USECASE_AUTH_USE_CASE_H_

@@ -3,7 +3,7 @@
 
 #include "ichat_use_case.h"
 #include "ichat_message_reprositoriy.h"
-#include "ichat_reprository.h"
+#include "ichat_repository.h"
 
 class ChatUseCase : IChatUseCase {
 public:

@@ -2,13 +2,13 @@
 #define MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_
 
 #include "isong_use_case.h"
-#include "isong_reprository.h"
+#include "isong_repository.h"
 
 class SongUseCase : ISongUseCase {
 public:
     SongUseCase() = delete;
 
-    SongUseCase(ISongReprository& song_rep);
+    SongUseCase(ISongRepository& song_rep);
 
     SongUseCase(const SongUseCase& song_use_case);
 
@@ -23,7 +23,7 @@ public:
     ~ISongUseCase();
 
 private:
-    ISongReprository& m_song_rep;
+    ISongRepository& m_song_rep;
 };
 
 
