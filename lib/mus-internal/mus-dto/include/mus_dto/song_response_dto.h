@@ -12,7 +12,7 @@ struct SongResponseDTO {
 
     uint32_t id;
     std::string name;
-    std::strng author;
+    std::string author;
     std::string path;
 };
 
