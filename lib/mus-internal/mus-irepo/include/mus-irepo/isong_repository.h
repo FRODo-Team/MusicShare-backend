@@ -11,7 +11,7 @@ namespace music_share {
 class ISongRepository : public IRepository<Song> {
 public:
     virtual std::vector<Song> FindByTitle(const std::string& title) = 0;
-    virtual std::vector<Song> FindByAuthor(const std::string& author) = 0;
+    virtual std::vector<Song> FindByArtist(const std::string& artist) = 0;
 };
 
 } // namespace music_share
