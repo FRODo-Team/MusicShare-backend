@@ -1,14 +1,14 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_
 
-#include "isong_use_case.h"
-#include "isong_repository.h"
+#include "mus-iusecase/isong_use_case.h"
+#include "mus-irepo/isong_repository.h"
 
-class SongUseCase : ISongUseCase {
+class SongUseCase : public ISongUseCase {
 public:
     SongUseCase() = delete;
 
-    SongUseCase(ISongRepository& song_rep);
+    SongUseCase(music_share::ISongRepository& song_rep);
 
     SongUseCase(const SongUseCase& song_use_case);
 
@@ -18,12 +18,12 @@ public:
 
     std::vector<SongResponseDTO> GetByTitle(std::string title) override;
 
-    vector<SongResponseDTO> GetByArtist(std::string artist) override;
+    std::vector<SongResponseDTO> GetByArtist(std::string artist) override;
 
-    ~ISongUseCase();
+    ~SongUseCase();
 
 private:
-    ISongRepository& m_song_rep;
+    music_share::ISongRepository& m_song_rep;
 };
 
 

@@ -1,14 +1,14 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 
-#include "iuser_use_case.h"
-#include "iuser_repository.h"
+#include "mus-iusecase/iuser_use_case.h"
+#include "mus-irepo/iuser_repository.h"
 
-class UserUseCase : IUserUseCase {
+class UserUseCase : public IUserUseCase {
 public:
     UserUseCase() = delete;
 
-    UserUseCase(IUserRepository& user_rep);
+    UserUseCase(music_share::IUserRepository& user_rep);
 
     UserUseCase(const UserUseCase& user_use_case);
 
@@ -20,14 +20,14 @@ public:
 
     std::vector<UserResponseDTO> GetByUsername(std::string username) override;
 
-    UserResponseDTO GetByNickname(std::string nickname) override;
+    std::optional<UserResponseDTO> GetByNickname(std::string nickname) override;
 
     std::optional<UserResponseDTO> GetById(uint32_t id) override;
 
     ~UserUseCase();
 
 private:
-    IUserRepository& m_user_rep;
+    music_share::IUserRepository& m_user_rep;
 };
 
 #endif   // MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_

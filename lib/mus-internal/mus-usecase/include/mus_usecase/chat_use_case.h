@@ -1,16 +1,16 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_CHAT_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_CHAT_USE_CASE_H_
 
-#include "ichat_use_case.h"
-#include "ichat_message_reprositoriy.h"
-#include "ichat_repository.h"
+#include "mus-iusecase/ichat_use_case.h"
+#include "mus-irepo/ichat_message_reprositoriy.h"
+#include "mus-irepo/ichat_repository.h"
 
-class ChatUseCase : IChatUseCase {
+class ChatUseCase : public IChatUseCase {
 public:
     ChatUseCase() = delete;
 
-    ChatUseCase(const IChatReprository& chat_rep,
-                const IChatMessageRepository& chat_message_rep);
+    ChatUseCase(const music_share::IChatReprository& chat_rep,
+                const music_share::IChatMessageRepository& chat_message_rep);
 
     ChatUseCase(const ChatUseCase& chat_use_case);
 
@@ -18,8 +18,8 @@ public:
 
     std::optional<uint32_t> Create(ChatRequestDTO chat) override;
 
-    bool SendMessage(MessageRequestDTO message, uint32_t id_chat,
-                     uint32_t id_user) override;
+    bool SendMessage(MessageRequestDTO message, uint32_t chat_id,
+                     uint32_t user_id) override;
 
     std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
                                                     uint32_t chat_id) override;
@@ -32,8 +32,8 @@ public:
     ~ChatUseCase();
 
 private:
-    IChatReprository& m_chat_rep;
-    IChatMessageRepository& m_chat_message_rep;
+    music_share::IChatReprository& m_chat_rep;
+    music_share::IChatMessageRepository& m_chat_message_rep;
 
 };
 
