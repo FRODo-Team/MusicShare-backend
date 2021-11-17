@@ -1,7 +1,7 @@
 #ifndef MUS_INTERNAL_MUS_IREPO_IPLAYLIST_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IPLAYLIST_REPOSITORY_H_
 
-#include "mus_models/playlist.h"
+#include "mus-models/playlist.h"
 #include "irepository.h"
 
 namespace music_share {
