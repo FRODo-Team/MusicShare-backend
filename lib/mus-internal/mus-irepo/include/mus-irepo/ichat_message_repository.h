@@ -1,7 +1,9 @@
 #ifndef MUS_INTERNAL_MUS_IREPO_IMESSAGE_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IMESSAGE_REPOSITORY_H_
 
-#include "mus_models/chat_message.h"
+#include <vector>
+
+#include "mus-models/chat_message.h"
 #include "irepository.h"
 
 namespace music_share {

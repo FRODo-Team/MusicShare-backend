@@ -3,13 +3,15 @@
 
 #include "mus-dto/user_request_dto.h"
 
+namespace music_share {
+
 class IAuthUseCase {
 public:
     IAuthUseCase() = default;
 
     IAuthUseCase(const IAuthUseCase& auth_use_case) = default;
 
-    IChatUseCase& operator=(const IAuthUseCase& auth_use_case) = default;
+    IAuthUseCase& operator=(const IAuthUseCase& auth_use_case) = default;
 
     virtual bool Authorization(UserRequestDTO& user) = 0;
 
@@ -17,5 +19,7 @@ public:
 
     virtual ~IAuthUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_IAUTH_USE_CASE_H_

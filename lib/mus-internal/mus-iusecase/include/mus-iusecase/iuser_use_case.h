@@ -3,9 +3,12 @@
 
 #include <vector>
 #include <string>
+#include <optional>
 
 #include "mus-dto/user_request_dto.h"
 #include "mus-dto/user_response_dto.h"
+
+namespace music_share {
 
 class IUserUseCase {
 public:
@@ -27,5 +30,7 @@ public:
 
     virtual ~IUserUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_

@@ -1,9 +1,10 @@
 #ifndef MUS_INTERNAL_MUS_IREPO_ISONG_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_ISONG_REPOSITORY_H_
 
-#include "mus_models/song.h"
-#include "irepository.h"
 #include <vector>
+
+#include "mus-models/song.h"
+#include "irepository.h"
 
 namespace music_share {
 

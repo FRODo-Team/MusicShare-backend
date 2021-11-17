@@ -4,8 +4,11 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <optional>
 
 #include "mus-dto/song_response_dto.h"
+
+namespace music_share {
 
 class ISongUseCase {
 public:
@@ -23,5 +26,7 @@ public:
 
     virtual ~ISongUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_ISONG_USE_CASE_H_
