@@ -3,11 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <optional>
 
 #include "mus-dto/chat_request_dto.h"
 #include "mus-dto/chat_response_dto.h"
 #include "mus-dto/message_response_dto.h"
 #include "mus-dto/message_request_dto.h"
+
+namespace music_share {
 
 class IChatUseCase {
 public:
@@ -32,5 +35,7 @@ public:
 
     virtual ~IChatUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_ICHAT_USE_CASE_H_

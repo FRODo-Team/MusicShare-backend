@@ -1,8 +1,10 @@
 #ifndef MUS_INTERNAL_MUS_IREPO_IUSER_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IUSER_REPOSITORY_H_
 
+#include <vector>
+
+#include "mus-models/user.h"
 #include "irepository.h"
-#include "mus_models/user.h"
 
 namespace music_share {
 

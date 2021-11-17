@@ -2,11 +2,14 @@
 #define MUS_INTERNAL_MUS_IUSECASE_IPLAYLIST_USE_CASE_H_
 
 #include <vector>
+#include <optional>
 
 #include "mus-dto/playlist_request_dto.h"
 #include "mus-dto/playlist_song_request_dto.h"
 #include "mus-dto/playlist_response_dto.h"
 #include "mus-dto/song_response_dto.h"
+
+namespace music_share {
 
 class IPlaylistUseCase {
 public:
@@ -36,5 +39,7 @@ public:
 
     virtual ~IPlaylistUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_IPLAYLIST_USE_CASE_H_
