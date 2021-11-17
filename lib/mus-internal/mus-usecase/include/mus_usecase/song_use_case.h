@@ -1,30 +1,34 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_
 
-#include "isong_use_case.h"
-#include "isong_repository.h"
+#include "mus-iusecase/isong_use_case.h"
+#include "mus-irepo/isong_repository.h"
 
-class SongUseCase : ISongUseCase {
-public:
-    SongUseCase() = delete;
+namespace music_share {
 
-    SongUseCase(ISongRepository& song_rep);
+    class SongUseCase : public ISongUseCase {
+    public:
+        SongUseCase() = delete;
 
-    SongUseCase(const SongUseCase& song_use_case);
+        SongUseCase(ISongRepository &song_rep);
 
-    SongUseCase& operator=(const SongUseCase& song_use_case);
+        SongUseCase(const SongUseCase &song_use_case);
 
-    std::optional<SongResponseDTO> GetById(uint32_t id) override;
+        SongUseCase &operator=(const SongUseCase &song_use_case);
 
-    std::vector<SongResponseDTO> GetByTitle(std::string title) override;
+        std::optional<SongResponseDTO> GetById(uint32_t id) override;
 
-    vector<SongResponseDTO> GetByArtist(std::string artist) override;
+        std::vector<SongResponseDTO> GetByTitle(std::string title) override;
 
-    ~ISongUseCase();
+        std::vector<SongResponseDTO> GetByArtist(std::string artist) override;
 
-private:
-    ISongRepository& m_song_rep;
-};
+        ~SongUseCase();
+
+    private:
+        ISongRepository &m_song_rep;
+    };
+
+}
 
 
 #endif  // MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_

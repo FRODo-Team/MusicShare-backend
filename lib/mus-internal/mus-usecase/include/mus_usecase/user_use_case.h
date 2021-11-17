@@ -1,33 +1,37 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
 
-#include "iuser_use_case.h"
-#include "iuser_repository.h"
+#include "mus-iusecase/iuser_use_case.h"
+#include "mus-irepo/iuser_repository.h"
 
-class UserUseCase : IUserUseCase {
-public:
-    UserUseCase() = delete;
+namespace music_share {
 
-    UserUseCase(IUserRepository& user_rep);
+    class UserUseCase : public IUserUseCase {
+    public:
+        UserUseCase() = delete;
 
-    UserUseCase(const UserUseCase& user_use_case);
+        UserUseCase(IUserRepository &user_rep);
 
-    UserUseCase& operator=(const UserUseCase& user_use_case);
+        UserUseCase(const UserUseCase &user_use_case);
 
-    std::optional<uint32_t> Create(UserRequestDTO user) override;
+        UserUseCase &operator=(const UserUseCase &user_use_case);
 
-    std::optional<UserResponseDTO> Update(UserRequestDTO user) override;
+        std::optional<uint32_t> Create(UserRequestDTO user) override;
 
-    std::vector<UserResponseDTO> GetByUsername(std::string username) override;
+        std::optional<UserResponseDTO> Update(UserRequestDTO user) override;
 
-    UserResponseDTO GetByNickname(std::string nickname) override;
+        std::vector<UserResponseDTO> GetByUsername(std::string username) override;
 
-    std::optional<UserResponseDTO> GetById(uint32_t id) override;
+        std::optional<UserResponseDTO> GetByNickname(std::string nickname) override;
 
-    ~UserUseCase();
+        std::optional<UserResponseDTO> GetById(uint32_t id) override;
 
-private:
-    IUserRepository& m_user_rep;
-};
+        ~UserUseCase();
+
+    private:
+        IUserRepository &m_user_rep;
+    };
+
+}
 
 #endif   // MUS_INTERNAL_MUS_USECASE_USER_USE_CASE_H_
