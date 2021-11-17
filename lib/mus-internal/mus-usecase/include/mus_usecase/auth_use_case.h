@@ -4,24 +4,28 @@
 #include "mus-iusecase/iauth_use_case.h"
 #include "mus-irepo/iauth_repository.h"
 
-class AuthUseCase : public IAuthUseCase {
-public:
-    AuthUseCase() = delete;
+namespace music_share {
 
-    AuthUseCase(music_share::IAuthRepository& auth_rep);
+    class AuthUseCase : public IAuthUseCase {
+    public:
+        AuthUseCase() = delete;
 
-    AuthUseCase(const AuthUseCase& auth_use_case);
+        AuthUseCase(IAuthRepository &auth_rep);
 
-    AuthUseCase& operator=(const AuthUseCase& auth_use_case);
+        AuthUseCase(const AuthUseCase &auth_use_case);
 
-    bool Authorization(UserRequestDTO user) override;
+        AuthUseCase &operator=(const AuthUseCase &auth_use_case);
 
-    bool Authentication(UserRequestDTO user) override;
+        bool Authorization(UserRequestDTO user) override;
 
-    ~AuthUseCase();
+        bool Authentication(UserRequestDTO user) override;
 
-private:
-    music_share::IAuthRepository& m_auth_rep;
-};
+        ~AuthUseCase();
+
+    private:
+        IAuthRepository &m_auth_rep;
+    };
+
+}
 
 #endif  // MUS_INTERNAL_MUS_USECASE_AUTH_USE_CASE_H_

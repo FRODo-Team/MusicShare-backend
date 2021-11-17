@@ -4,27 +4,31 @@
 #include "mus-iusecase/isong_use_case.h"
 #include "mus-irepo/isong_repository.h"
 
-class SongUseCase : public ISongUseCase {
-public:
-    SongUseCase() = delete;
+namespace music_share {
 
-    SongUseCase(music_share::ISongRepository& song_rep);
+    class SongUseCase : public ISongUseCase {
+    public:
+        SongUseCase() = delete;
 
-    SongUseCase(const SongUseCase& song_use_case);
+        SongUseCase(ISongRepository &song_rep);
 
-    SongUseCase& operator=(const SongUseCase& song_use_case);
+        SongUseCase(const SongUseCase &song_use_case);
 
-    std::optional<SongResponseDTO> GetById(uint32_t id) override;
+        SongUseCase &operator=(const SongUseCase &song_use_case);
 
-    std::vector<SongResponseDTO> GetByTitle(std::string title) override;
+        std::optional<SongResponseDTO> GetById(uint32_t id) override;
 
-    std::vector<SongResponseDTO> GetByArtist(std::string artist) override;
+        std::vector<SongResponseDTO> GetByTitle(std::string title) override;
 
-    ~SongUseCase();
+        std::vector<SongResponseDTO> GetByArtist(std::string artist) override;
 
-private:
-    music_share::ISongRepository& m_song_rep;
-};
+        ~SongUseCase();
+
+    private:
+        ISongRepository &m_song_rep;
+    };
+
+}
 
 
 #endif  // MUS_INTERNAL_MUS_USECASE_SONG_USE_CASE_H_

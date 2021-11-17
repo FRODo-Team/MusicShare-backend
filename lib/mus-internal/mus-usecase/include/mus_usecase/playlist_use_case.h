@@ -4,36 +4,40 @@
 #include "mus-iusecase/iplaylist_use_case.h"
 #include "mus-irepo/iplaylist_repository.h"
 
-class PlaylistUseCase : public IPlaylistUseCase {
-public:
-    PlaylistUseCase() = delete;
+namespace music_share {
 
-    PlaylistUseCase(music_share::IPlaylistRepository& playlist_rep);
+    class PlaylistUseCase : public IPlaylistUseCase {
+    public:
+        PlaylistUseCase() = delete;
 
-    PlaylistUseCase(const PlaylistUseCase& playlist_use_case);
+        PlaylistUseCase(IPlaylistRepository &playlist_rep);
 
-    virtual PlaylistUseCase& operator=(const PlaylistUseCase& playlist_use_case);
+        PlaylistUseCase(const PlaylistUseCase &playlist_use_case);
 
-    ~PlaylistUseCase();
+        virtual PlaylistUseCase &operator=(const PlaylistUseCase &playlist_use_case);
 
-    std::optional<uint32_t> Create(uint32_t user_id, PlaylistRequestDTO playlist) override;
+        ~PlaylistUseCase();
 
-    bool DeleteById(uint32_t user_id, uint32_t playlist_id) override;
+        std::optional<uint32_t> Create(uint32_t user_id, PlaylistRequestDTO playlist) override;
 
-    bool AddSongById(PlaylistSongRequestDTO song, uint32_t playlist_id,
-                     uint32_t user_id) override;
+        bool DeleteById(uint32_t user_id, uint32_t playlist_id) override;
 
-    bool DeleteSongById(uint32_t song_id, uint32_t playlist_id, uint32_t user_id) override;
+        bool AddSongById(PlaylistSongRequestDTO song, uint32_t playlist_id,
+                         uint32_t user_id) override;
 
-    std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id,
-                                            uint32_t author_id) override;
+        bool DeleteSongById(uint32_t song_id, uint32_t playlist_id, uint32_t user_id) override;
 
-    std::optional<PlaylistResponseDTO> GetById(uint32_t id) override;
+        std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id,
+                                                     uint32_t author_id) override;
 
-    std::vector<SongResponseDTO> GetSongs(uint32_t playlist_id) override;
+        std::optional<PlaylistResponseDTO> GetById(uint32_t id) override;
 
-private:
-    music_share::IPlaylistRepository& m_playlist_rep;
-};
+        std::vector<SongResponseDTO> GetSongs(uint32_t playlist_id) override;
+
+    private:
+        IPlaylistRepository &m_playlist_rep;
+    };
+
+}
 
 #endif  // MUS_INTERNAL_MUS_USECASE_PLAYLIST_USE_CASE_H_
