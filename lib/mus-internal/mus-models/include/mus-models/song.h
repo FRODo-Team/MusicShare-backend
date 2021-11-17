@@ -10,7 +10,7 @@ class Song {
 public:
     Song() = delete;
     Song(const std::string& title,
-         const std::string& author,
+         const std::string& artist,
          const std::string& duration,
          const std::string& url,
          std::optional<uint32_t> year = {},
@@ -23,7 +23,7 @@ public:
 
     std::optional<uint32_t> GetId() const;
     const std::string& GetTitle() const;
-    const std::string& GetAuthor() const;
+    const std::string& GetArtist() const;
     const std::optional<std::string>& GetAlbum() const;
     const std::optional<std::string>& GetGenre() const;
     std::optional<uint32_t> GetYear() const;
@@ -31,7 +31,7 @@ public:
     const std::string& GetUrl() const;
 
     void SetTitle(const std::string& title);
-    void SetAuthor(const std::string& author);
+    void SetArtist(const std::string& artist);
     void SetAlbum(const std::optional<std::string>& album);
     void SetGenre(const std::optional<std::string>& genre);
     void SetYear(std::optional<uint32_t> year);
@@ -40,7 +40,7 @@ public:
 
 private:
     std::string m_title;
-    std::string m_author;
+    std::string m_artist;
     std::string m_duration;
     std::string m_url;
     std::optional<uint32_t> m_year;

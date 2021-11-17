@@ -1,7 +1,6 @@
-#include "mus_models/chat_message.h"
+#include "mus-models/chat_message.h"
 
 namespace music_share {
-
 
 ChatMessage::ChatMessage(uint32_t chat_id,
                          uint32_t sender_id,
