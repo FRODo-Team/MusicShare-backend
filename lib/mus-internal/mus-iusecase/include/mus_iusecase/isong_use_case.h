@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include "isong_use_case.h"
+#include "mus-dto/song_response_dto.h"
 
 class ISongUseCase {
 public:
@@ -19,7 +19,7 @@ public:
 
     virtual std::vector<SongResponseDTO> GetByTitle(std::string title) = 0;
 
-    virtual vector<SongResponseDTO> GetByArtist(std::string artist) = 0;
+    virtual std::vector<SongResponseDTO> GetByArtist(std::string artist) = 0;
 
     virtual ~ISongUseCase() {};
 };

@@ -1,12 +1,11 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 
-#include <cstdint>
 #include <vector>
 #include <string>
 
-#include "user_request_dto.h"
-#include "user_response_dto.h"
+#include "mus-dto/user_request_dto.h"
+#include "mus-dto/user_response_dto.h"
 
 class IUserUseCase {
 public:
@@ -22,7 +21,7 @@ public:
 
     virtual std::vector<UserResponseDTO> GetByUsername(std::string username) = 0;
 
-    virtual UserResponseDTO GetByNickname(std::string nickname) = 0;
+    virtual std::optional<UserResponseDTO> GetByNickname(std::string nickname) = 0;
 
     virtual std::optional<UserResponseDTO> GetById(uint32_t id) = 0;
 

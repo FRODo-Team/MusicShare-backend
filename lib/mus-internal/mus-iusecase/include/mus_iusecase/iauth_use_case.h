@@ -1,7 +1,7 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_IAUTH_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_IAUTH_USE_CASE_H_
 
-#include "user_request_dto.h"
+#include "mus-dto/user_request_dto.h"
 
 class IAuthUseCase {
 public:
