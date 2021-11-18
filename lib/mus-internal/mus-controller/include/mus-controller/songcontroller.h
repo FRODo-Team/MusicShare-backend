@@ -6,7 +6,7 @@
 #include <memory>  // std::shared_ptr
 
 #include "mus-dto/song_response_dto.h"  // music_share::SongRequestDTO
-#include "mus-usecase/song_use_case.h"  // music_share::SongUseCase
+#include "mus-iusecase/isong_use_case.h"  // music_share::SongUseCase
 #include "mus-controller/request.h"
 #include "mus-controller/response.h"
 
@@ -18,7 +18,10 @@ public:
     using Request = Request<EmptyBody>;
     using Response = Response<SongResponseDTO>;
 
-    SongController();
+    SongController(std::shared_ptr<ISongUseCase> song_usecase)
+        : m_song_usecase(song_usecase),
+          m_song_endpoint(m_song_usecase),
+          m_song_id_endpoint(m_song_usecase) {}
     ~SongController() = default;
 
     Response Song(const Request& response) {
