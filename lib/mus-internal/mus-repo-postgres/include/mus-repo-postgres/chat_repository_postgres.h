@@ -21,6 +21,12 @@ class ChatRepositoryPostgres final : public IChatRepository {
                              uint32_t second_user_id) override;
 
 private:
+    class Mapper {
+    public:
+        static Chat ToDomain(const pqxx::row& sql_row);
+    };
+
+private:
     std::unique_ptr<DbConnectionPostgres> m_database;
 };
 

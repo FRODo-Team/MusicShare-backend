@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "test_user_repository_postgres.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

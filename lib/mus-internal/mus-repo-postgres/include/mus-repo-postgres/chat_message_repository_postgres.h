@@ -19,6 +19,12 @@ public:
     std::vector<ChatMessage> FindByChatId(uint32_t chat_id) override;
 
 private:
+    class Mapper {
+    public:
+        static ChatMessage ToDomain(const pqxx::row& sql_row);
+    };
+
+private:
     std::unique_ptr<DbConnectionPostgres> m_database;
 };
 
