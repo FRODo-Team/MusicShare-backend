@@ -20,7 +20,7 @@ public:
 
     virtual std::optional<uint32_t> Create(UserRequestDTO user) = 0;
 
-    virtual std::optional<UserResponseDTO> Update(UserRequestDTO user) = 0;
+    virtual std::optional<UserResponseDTO> Update(uint32_t user_id, UserRequestDTO user) = 0;
 
     virtual std::vector<UserResponseDTO> GetByUsername(std::string username) = 0;
 

@@ -20,7 +20,7 @@ public:
 
     IChatUseCase& operator=(const IChatUseCase& chat_use_case) = default;
 
-    virtual std::optional<uint32_t> Create(ChatRequestDTO chat) = 0;
+    virtual std::optional<uint32_t> Create(uint32_t user_id, ChatRequestDTO chat) = 0;
 
     virtual bool SendMessage(MessageRequestDTO message, uint32_t chat_id,
                              uint32_t user_id) = 0;
