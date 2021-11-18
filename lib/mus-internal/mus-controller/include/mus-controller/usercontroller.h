@@ -23,10 +23,10 @@ public:
     ~UserController() = default;
 
     Response User(const Request& response) {
-        return Response();
+        return m_user_endpoint(response);
     }
     Response UserID(const Request& response) {
-        return Response();
+        return m_user_id_endpoint(response);
     }
 private:
     class UserEndpoint : public Endpoint<Request, Response> {
