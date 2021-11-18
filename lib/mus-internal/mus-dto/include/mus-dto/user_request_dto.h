@@ -5,13 +5,11 @@
 #include <string>
 
 struct UserRequestDTO {
-    UserRequestDTO(uint32_t id_, std::string username_,
-                   std::string password_, std::string nickname_,
-                   std::string email_)
+    UserRequestDTO(std::string username_, std::string password_,
+                   std::string nickname_, std::string email_)
                     : username(username_), password(password_),
                     nickname(nickname_), id(id_), email(email_) {}
 
-    uint32_t id;
     std::string username;
     std::string password;
     std::string nickname;
