@@ -20,6 +20,12 @@ public:
     std::vector<Song> FindByArtist(const std::string& artist) override;
 
 private:
+    class Mapper {
+    public:
+        static Song ToDomain(const pqxx::row& sql_row);
+    };
+
+private:
     std::unique_ptr<DbConnectionPostgres> m_database;
 };
 

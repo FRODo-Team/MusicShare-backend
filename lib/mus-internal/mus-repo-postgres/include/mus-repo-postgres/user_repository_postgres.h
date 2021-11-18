@@ -21,6 +21,11 @@ public:
     std::vector<User> FindByNickname(const std::string& nickname) override;
 
 private:
+    class Mapper {
+    public:
+        static User ToDomain(const pqxx::row& sql_row);
+    };
+private:
     std::unique_ptr<DbConnectionPostgres> m_database;
 };
 

@@ -19,6 +19,12 @@ public:
     std::vector<Playlist> FindByUserId(uint32_t user_id) override;
 
 private:
+    class Mapper {
+    public:
+        static Playlist ToDomain(const pqxx::row& sql_row);
+    };
+
+private:
     std::unique_ptr<DbConnectionPostgres> m_database;
 };
 
