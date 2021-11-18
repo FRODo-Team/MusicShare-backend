@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "usercontroller.h"
+#include "chatcontroller.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
