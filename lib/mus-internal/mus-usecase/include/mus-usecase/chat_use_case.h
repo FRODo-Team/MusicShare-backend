@@ -18,7 +18,7 @@ public:
 
     ChatUseCase &operator=(const ChatUseCase &chat_use_case);
 
-    std::optional <uint32_t> Create(ChatRequestDTO chat) override;
+    std::optional <uint32_t> Create(uint32_t user_id, ChatRequestDTO chat) override;
 
     bool SendMessage(MessageRequestDTO message, uint32_t chat_id,
                      uint32_t user_id) override;
