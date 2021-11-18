@@ -18,7 +18,7 @@ public:
 
     std::optional<uint32_t> Create(UserRequestDTO user) override;
 
-    std::optional<UserResponseDTO> Update(UserRequestDTO user) override;
+    std::optional<UserResponseDTO> Update(uint32_t user_id, UserRequestDTO user) override;
 
     std::vector<UserResponseDTO> GetByUsername(std::string username) override;
 
