@@ -9,6 +9,11 @@ namespace music_share {
 
 template <typename Body>
 struct Request {
+    enum class Method {
+        GET, POST, PATCH, DELETE
+    };
+
+    Method method;
     std::map<std::string, std::string> parameters;
     std::map<std::string, std::string> headers;
     std::optional<Body> body;
