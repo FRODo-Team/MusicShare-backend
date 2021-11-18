@@ -1,6 +1,8 @@
 #ifndef MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 
+#include <optional>
+
 namespace music_share {
 
 template<class T>

@@ -5,7 +5,7 @@
 #include <vector>
 
 struct PlaylistSongRequestDTO {
-    PlaylistSongRequestDTO(std::vector<uint32_t[]> song_ids_)
+    PlaylistSongRequestDTO(std::vector<uint32_t> song_ids_)
                             : song_ids(song_ids_) {}
 
     std::vector<uint32_t> song_ids;

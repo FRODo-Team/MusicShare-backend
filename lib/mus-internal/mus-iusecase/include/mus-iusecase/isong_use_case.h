@@ -4,8 +4,11 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <optional>
 
-#include "isong_use_case.h"
+#include "mus-dto/song_response_dto.h"
+
+namespace music_share {
 
 class ISongUseCase {
 public:
@@ -19,9 +22,11 @@ public:
 
     virtual std::vector<SongResponseDTO> GetByTitle(std::string title) = 0;
 
-    virtual vector<SongResponseDTO> GetByArtist(std::string artist) = 0;
+    virtual std::vector<SongResponseDTO> GetByArtist(std::string artist) = 0;
 
     virtual ~ISongUseCase() {};
 };
+
+} // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_IUSECASE_ISONG_USE_CASE_H_

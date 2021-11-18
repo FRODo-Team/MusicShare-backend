@@ -1,9 +1,9 @@
-#include "mus_models/song.h"
+#include "mus-models/song.h"
 
 namespace music_share {
 
 Song::Song(const std::string &title,
-           const std::string &author,
+           const std::string &artist,
            const std::string &duration,
            const std::string &url,
            std::optional<uint32_t> year,
@@ -11,7 +11,7 @@ Song::Song(const std::string &title,
            const std::optional<std::string> &genre,
            std::optional<uint32_t> id) :
     m_title(title),
-    m_author(author),
+    m_artist(artist),
     m_duration(duration),
     m_url(url),
     m_year(year),
@@ -27,8 +27,8 @@ const std::string& Song::GetTitle() const {
     return m_title;
 }
 
-const std::string& Song::GetAuthor() const {
-    return m_author;
+const std::string& Song::GetArtist() const {
+    return m_artist;
 }
 
 const std::optional<std::string>& Song::GetAlbum() const {
@@ -57,9 +57,9 @@ void Song::SetTitle(const std::string &title) {
     }
 }
 
-void Song::SetAuthor(const std::string &author) {
-    if (!author.empty()) {
-        m_author = author;
+void Song::SetArtist(const std::string &artist) {
+    if (!artist.empty()) {
+        m_artist = artist;
     }
 }
 
