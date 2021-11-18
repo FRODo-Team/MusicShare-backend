@@ -7,7 +7,7 @@
 
 #include "mus-dto/user_request_dto.h"  // music_share::UserRequestDTO
 #include "mus-dto/user_response_dto.h"  // music_share::UserRequestDTO
-#include "mus-usecase/user_use_case.h"  // music_share::UserUseCase
+#include "mus-iusecase/iuser_use_case.h"  // music_share::UserUseCase
 #include "mus-controller/request.h"
 #include "mus-controller/response.h"
 
@@ -18,7 +18,10 @@ public:
     using Request = Request<UserRequestDTO>;
     using Response = Response<UserResponseDTO>;
 
-    UserController();
+    UserController(std::shared_ptr<IUserUseCase> user_usecase)
+        : m_user_usecase(user_usecase),
+          m_user_endpoint(m_user_usecase),
+          m_user_id_endpoint(m_user_usecase) {}
     ~UserController() = default;
 
     Response User(const Request& response) {

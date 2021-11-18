@@ -7,7 +7,7 @@
 
 #include "mus-dto/playlist_request_dto.h"  // music_share::PlaylistRequestDTO
 #include "mus-dto/playlist_response_dto.h"  // music_share::PlaylistRequestDTO
-#include "mus-usecase/playlist_use_case.h"  // music_share::PlaylistUseCase
+#include "mus-iusecase/iplaylist_use_case.h"  // music_share::PlaylistUseCase
 #include "mus-controller/request.h"
 #include "mus-controller/response.h"
 
@@ -18,7 +18,10 @@ public:
     using Request = Request<PlaylistRequestDTO>;
     using Response = Response<PlaylistResponseDTO>;
 
-    PlaylistController();
+    PlaylistController(std::shared_ptr<IPlaylistUseCase> playlist_usecase)
+        : m_playlist_usecase(playlist_usecase),
+          m_playlist_endpoint(m_playlist_usecase),
+          m_playlist_id_endpoint(m_playlist_usecase) {};
     ~PlaylistController() = default;
 
     Response Playlist(const Request& response) {

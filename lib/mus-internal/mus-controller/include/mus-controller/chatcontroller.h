@@ -7,7 +7,7 @@
 
 #include "mus-dto/chat_request_dto.h"  // music_share::ChatRequestDTO
 #include "mus-dto/chat_response_dto.h"  // music_share::ChatRequestDTO
-#include "mus-usecase/chat_use_case.h"  // music_share::ChatUseCase
+#include "mus-iusecase/ichat_use_case.h"  // music_share::ChatUseCase
 #include "mus-controller/request.h"
 #include "mus-controller/response.h"
 
@@ -18,7 +18,10 @@ public:
     using Request = Request<ChatRequestDTO>;
     using Response = Response<ChatResponseDTO>;
 
-    ChatController();
+    ChatController(std::shared_ptr<IChatUseCase> chat_usecase)
+        : m_chat_usecase(chat_usecase),
+          m_chat_endpoint(m_chat_usecase),
+          m_chat_id_message_endpoint(m_chat_usecase) {}
     ~ChatController() = default;
 
     Response Chat(const Request& response) {
