@@ -4,7 +4,6 @@
 #include "mus-controller/endpoint.h"
 
 #include <memory>  // std::shared_ptr
-#include <optional>  // std::optional
 
 #include "mus-dto/user_request_dto.h"  // music_share::UserRequestDTO
 #include "mus-dto/user_response_dto.h"  // music_share::UserRequestDTO
@@ -17,7 +16,7 @@ namespace music_share {
 class UserController {
 public:
     using Request = Request<UserRequestDTO>;
-    using Response = Response<UserRequestDTO>;
+    using Response = Response<UserResponseDTO>;
 
     UserController();
     ~UserController() = default;
