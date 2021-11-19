@@ -3,8 +3,8 @@
 namespace music_share {
 
 PlaylistRepositoryPostgres::PlaylistRepositoryPostgres(
-        std::unique_ptr<DbConnectionPostgres> db)
-        : m_database(std::move(db)) {
+        const std::string& connection)
+        : m_database(connection) {
     throw std::runtime_error("Not implemented yet");
 }
 
@@ -29,5 +29,9 @@ std::vector<Playlist> PlaylistRepositoryPostgres::FindByUserId(
     throw std::runtime_error("Not implemented yet");
 }
 
+
+Playlist PlaylistRepositoryPostgres::Mapper::ToDomain(const pqxx::row& record) {
+    throw std::runtime_error("Not implemented yet");
+}
 
 } // namespace music_share

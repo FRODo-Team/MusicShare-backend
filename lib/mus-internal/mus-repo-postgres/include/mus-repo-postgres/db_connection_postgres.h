@@ -8,7 +8,7 @@ namespace music_share {
 
 class DbConnectionPostgres {
 public:
-    DbConnectionPostgres(const std::string& connection_string);
+    explicit DbConnectionPostgres(const std::string& connection);
     virtual ~DbConnectionPostgres() = default;
 
     const std::string& GetConnectionString() const;
@@ -18,6 +18,7 @@ public:
     virtual void ValidateConnection(const std::vector<std::string>& table_names);
 
 protected:
+
     std::string m_connection_string;
 };
 

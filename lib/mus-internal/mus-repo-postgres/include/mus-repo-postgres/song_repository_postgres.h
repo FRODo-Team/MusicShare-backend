@@ -8,7 +8,7 @@ namespace music_share {
 
 class SongRepositoryPostgres final : public ISongRepository {
 public:
-    SongRepositoryPostgres(std::unique_ptr<DbConnectionPostgres> db);
+    explicit SongRepositoryPostgres(const std::string& connection);
     ~SongRepositoryPostgres() = default;
 
     std::optional<Song> Find(uint32_t id) override;
@@ -22,11 +22,10 @@ public:
 private:
     class Mapper {
     public:
-        static Song ToDomain(const pqxx::row& sql_row);
+        static Song ToDomain(const pqxx::row& record);
     };
 
-private:
-    std::unique_ptr<DbConnectionPostgres> m_database;
+    DbConnectionPostgres m_database;
 };
 
 }

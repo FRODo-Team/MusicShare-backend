@@ -7,7 +7,7 @@
 namespace music_share {
 
 class ChatRepositoryPostgres final : public IChatRepository {
-    ChatRepositoryPostgres(std::unique_ptr<DbConnectionPostgres> db);
+    explicit ChatRepositoryPostgres(const std::string& connection);
     ~ChatRepositoryPostgres() = default;
 
     std::optional<Chat> Find(uint32_t id) override;
@@ -23,11 +23,10 @@ class ChatRepositoryPostgres final : public IChatRepository {
 private:
     class Mapper {
     public:
-        static Chat ToDomain(const pqxx::row& sql_row);
+        static Chat ToDomain(const pqxx::row& record);
     };
 
-private:
-    std::unique_ptr<DbConnectionPostgres> m_database;
+    DbConnectionPostgres m_database;
 };
 
 } // namespace music_share
