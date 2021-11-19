@@ -8,7 +8,7 @@ namespace music_share {
 
 class PlaylistRepositoryPostgres final : public IPlaylistRepository {
 public:
-    PlaylistRepositoryPostgres(std::unique_ptr<DbConnectionPostgres> db);
+    explicit PlaylistRepositoryPostgres(const std::string& connection);
     ~PlaylistRepositoryPostgres() = default;
 
     std::optional<Playlist> Find(uint32_t id) override;
@@ -21,11 +21,10 @@ public:
 private:
     class Mapper {
     public:
-        static Playlist ToDomain(const pqxx::row& sql_row);
+        static Playlist ToDomain(const pqxx::row& record);
     };
 
-private:
-    std::unique_ptr<DbConnectionPostgres> m_database;
+    DbConnectionPostgres m_database;
 };
 
 } // namespace music_share

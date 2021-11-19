@@ -2,9 +2,8 @@
 
 namespace music_share {
 
-UserRepositoryPostgres::UserRepositoryPostgres(
-        std::unique_ptr<DbConnectionPostgres> db)
-        : m_database(std::move(db)) {
+UserRepositoryPostgres::UserRepositoryPostgres(const std::string& connection)
+        : m_database(connection) {
     throw std::runtime_error("Not implemented yet");
 }
 
@@ -25,7 +24,12 @@ void UserRepositoryPostgres::Delete(const User& user) {
 }
 
 std::vector<User> UserRepositoryPostgres::FindByNickname(
-    const std::string& nickname) {
+        const std::string& nickname) {
+    throw std::runtime_error("Not implemented yet");
+}
+
+
+User UserRepositoryPostgres::Mapper::ToDomain(const pqxx::row& record) {
     throw std::runtime_error("Not implemented yet");
 }
 
