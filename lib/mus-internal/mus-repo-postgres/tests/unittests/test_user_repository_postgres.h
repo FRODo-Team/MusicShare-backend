@@ -41,6 +41,18 @@ TEST_F(TestUserRepositoryPostgres, Find) {
     }
 }
 
+TEST_F(TestUserRepositoryPostgres, FindNotExistingUser) {
+    // arrange
+    uint32_t user_id_to_find = 1028374;
+
+    // act
+    auto repo = std::make_unique<UserRepositoryPostgres>(s_ConnectionString);
+    std::optional<User> actual_user = repo->Find(user_id_to_find);
+
+    // assert
+    EXPECT_FALSE(actual_user.has_value());
+}
+
 TEST_F(TestUserRepositoryPostgres, Insert) {
     // arrange
     User expected_user("nick2", "2nick@mail.ru",
