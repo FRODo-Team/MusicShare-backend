@@ -7,8 +7,6 @@
 
 #include "mus-dto/chat_request_dto.h"
 #include "mus-dto/chat_response_dto.h"
-#include "mus-dto/message_response_dto.h"
-#include "mus-dto/message_request_dto.h"
 
 namespace music_share {
 
@@ -21,12 +19,6 @@ public:
     IChatUseCase& operator=(const IChatUseCase& chat_use_case) = default;
 
     virtual std::optional<uint32_t> Create(uint32_t user_id, ChatRequestDTO chat) = 0;
-
-    virtual bool SendMessage(MessageRequestDTO message, uint32_t chat_id,
-                             uint32_t user_id) = 0;
-
-    virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
-                                                            uint32_t chat_id) = 0;
 
     virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) = 0;
 
