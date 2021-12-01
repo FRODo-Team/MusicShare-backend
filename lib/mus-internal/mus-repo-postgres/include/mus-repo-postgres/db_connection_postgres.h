@@ -8,17 +8,16 @@ namespace music_share {
 
 class DbConnectionPostgres {
 public:
-    DbConnectionPostgres(const std::string& connection_string);
+    explicit DbConnectionPostgres(const std::string& connection);
     virtual ~DbConnectionPostgres() = default;
 
     const std::string& GetConnectionString() const;
 
-    virtual pqxx::result ExecuteQuery(const std::string& sql_command);
-    virtual void ValidateConnection(const std::string& table_name);
-    virtual void ValidateConnection(const std::vector<std::string>& table_names);
+    virtual pqxx::result ExecuteQuery(const std::string& query);
 
 protected:
     std::string m_connection_string;
+    pqxx::connection m_connection;
 };
 
 } // namespace music_share

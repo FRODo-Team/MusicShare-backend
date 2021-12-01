@@ -3,8 +3,8 @@
 namespace music_share {
 
 ChatMessageRepositoryPostgres::ChatMessageRepositoryPostgres(
-        std::unique_ptr<DbConnectionPostgres> db)
-        : m_database(std::move(db)) {
+        const std::string& connection)
+        : m_database(connection) {
     throw std::runtime_error("Not implemented yet");
 }
 
@@ -26,6 +26,12 @@ void ChatMessageRepositoryPostgres::Delete(const ChatMessage& chat_message) {
 
 std::vector<ChatMessage> ChatMessageRepositoryPostgres::FindByChatId(
         uint32_t chat_id) {
+    throw std::runtime_error("Not implemented yet");
+}
+
+
+ChatMessage ChatMessageRepositoryPostgres::Mapper::ToDomain(
+        const pqxx::row& record) {
     throw std::runtime_error("Not implemented yet");
 }
 
