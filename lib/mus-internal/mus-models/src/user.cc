@@ -15,6 +15,14 @@ User::User(const std::string& nickname,
     m_access_level(access_level),
     m_id(id) { }
 
+User::User(const User& other, uint32_t id) :
+        m_nickname(other.GetNickname()),
+        m_email(other.GetEmail()),
+        m_username(other.GetUsername()),
+        m_password_hash(other.GetPasswordHash()),
+        m_access_level(other.GetAccessLevel()),
+        m_id(id) { }
+
 std::optional<uint32_t> User::GetId() const {
     return m_id;
 }

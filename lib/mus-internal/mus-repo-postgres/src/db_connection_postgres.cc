@@ -16,6 +16,7 @@ pqxx::result DbConnectionPostgres::ExecuteQuery(const std::string& query) {
     // TODO(sunz): Handle Exceptions.
     pqxx::work transaction{ m_connection };
     pqxx::result response = transaction.exec(query);
+    transaction.commit();
     return response;
 }
 
