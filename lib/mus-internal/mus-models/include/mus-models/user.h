@@ -20,8 +20,9 @@ public:
          const std::string& password_hash,
          AccessLevel access_level = AccessLevel::Authorized,
          std::optional<uint32_t> id = {});
+
     User(const User&) = default;
-    User(User&&) = default;
+    User(const User& other, uint32_t id);
     ~User() = default;
 
     std::optional<uint32_t> GetId() const;
