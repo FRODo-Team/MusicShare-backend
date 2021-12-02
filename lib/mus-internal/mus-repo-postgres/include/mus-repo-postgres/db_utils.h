@@ -68,12 +68,15 @@ public:
                                             int port,
                                             const std::string& user,
                                             const std::string& password,
-                                            const std::string& database_name)
+                                            const std::string& database_name,
+                                            bool urlstyle = true)
     {
-        /*return {
-            "postgresql://" + user + ":" + password +"@" + host + ":" +
-             std::to_string(port) + "/" + database_name
-        };*/
+        if (urlstyle) {
+            return {
+                    "postgresql://" + user + ":" + password +"@" + host + ":" +
+                    std::to_string(port) + "/" + database_name
+            };
+        }
 
         return {
             "host=" + host + " " +
