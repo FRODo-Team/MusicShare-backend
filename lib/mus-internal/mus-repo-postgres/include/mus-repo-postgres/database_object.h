@@ -6,13 +6,13 @@
 
 namespace music_share {
 
-class DbConnectionPostgres {
+class DatabaseObject {
 public:
-    explicit DbConnectionPostgres(const std::string& connection_string);
-    DbConnectionPostgres(const DbConnectionPostgres&) = delete;
-    virtual ~DbConnectionPostgres() = default;
+    explicit DatabaseObject(const std::string& connection_string);
+    DatabaseObject(const DatabaseObject&) = delete;
+    virtual ~DatabaseObject() = default;
 
-    DbConnectionPostgres& operator=(const DbConnectionPostgres&) = delete;
+    DatabaseObject& operator=(const DatabaseObject&) = delete;
 
     const std::string& GetConnectionString() const { return m_connection_string; }
 
