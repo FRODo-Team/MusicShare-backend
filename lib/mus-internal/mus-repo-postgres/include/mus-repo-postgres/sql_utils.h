@@ -9,9 +9,9 @@ namespace music_share {
 
 using SqlObject = std::map<std::string, std::string>;
 
-class DbUtils {
+class SqlUtils {
 public:
-    DbUtils() = delete;
+    SqlUtils() = delete;
 
     // Приводит value в нужный для SQL-запроса формат
     template<typename T>
