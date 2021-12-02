@@ -2,50 +2,28 @@
 
 namespace music_share {
 
-User::User(const std::string& nickname,
+User::User(const std::string& username,
            const std::string& email,
-           const std::string& username,
            const std::string& password_hash,
+           const std::string& nickname,
            AccessLevel access_level,
-           std::optional<uint32_t> id) :
-    m_nickname(nickname),
-    m_email(email),
-    m_username(username),
-    m_password_hash(password_hash),
-    m_access_level(access_level),
-    m_id(id) { }
-
-User::User(const User& other, uint32_t id) :
-        m_nickname(other.GetNickname()),
-        m_email(other.GetEmail()),
-        m_username(other.GetUsername()),
-        m_password_hash(other.GetPasswordHash()),
-        m_access_level(other.GetAccessLevel()),
+           std::optional<uint32_t> id)
+        :
+        m_username(username),
+        m_email(email),
+        m_password_hash(password_hash),
+        m_nickname(nickname),
+        m_access_level(access_level),
         m_id(id) { }
 
-std::optional<uint32_t> User::GetId() const {
-    return m_id;
-}
-
-const std::string& User::GetNickname() const {
-    return m_nickname;
-}
-
-const std::string& User::GetEmail() const {
-    return m_email;
-}
-
-const std::string& User::GetUsername() const {
-    return m_username;
-}
-
-const std::string& User::GetPasswordHash() const {
-    return m_password_hash;
-}
-
-User::AccessLevel User::GetAccessLevel() const {
-    return m_access_level;
-}
+User::User(const User& other, uint32_t id)
+        :
+        m_username(other.GetUsername()),
+        m_email(other.GetEmail()),
+        m_password_hash(other.GetPasswordHash()),
+        m_nickname(other.GetNickname()),
+        m_access_level(other.GetAccessLevel()),
+        m_id(id) { }
 
 void User::SetNickname(const std::string& nickname) {
     if (!nickname.empty() && nickname.size() <= kNicknameMaxLength) {

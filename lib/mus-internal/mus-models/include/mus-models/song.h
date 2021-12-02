@@ -9,26 +9,31 @@ namespace music_share {
 class Song {
 public:
     Song() = delete;
+
     Song(const std::string& title,
          const std::string& artist,
          const std::string& duration,
          const std::string& url,
-         std::optional<uint32_t> year = {},
-         const std::optional<std::string>& album = {},
-         const std::optional<std::string>& genre = {},
-         std::optional<uint32_t> id = {});
+         std::optional<uint32_t> year = { },
+         const std::optional<std::string>& album = { },
+         const std::optional<std::string>& genre = { },
+         std::optional<uint32_t> id = { });
+
     Song(const Song&) = default;
+    Song(const Song& other, uint32_t id);
     Song(Song&&) = default;
     ~Song() = default;
 
-    std::optional<uint32_t> GetId() const;
-    const std::string& GetTitle() const;
-    const std::string& GetArtist() const;
-    const std::optional<std::string>& GetAlbum() const;
-    const std::optional<std::string>& GetGenre() const;
-    std::optional<uint32_t> GetYear() const;
-    const std::string& GetDuration() const;
-    const std::string& GetUrl() const;
+    Song& operator=(const Song&) = default;
+
+    std::optional<uint32_t> GetId() const { return m_id; }
+    const std::string& GetTitle() const { return m_title; }
+    const std::string& GetArtist() const { return m_artist; }
+    const std::optional<std::string>& GetAlbum() const { return m_album; }
+    const std::optional<std::string>& GetGenre() const { return m_genre; }
+    std::optional<uint32_t> GetYear() const { return m_year; }
+    const std::string& GetDuration() const { return m_duration; }
+    const std::string& GetUrl() const { return m_url; }
 
     void SetTitle(const std::string& title);
     void SetArtist(const std::string& artist);
