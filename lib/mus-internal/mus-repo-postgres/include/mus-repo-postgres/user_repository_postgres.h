@@ -24,14 +24,17 @@ public:
     std::vector<User> FindByNickname(const std::string& nickname) override;
 
 private:
-    class SqlMapper {
+    class SqlMapperForUserTable {
     public:
         static User ToDomainObject(const pqxx::row& row);
         static SqlObject ToSqlObject(const User& domain);
     };
 
-    RepositoryPostgres<User, SqlMapper> m_crud_repository;
+    RepositoryPostgres<User, SqlMapperForUserTable> m_crud_repository;
     const std::string& m_table_name;
+
+    static constexpr std::string_view kUserHasPlaylistTableName =
+            "mus_user_has_playlist";
 };
 
 } // namespace music_share

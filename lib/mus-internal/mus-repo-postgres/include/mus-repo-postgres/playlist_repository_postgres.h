@@ -27,7 +27,6 @@ public:
 private:
     class SqlMapperForTablePlaylist {
     public:
-        // основные таблицы
         static Playlist ToDomainObject(const pqxx::row& row);
         static SqlObject ToSqlObject(const Playlist& domain);
     };
@@ -35,8 +34,6 @@ private:
     RepositoryPostgres<Playlist, SqlMapperForTablePlaylist> m_crud_repository;
     const std::string& m_table_name;
 
-    static constexpr std::string_view kUserHasPlaylistTableName =
-            "mus_user_has_playlist";
     static constexpr std::string_view kPlaylistHasSongTableName =
             "mus_playlist_has_song";
 };
