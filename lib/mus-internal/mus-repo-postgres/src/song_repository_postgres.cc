@@ -6,7 +6,7 @@ SongRepositoryPostgres::SongRepositoryPostgres(
         const std::string& connection_string)
         :
         m_crud_repository(connection_string, "mus_song"),
-        m_table_name(m_crud_repository.GetConnectionString()) { }
+        m_table_name(m_crud_repository.GetTableName()) { }
 
 std::optional<Song> SongRepositoryPostgres::Find(uint32_t id) { 
     return m_crud_repository.Find(id);
@@ -100,6 +100,8 @@ SqlObject SongRepositoryPostgres::SqlMapper::ToSqlObject(const Song& domain) {
     result["title"] = SqlUtils::ValueToSqlFormat(domain.GetTitle());
     result["artist"] = SqlUtils::ValueToSqlFormat(domain.GetArtist());
     result["duration"] = SqlUtils::ValueToSqlFormat(domain.GetDuration());
+    result["url"] = SqlUtils::ValueToSqlFormat(domain.GetUrl());
+
 
     if (domain.GetYear().has_value()) {
         result["year"] = SqlUtils::ValueToSqlFormat(domain.GetYear().value());
