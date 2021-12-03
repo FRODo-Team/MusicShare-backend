@@ -18,6 +18,13 @@ public:
 
     virtual pqxx::result ExecuteQuery(const std::string& query);
 
+    static std::string MakeConnectionString(const std::string& host,
+                                            int port,
+                                            const std::string& user,
+                                            const std::string& password,
+                                            const std::string& database_name,
+                                            bool urlstyle = true);
+
 protected:
     std::string m_connection_string;
     pqxx::connection m_connection;
