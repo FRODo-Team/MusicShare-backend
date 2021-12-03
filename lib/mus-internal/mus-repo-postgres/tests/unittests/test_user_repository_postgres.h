@@ -1,25 +1,61 @@
 #include <gtest/gtest.h>
 #include <memory>
-
+#include <fstream>
+#include <sstream>
 #include "mus-repo-postgres/user_repository_postgres.h"
 
 using music_share::UserRepositoryPostgres;
 using music_share::User;
 using music_share::SqlUtils;
+using music_share::DatabaseObject;
 
-/*
-    Данный тест имеет смысл при наличии поднятой тестовой базы данных.
-    TODO: Определить наполнение тестовой БД, Дописать FindByNickname.
+/* TODO (sunz):
+ *      !   Добавить сравнения User.playlist_ids     !
  */
 
+
 class TestUserRepositoryPostgres : public ::testing::Test {
+public:
+    static void SetUpTestSuite() {
+        DatabaseObject dbo(s_ConnectionString);
+        for (const auto& filepath: s_TestDatabaseInitSqlScripts) {
+            std::ifstream file(filepath);
+            std::stringstream buffer;
+            buffer << file.rdbuf();
+            std::string query = buffer.str();
+            dbo.ExecuteQuery(query);
+        }
+    }
+
+    static void TearDownTestSuite() {
+        DatabaseObject dbo(s_ConnectionString);
+        for (const auto& filepath: s_TestDatabaseDeinitSqlScripts) {
+            std::ifstream file(filepath);
+            std::stringstream buffer;
+            buffer << file.rdbuf();
+            std::string query = buffer.str();
+            dbo.ExecuteQuery(query);
+        }
+    }
+
 protected:
     static const std::string s_ConnectionString;
+    static const std::vector<std::string> s_TestDatabaseInitSqlScripts;
+    static const std::vector<std::string> s_TestDatabaseDeinitSqlScripts;
 };
 
 const std::string TestUserRepositoryPostgres::s_ConnectionString =
-        SqlUtils::MakeConnectionString(
-                "localhost", 5432, "sunz", "123123123", "mus_test");
+        DatabaseObject::MakeConnectionString("localhost", 5432, "sunz", "123123123", "mus_test");
+
+// TODO: Написать конфиг файл для такого рода вещей
+const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
+    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+};
+
+// TODO: Написать конфиг файл для такого рода вещей
+const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
+    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+};
 
 
 TEST_F(TestUserRepositoryPostgres, FindNotExistingUser) {
