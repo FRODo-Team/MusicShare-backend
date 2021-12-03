@@ -30,6 +30,7 @@ public:
 
     void SetCreatorId(uint32_t creator_id);
     void SetTitle(const std::string& title);
+    void SetSongIds(const std::vector<uint32_t>& songs);
 
     void AppendSong(uint32_t song_id);
     void RemoveSong(uint32_t song_id);
