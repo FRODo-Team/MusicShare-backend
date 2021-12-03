@@ -80,6 +80,8 @@ SqlObject ChatMessageRepositoryPostgres::SqlMapper::ToSqlObject(
     if (domain.GetId().has_value()) {
         result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
     }
+
+    return result;
 }
 
 } // namespace music_share
