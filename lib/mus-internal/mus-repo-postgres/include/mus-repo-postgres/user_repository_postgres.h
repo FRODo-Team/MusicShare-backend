@@ -22,6 +22,7 @@ public:
     std::optional<User> FindByUsername(const std::string& username) override;
     std::optional<User> FindByEmail(const std::string& email) override;
     std::vector<User> FindByNickname(const std::string& nickname) override;
+    std::vector<uint32_t> FindUserPlaylists(uint32_t user_id) override;
 
 private:
     class SqlMapperForUserTable {
