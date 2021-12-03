@@ -2,7 +2,7 @@
 #define MUS_INTERNAL_MUS_REPO_POSTGRES_USER_REPOSITORY_POSTGRES_H_
 
 #include "mus-irepo/iuser_repository.h"
-#include "repository_postgres.h"
+#include "mus-repo-postgres/internal/repository_postgres.h"
 
 namespace music_share {
 

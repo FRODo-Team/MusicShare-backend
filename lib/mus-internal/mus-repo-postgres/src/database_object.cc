@@ -1,4 +1,4 @@
-#include "mus-repo-postgres/database_object.h"
+#include "mus-repo-postgres/internal/database_object.h"
 
 namespace music_share {
 
