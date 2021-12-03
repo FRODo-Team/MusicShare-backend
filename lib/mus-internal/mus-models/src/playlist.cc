@@ -27,6 +27,10 @@ void Playlist::SetTitle(const std::string &title) {
     m_title = title;
 }
 
+void Playlist::SetSongIds(const std::vector<uint32_t>& songs) {
+    m_song_ids = songs;
+}
+
 void Playlist::AppendSong(uint32_t song_id) {
     auto iter = std::find(m_song_ids.begin(), m_song_ids.end(), song_id);
     if (iter == m_song_ids.end()) {
