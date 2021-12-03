@@ -10,9 +10,9 @@ using music_share::SqlUtils;
 using music_share::DatabaseObject;
 
 /* TODO (sunz):
- *      !   Добавить сравнения User.playlist_ids     !
+ *      !   Добавить сравнения для User.playlist_ids     !
+ *      !   Добавить тест для FindUserPlaylists          !
  */
-
 
 class TestUserRepositoryPostgres : public ::testing::Test {
 public:

@@ -21,7 +21,6 @@ public:
     void Delete(const Playlist &obj) override;
 
     std::vector<Playlist> FindByTitle(const std::string& title) override;
-    std::vector<Playlist> FindByUserId(uint32_t user_id) override;
     std::vector<Playlist> FindByCreatorId(uint32_t creator_id) override;
 
 private:

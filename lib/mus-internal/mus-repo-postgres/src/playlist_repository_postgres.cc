@@ -94,29 +94,6 @@ std::vector<Playlist> PlaylistRepositoryPostgres::FindByTitle(
 }
 
 // TODO: Переписать на JOIN-ах
-std::vector<Playlist> PlaylistRepositoryPostgres::FindByUserId(
-        uint32_t user_id)
-{
-    std::string query =
-            "SELECT playlist_id FROM " + std::string(kPlaylistHasSongTableName) + " " +
-            "WHERE user_id=" + SqlUtils::ValueToSqlFormat(user_id);
-
-    pqxx::result response = m_crud_repository.ExecuteQuery(query);
-
-    std::vector<Playlist> result;
-    for (const auto& row: response) {
-        assert(row[0].name() == std::string{ "playlist_id" });
-        auto playlist_id = row[0].as<uint32_t>();
-
-        std::optional<Playlist> p = Find(playlist_id);
-        assert(p.has_value());
-        result.push_back(p.value());
-    }
-
-    return result;
-}
-
-// TODO: Переписать на JOIN-ах
 std::vector<Playlist> PlaylistRepositoryPostgres::FindByCreatorId(
         uint32_t creator_id)
 {
@@ -160,7 +137,7 @@ Playlist PlaylistRepositoryPostgres::SqlMapperForTablePlaylist::ToDomainObject(c
 SqlObject PlaylistRepositoryPostgres::SqlMapperForTablePlaylist::ToSqlObject(const Playlist& domain) {
     SqlObject o;
 
-    o["creator_d"] = SqlUtils::ValueToSqlFormat(domain.GetCreatorId());
+    o["creator_id"] = SqlUtils::ValueToSqlFormat(domain.GetCreatorId());
     o["title"] = SqlUtils::ValueToSqlFormat(domain.GetTitle());
     if(domain.GetId().has_value()) {
         o["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
