@@ -1,6 +1,7 @@
 #ifndef MUS_INTERNAL_MUS_REPO_POSTGRES_REPOSITORY_POSTGRES
 #define MUS_INTERNAL_MUS_REPO_POSTGRES_REPOSITORY_POSTGRES
 
+#include <cassert>
 #include "mus-irepo/irepository.h"
 #include "database_object.h"
 #include "sql_utils.h"

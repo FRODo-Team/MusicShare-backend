@@ -105,9 +105,6 @@ User UserRepositoryPostgres::SqlMapper::ToDomainObject(const pqxx::row& row) {
 SqlObject UserRepositoryPostgres::SqlMapper::ToSqlObject(const User& domain) {
     SqlObject result;
 
-    if (domain.GetId().has_value()) {
-        result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
-    }
     result["nickname"] = SqlUtils::ValueToSqlFormat(domain.GetNickname());
     result["email"] = SqlUtils::ValueToSqlFormat(domain.GetEmail());
     result["username"] = SqlUtils::ValueToSqlFormat(domain.GetUsername());
@@ -115,6 +112,9 @@ SqlObject UserRepositoryPostgres::SqlMapper::ToSqlObject(const User& domain) {
             SqlUtils::ValueToSqlFormat(domain.GetPasswordHash());
     result["access_level"] =
             SqlUtils::ValueToSqlFormat(static_cast<int>(domain.GetAccessLevel()));
+    if (domain.GetId().has_value()) {
+        result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
+    }
 
     return result;
 }
