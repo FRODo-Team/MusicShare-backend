@@ -2,13 +2,17 @@
 #define MUS_INTERNAL_MUS_REPO_POSTGRES_CHAT_REPOSITORY_POSTGRES_H_
 
 #include "mus-irepo/ichat_repository.h"
-#include "db_connection_postgres.h"
+#include "internal/repository_postgres.h"
 
 namespace music_share {
 
 class ChatRepositoryPostgres final : public IChatRepository {
-    explicit ChatRepositoryPostgres(const std::string& connection);
+public:
+    explicit ChatRepositoryPostgres(const std::string& connection_string);
+    ChatRepositoryPostgres(const ChatRepositoryPostgres&) = delete;
     ~ChatRepositoryPostgres() = default;
+
+    ChatRepositoryPostgres& operator=(const ChatRepositoryPostgres&) = delete;
 
     std::optional<Chat> Find(uint32_t id) override;
     void Insert(Chat& out_chat) override;
@@ -16,17 +20,18 @@ class ChatRepositoryPostgres final : public IChatRepository {
     void Delete(const Chat& chat) override;
 
     std::vector<Chat> FindByUserId(uint32_t user_id) override;
-
     Chat FindByIdsOfUserPair(uint32_t first_user_id,
                              uint32_t second_user_id) override;
 
 private:
-    class Mapper {
+    class SqlMapper {
     public:
-        static Chat ToDomain(const pqxx::row& record);
+        static Chat ToDomainObject(const pqxx::row& row);
+        static SqlObject ToSqlObject(const Chat& domain);
     };
 
-    DbConnectionPostgres m_database;
+    RepositoryPostgres<Chat, SqlMapper> m_crud_repository;
+    const std::string& m_table_name;
 };
 
 } // namespace music_share
