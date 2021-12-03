@@ -27,7 +27,7 @@ Song::Song(const Song& other, uint32_t id)
         m_duration(other.GetDuration()),
         m_url(other.GetUrl()),
         m_year(other.GetYear()),
-        m_album(other.GetArtist()),
+        m_album(other.GetAlbum()),
         m_genre(other.GetGenre()),
         m_id(id) { }
 
