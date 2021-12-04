@@ -22,6 +22,7 @@ public:
 
     std::vector<Playlist> FindByTitle(const std::string& title) override;
     std::vector<Playlist> FindByCreatorId(uint32_t creator_id) override;
+    std::vector<Playlist> FindByUserId(uint32_t user_id) override;
 
 private:
     class SqlMapperForTablePlaylist {
@@ -35,6 +36,9 @@ private:
 
     static constexpr std::string_view kPlaylistHasSongTableName =
             "mus_playlist_has_song";
+
+    static constexpr std::string_view kUserHasPlaylistTableName =
+            "mus_user_has_playlist";
 };
 
 } // namespace music_share

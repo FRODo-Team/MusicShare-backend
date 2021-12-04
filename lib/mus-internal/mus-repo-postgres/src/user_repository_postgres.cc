@@ -127,26 +127,6 @@ std::vector<User> UserRepositoryPostgres::FindByNickname(
     return result;
 }
 
-// TODO: Переписать на JOIN-ах
-std::vector<uint32_t> UserRepositoryPostgres::FindUserPlaylists(
-        uint32_t user_id)
-{
-    std::string query =
-            "SELECT playlist_id FROM " + std::string(kUserHasPlaylistTableName) + " " +
-            "WHERE user_id=" + SqlUtils::ValueToSqlFormat(user_id);
-
-    pqxx::result response = m_crud_repository.ExecuteQuery(query);
-
-    std::vector<uint32_t> result;
-    for (const auto& row: response) {
-        assert(row[0].name() == std::string{ "playlist_id" });
-        auto playlist_id = row[0].as<uint32_t>();
-        result.push_back(playlist_id);
-    }
-
-    return result;
-}
-
 User UserRepositoryPostgres::SqlMapperForUserTable::ToDomainObject(
         const pqxx::row& row)
 {
