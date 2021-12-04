@@ -76,8 +76,8 @@ Chat ChatRepositoryPostgres::SqlMapper::ToDomainObject(const pqxx::row& row) {
 SqlObject ChatRepositoryPostgres::SqlMapper::ToSqlObject(const Chat& domain) {
     SqlObject o;
 
-    o["user_id_1"] = domain.GetUserIds().first;
-    o["user_id_2"] = domain.GetUserIds().second;
+    o["user_id_1"] = SqlUtils::ValueToSqlFormat(domain.GetUserIds().first);
+    o["user_id_2"] = SqlUtils::ValueToSqlFormat(domain.GetUserIds().second);
     if (domain.GetId().has_value()) {
         o["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
     }
