@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS mus_user_has_playlist(
     user_id INT,
     playlist_id INT,
 
+    UNIQUE (user_id, playlist_id),
+
     CONSTRAINT fk_user
         FOREIGN KEY(user_id) REFERENCES mus_user(id)
         ON DELETE CASCADE,
@@ -46,6 +48,8 @@ CREATE TABLE IF NOT EXISTS mus_user_has_playlist(
 CREATE TABLE IF NOT EXISTS mus_playlist_has_song(
     playlist_id INT,
     song_id INT,
+
+    UNIQUE (playlist_id, song_id),
 
     CONSTRAINT fk_playlist
         FOREIGN KEY(playlist_id) REFERENCES mus_playlist(id)

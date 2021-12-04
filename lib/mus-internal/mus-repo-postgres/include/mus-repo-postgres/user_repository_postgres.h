@@ -2,35 +2,39 @@
 #define MUS_INTERNAL_MUS_REPO_POSTGRES_USER_REPOSITORY_POSTGRES_H_
 
 #include "mus-irepo/iuser_repository.h"
-#include "db_connection_postgres.h"
-#include "db_utils.h"
+#include "mus-repo-postgres/internal/repository_postgres.h"
 
 namespace music_share {
 
 class UserRepositoryPostgres final : public IUserRepository {
 public:
-    explicit UserRepositoryPostgres(const std::string& connection);
+    explicit UserRepositoryPostgres(const std::string& connection_string);
+    UserRepositoryPostgres(const UserRepositoryPostgres&) = delete;
     ~UserRepositoryPostgres() = default;
-        
-    std::optional<User> Find(uint32_t id) override;
-    void Insert(User& out_user) override;
-    void Update(const User& user) override;
-    void Delete(const User& user) override;
 
-    std::vector<User> FindByNickname(const std::string& nickname) override;
+    UserRepositoryPostgres& operator=(const UserRepositoryPostgres&) = delete;
+
+    std::optional<User> Find(uint32_t id) override;
+    void Insert(User& out_obj) override;
+    void Update(const User& obj) override;
+    void Delete(const User& obj) override;
+
     std::optional<User> FindByUsername(const std::string& username) override;
     std::optional<User> FindByEmail(const std::string& email) override;
+    std::vector<User> FindByNickname(const std::string& nickname) override;
 
 private:
-    DbConnectionPostgres m_database;
-
-    class Mapper {
+    class SqlMapperForUserTable {
     public:
-        static User ToDomainObject(const pqxx::row& record);
-        static SqlObject ToSqlObject(const User& domain_obj);
+        static User ToDomainObject(const pqxx::row& row);
+        static SqlObject ToSqlObject(const User& domain);
     };
 
-    static constexpr std::string_view kTableName = "mus_user";
+    RepositoryPostgres<User, SqlMapperForUserTable> m_crud_repository;
+    const std::string& m_table_name;
+
+    static constexpr std::string_view kUserHasPlaylistTableName =
+            "mus_user_has_playlist";
 };
 
 } // namespace music_share

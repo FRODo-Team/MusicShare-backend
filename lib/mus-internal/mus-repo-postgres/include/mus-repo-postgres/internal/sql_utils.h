@@ -9,9 +9,9 @@ namespace music_share {
 
 using SqlObject = std::map<std::string, std::string>;
 
-class DbUtils {
+class SqlUtils {
 public:
-    DbUtils() = delete;
+    SqlUtils() = delete;
 
     // Приводит value в нужный для SQL-запроса формат
     template<typename T>
@@ -62,26 +62,6 @@ public:
         }
 
         return result;
-    }
-
-    static std::string MakeConnectionString(const std::string& host,
-                                            int port,
-                                            const std::string& user,
-                                            const std::string& password,
-                                            const std::string& database_name)
-    {
-        /*return {
-            "postgresql://" + user + ":" + password +"@" + host + ":" +
-             std::to_string(port) + "/" + database_name
-        };*/
-
-        return {
-            "host=" + host + " " +
-            "port=" + std::to_string(port) + " " +
-            "dbname=" + database_name + " " +
-            "user=" + user + " " +
-            "password=" + password
-        };
     }
 };
 

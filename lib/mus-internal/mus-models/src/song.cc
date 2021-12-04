@@ -9,47 +9,27 @@ Song::Song(const std::string &title,
            std::optional<uint32_t> year,
            const std::optional<std::string> &album,
            const std::optional<std::string> &genre,
-           std::optional<uint32_t> id) :
-    m_title(title),
-    m_artist(artist),
-    m_duration(duration),
-    m_url(url),
-    m_year(year),
-    m_album(album),
-    m_genre(genre),
-    m_id(id) { }
+           std::optional<uint32_t> id)
+        :
+        m_title(title),
+        m_artist(artist),
+        m_duration(duration),
+        m_url(url),
+        m_year(year),
+        m_album(album),
+        m_genre(genre),
+        m_id(id) { }
 
-std::optional<uint32_t> Song::GetId() const {
-    return m_id;
-}
-
-const std::string& Song::GetTitle() const {
-    return m_title;
-}
-
-const std::string& Song::GetArtist() const {
-    return m_artist;
-}
-
-const std::optional<std::string>& Song::GetAlbum() const {
-    return m_album;
-}
-
-const std::optional <std::string>& Song::GetGenre() const {
-    return m_genre;
-}
-
-std::optional<uint32_t> Song::GetYear() const {
-    return m_year;
-}
-
-const std::string& Song::GetDuration() const {
-    return m_duration;
-}
-
-const std::string& Song::GetUrl() const {
-    return m_url;
-}
+Song::Song(const Song& other, uint32_t id)
+        :
+        m_title(other.GetTitle()),
+        m_artist(other.GetArtist()),
+        m_duration(other.GetDuration()),
+        m_url(other.GetUrl()),
+        m_year(other.GetYear()),
+        m_album(other.GetAlbum()),
+        m_genre(other.GetGenre()),
+        m_id(id) { }
 
 void Song::SetTitle(const std::string &title) {
     if (!title.empty()) {
