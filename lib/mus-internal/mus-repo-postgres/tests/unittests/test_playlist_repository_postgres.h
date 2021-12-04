@@ -9,11 +9,7 @@ using music_share::PlaylistRepositoryPostgres;
 using music_share::Playlist;
 using music_share::DatabaseObject;
 
-/*
-    Данный тест имеет смысл при наличии поднятой тестовой базы данных.
-    TODO: Определить наполнение тестовой БД,
-          Дописать
- */
+//      !   Добавить тест для FindByUserId          !
 
 class TestPlaylistRepositoryPostgres : public ::testing::Test {
 protected:

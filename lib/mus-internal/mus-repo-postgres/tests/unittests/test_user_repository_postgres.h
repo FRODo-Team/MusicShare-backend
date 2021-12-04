@@ -11,7 +11,6 @@ using music_share::DatabaseObject;
 
 /* TODO (sunz):
  *      !   Добавить сравнения для User.playlist_ids     !
- *      !   Добавить тест для FindUserPlaylists          !
  */
 
 class TestUserRepositoryPostgres : public ::testing::Test {

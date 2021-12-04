@@ -116,6 +116,28 @@ std::vector<Playlist> PlaylistRepositoryPostgres::FindByCreatorId(
     return result;
 }
 
+// TODO: Переписать на JOIN-ах
+std::vector<Playlist> PlaylistRepositoryPostgres::FindByUserId(
+        uint32_t user_id)
+{
+    std::string query =
+            "SELECT playlist_id FROM " + std::string(kUserHasPlaylistTableName) + " " +
+            "WHERE user_id=" + SqlUtils::ValueToSqlFormat(user_id);
+
+    pqxx::result response = m_crud_repository.ExecuteQuery(query);
+
+    std::vector<Playlist> result;
+    for (const auto& row: response) {
+        assert(row[0].name() == std::string{ "playlist_id" });
+        auto playlist_id = row[0].as<uint32_t>();
+        std::optional<Playlist> playlist = Find(playlist_id);
+        assert(playlist.has_value());
+        result.push_back(*playlist);
+    }
+
+    return result;
+}
+
 Playlist PlaylistRepositoryPostgres::SqlMapperForTablePlaylist::ToDomainObject(const pqxx::row& row) {
     std::string title;
     uint32_t creator_id;
