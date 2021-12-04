@@ -8,24 +8,18 @@
 #include "http-server//requesthandler.h"  // music_share::RequestHandler
 
 namespace music_share {
-
-class Exception;
+namespace http_server {
 
 class IMiddleware {
 public:
-    using ExceptionHandler = std::function<Response(const Request&,
-                                                    const Exception&)>;
-
-    IMiddleware(RequestHandler inner_handler,
-                std::optional<ExceptionHandler> exception_handler);
+    IMiddleware(RequestHandler handler);
     virtual ~IMiddleware() = default;
 
     virtual Response operator()(const Request& request);
 protected:
-    Response call_inner_handler(const Request& request);
+    Response get_response(const Request& request);
 private:
     RequestHandler m_inner_handler;
-    std::optional<ExceptionHandler> m_exception_handler;
 };
 
 template<typename T>
@@ -39,18 +33,15 @@ public:
 template<Middleware T>
 class MiddlewareBuilder : public IMiddlewareBuilder {
 public:
-    explicit MiddlewareBuilder(
-        std::optional<IMiddleware::ExceptionHandler> exception_handler) 
-        : m_exception_handler(exception_handler) {}
+    MiddlewareBuilder() = default;
     ~MiddlewareBuilder() = default;
 
-    RequestHandler Build(RequestHandler inner_handler) {
-        return T(inner_handler, m_exception_handler);
+    RequestHandler Build(RequestHandler inner_handler) const {
+        return T(inner_handler);
     }
-private:
-    std::optional<IMiddleware::ExceptionHandler> m_exception_handler;
 };
 
+}  // namespace http_server
 }  // namespace music_share
 
 #endif  // MUS_HTTPSERVER_IMIDDLEWARE_H_

@@ -5,26 +5,18 @@
 #include "http-server/exception.h"  // music_share::Exception
 
 namespace music_share {
+namespace http_server {
 
-IMiddleware::IMiddleware(RequestHandler inner_handler,
-                         std::optional<ExceptionHandler> exception_handler) 
-    : m_inner_handler(inner_handler),
-      m_exception_handler(exception_handler) {}
+IMiddleware::IMiddleware(RequestHandler inner_handler)
+    : m_inner_handler(inner_handler) {}
 
 Response IMiddleware::operator()(const Request& request) {
-    return call_inner_handler(request);
+    return get_response(request);
 }
 
-Response IMiddleware::call_inner_handler(const Request& request) {
-    try {
-        return m_inner_handler(request);
-    } catch (const Exception& e) {
-        if (m_exception_handler.has_value()) {
-            return (*m_exception_handler)(request, e);
-        } else {
-            throw e;
-        }
-    }
+Response IMiddleware::get_response(const Request& request) {
+    return m_inner_handler(request);
 }
 
+}  // namespace http_server
 }  // namespace music_share

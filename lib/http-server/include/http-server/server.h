@@ -6,6 +6,7 @@
 #include <vector>  // std::vector
 
 namespace music_share {
+namespace http_server {
 
 class Acceptor;
 class Router;
@@ -30,6 +31,7 @@ private:
     std::shared_ptr<Router> m_router;
 };
 
+}  // namespace http_server
 }  // namespace music_share
 
 #endif  // MUS_HTTPSERVER_SERVER_H_

@@ -1,6 +1,9 @@
 #include "http-server/server.h"
 
+#include "http-server/acceptor.h"
+
 namespace music_share {
+namespace http_server {
 
 Server::Server(const std::string& portnum)
     : Server(portnum, std::thread::hardware_concurrency()) {}
@@ -15,4 +18,5 @@ void Server::Run() {
 void Server::on_stop() {
 }
 
+}  // namespace http_server
 }  // namespace music_share
