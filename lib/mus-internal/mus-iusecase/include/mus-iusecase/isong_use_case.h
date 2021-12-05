@@ -2,10 +2,10 @@
 #define MUS_INTERNAL_MUS_IUSECASE_ISONG_USE_CASE_H_
 
 #include <cstdint>
-#include <vector>
 #include <string>
-#include <optional>
+#include <vector>
 
+#include "mus-dto/song_request_dto.h"
 #include "mus-dto/song_response_dto.h"
 
 namespace music_share {
@@ -18,13 +18,20 @@ public:
 
     ISongUseCase& operator=(const ISongUseCase& song_use_case) = default;
 
-    virtual std::optional<SongResponseDTO> GetById(uint32_t id) = 0;
+    virtual SongResponseDTO GetById(uint32_t id) = 0;
 
-    virtual std::vector<SongResponseDTO> GetByTitle(std::string title) = 0;
+    virtual std::vector<SongResponseDTO> GetByTitle(const std::string& title) = 0;
 
-    virtual std::vector<SongResponseDTO> GetByArtist(std::string artist) = 0;
+    virtual std::vector<SongResponseDTO> GetByArtist(const std::string& artist) = 0;
 
-    virtual ~ISongUseCase() {};
+    virtual uint32_t Create(const SongRequestDTO& song_dto) = 0;
+
+    virtual SongResponseDTO Update(uint32_t song_id,
+                        const SongRequestDTO& song_dto) = 0;
+
+    virtual void DeleteById(uint32_t song_id) = 0;
+
+    virtual ~ISongUseCase() = default;
 };
 
 } // namespace music_share

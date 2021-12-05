@@ -13,11 +13,11 @@ public:
 
     IAuthUseCase& operator=(const IAuthUseCase& auth_use_case) = default;
 
-    virtual bool Authorization(UserRequestDTO& user) = 0;
+    virtual bool Authorization(const UserRequestDTO& user) = 0;
 
-    virtual bool Authentication(UserRequestDTO& user) = 0;
+    virtual bool Authentication(const UserRequestDTO& user) = 0;
 
-    virtual ~IAuthUseCase() {};
+    virtual ~IAuthUseCase() = default;
 };
 
 } // namespace music_share
