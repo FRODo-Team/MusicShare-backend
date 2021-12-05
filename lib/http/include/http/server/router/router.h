@@ -1,12 +1,22 @@
 #ifndef MUS_HTTP_ROUTER_H_
 #define MUS_HTTP_ROUTER_H_
 
+#include <map>  // std::map
 #include <string>  // std::string
+#include <memory>  // std::unique_ptr
+#include <algorithm>  // std::pair
 
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
 namespace music_share {
 namespace http {
+
+namespace common {
+
+class Request;  // namespace common
+
+}  // namespace common
+
 namespace server {
 namespace router {
 
@@ -15,13 +25,21 @@ class RouteTrie;
 
 class Router {
 public:
-    Router() = default;
+    Router();
     ~Router() = default;
 
-    RequestHandler RouteTo(const std::string& path);
-    void Register(Route&& route);
-private:
+    std::pair<RequestHandler, std::map<std::string, std::string>>
+    RouteTo(const common::Request& request);
 
+    void GET(const Route& route);
+    void POST(const Route& route);
+    void PATCH(const Route& route);
+    void DELETE(const Route& route);
+
+private:
+    void addRoute(const Route& route, std::string method);
+
+    std::unique_ptr<RouteTrie> m_trie;
 };
 
 }  // namespace router

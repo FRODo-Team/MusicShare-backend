@@ -1,15 +1,18 @@
 #ifndef MUS_HTTP_COMMON_REQUEST_H_
 #define MUS_HTTP_COMMON_REQUEST_H_
 
-#include <string>
-#include <boost/beast/http.hpp>
+#include "http/common/message.h"  // http::common::Message
+
+#include <string>  // std::string
 
 namespace music_share {
 namespace http {
 namespace common {
 
-class Request {
+class Request : public Message {
 public:
+    std::string Method() const;
+    std::string Path() const;
 private:
 };
 
