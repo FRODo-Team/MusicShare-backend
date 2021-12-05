@@ -1,7 +1,9 @@
-#include "http-server/router.h"
+#include "http/server/router/router.h"
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
+namespace router {
 
 RequestHandler Router::RouteTo(const std::string&) {
     return RequestHandler();
@@ -10,5 +12,7 @@ RequestHandler Router::RouteTo(const std::string&) {
 void Router::Register(Route&&) {
 }
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share

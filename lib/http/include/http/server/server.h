@@ -1,12 +1,13 @@
-#ifndef MUS_HTTPSERVER_SERVER_H_
-#define MUS_HTTPSERVER_SERVER_H_
+#ifndef MUS_HTTP_SERVER_SERVER_H_
+#define MUS_HTTP_SERVER_SERVER_H_
 
 #include <thread>  // std::thread
 #include <memory>  // std::unique_ptr, std::shared_ptr
 #include <vector>  // std::vector
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
 
 class Acceptor;
 class Router;
@@ -31,7 +32,8 @@ private:
     std::shared_ptr<Router> m_router;
 };
 
-}  // namespace http_server
+}  // namespace server
+}  // namespace http
 }  // namespace music_share
 
-#endif  // MUS_HTTPSERVER_SERVER_H_
+#endif  // MUS_HTTP_SERVER_SERVER_H_

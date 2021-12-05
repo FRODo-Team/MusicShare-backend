@@ -1,4 +1,4 @@
-#include "http-server/routetrie.h"
+#include "http/server/router/routetrie.h"
 
 #include <regex>  // std::regex_match
 #include <stack>  // std::stack
@@ -8,8 +8,8 @@
 #include <iterator>  // std::inserter
 #include <algorithm>  // std::pair
 
-#include "http-server/route.h"
-#include "http-server/routenode.h"
+#include "http/server/router/route.h"
+#include "http/server/router/routenode.h"
 
 namespace {
 
@@ -17,7 +17,7 @@ struct NotParametricKey {
     std::string name;
 };
 
-int operator<=>(const music_share::http_server::RouteNode& a,
+int operator<=>(const music_share::http::server::router::RouteNode& a,
                 const NotParametricKey& b) {
     if (a.pattern) {
         return 1;
@@ -26,7 +26,7 @@ int operator<=>(const music_share::http_server::RouteNode& a,
 }
 
 int operator<=>(const NotParametricKey& a,
-                const music_share::http_server::RouteNode& b) {
+                const music_share::http::server::router::RouteNode& b) {
     return operator<=>(b, a);
 }
 
@@ -35,7 +35,7 @@ struct ParametricKey {
     std::string pattern;
 };
 
-int operator<=>(const music_share::http_server::RouteNode& a,
+int operator<=>(const music_share::http::server::router::RouteNode& a,
                 const ParametricKey& b) {
     if (!a.pattern) {
         return -1;
@@ -45,14 +45,16 @@ int operator<=>(const music_share::http_server::RouteNode& a,
 }
 
 int operator<=>(const ParametricKey& a,
-                const music_share::http_server::RouteNode& b) {
+                const music_share::http::server::router::RouteNode& b) {
     return operator<=>(b, a);
 }
 
 }
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
+namespace router {
 
 using RouteNodeHolder = std::reference_wrapper<const RouteNode>;
 
@@ -146,9 +148,7 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
         }
 
         // push current path parameter
-        assert(idx > 0 && "If this assert is triggered, "
-                          "root route node is parametric, "
-                          "what is forbidden");
+        assert(idx > 0 && "root route node is forbidden to be parametric");
         if (current.get().pattern) {
             path_parameters.emplace_back(current.get().name, path_frags[idx - 1]);
         }
@@ -195,5 +195,7 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
     return {handler_it->second, path_params};
 }
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share

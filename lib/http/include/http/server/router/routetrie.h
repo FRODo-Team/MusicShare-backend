@@ -1,5 +1,5 @@
-#ifndef MUS_HTTPSERVER_ROUTETRIE_H_
-#define MUS_HTTPSERVER_ROUTETRIE_H_
+#ifndef MUS_HTTP_ROUTETRIE_H_
+#define MUS_HTTP_ROUTETRIE_H_
 
 #include <map>  // std::map
 #include <string>  // std::string
@@ -8,10 +8,12 @@
 #include <algorithm>  // std::pair
 #include <exception>  // std::exception
 
-#include "http-server//requesthandler.h"  // music_share::RequestHandler
+#include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
+namespace router {
 
 class Route;
 class RouteNode;
@@ -54,7 +56,9 @@ private:
     std::unique_ptr<RouteNode> m_root;
 };
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share
 
-#endif  // MUS_HTTPSERVER_ROUTETRIE_H_
+#endif  // MUS_HTTP_ROUTETRIE_H_
