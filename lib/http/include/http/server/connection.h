@@ -1,9 +1,11 @@
-#ifndef MUS_HTTPSERVER_CONNECTION_H_
-#define MUS_HTTPSERVER_CONNECTION_H_
+#ifndef MUS_HTTP_SERVER_CONNECTION_H_
+#define MUS_HTTP_SERVER_CONNECTION_H_
 
 #include <memory>  // std::shared_ptr
 
 namespace music_share {
+namespace http {
+namespace server {
 
 class Router;
 
@@ -25,6 +27,9 @@ private:
     std::shared_ptr<Router> m_router;
 };
 
+
+}  // namespace server
+}  // namespace http
 }  // namespace music_share
 
-#endif  // MUS_HTTPSERVER_CONNECTION_H_
+#endif  // MUS_HTTP_SERVER_CONNECTION_H_
