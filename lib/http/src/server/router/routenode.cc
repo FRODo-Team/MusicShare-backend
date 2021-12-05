@@ -1,10 +1,12 @@
-#include "http-server/routenode.h"
+#include "http/server/router/routenode.h"
 
 #include <regex> //  std::regex
 #include <cstring> //  strcmp
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
+namespace router {
 
 RouteNode::RouteNode(const std::string name,
         std::optional<std::string> pattern)
@@ -21,5 +23,7 @@ int operator<=>(const RouteNode& a, const RouteNode& b) {
     return diff;
 }
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share

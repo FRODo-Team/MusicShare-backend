@@ -1,9 +1,9 @@
-#include "http-server/route.h"
+#include "http/server/router/route.h"
 
 #include <cstring>
 
-#include "http-server/imiddleware.h"
-#include "http-server/routenode.h"
+#include "http/server/imiddleware.h"
+#include "http/server/router/routenode.h"
 #include "util.h"
 
 namespace {
@@ -14,7 +14,9 @@ const char* PATH_PARAM_RE = ":([a-zA-Z_]+[\\w_]*)\\((.*)\\)";
 }
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
+namespace router {
 
 std::optional<Route::PathNode>
 Route::PathNode::fromString(const std::string& node) {
@@ -72,7 +74,7 @@ RequestHandler Route::GetHandler() const {
 
     for (auto it = m_middleware_builders.rbegin();
          it != m_middleware_builders.rend(); ++it) {
-        handler = (**it).Build(handler);
+        handler = (*it)->Build(handler);
     }
 
     return handler;
@@ -82,5 +84,7 @@ const std::vector<Route::PathNode>& Route::GetPathNodes() const {
     return m_path_nodes;
 }
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share

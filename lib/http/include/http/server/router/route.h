@@ -1,5 +1,5 @@
-#ifndef MUS_HTTPSERVER_ROUTE_H_
-#define MUS_HTTPSERVER_ROUTE_H_
+#ifndef MUS_HTTP_ROUTE_H_
+#define MUS_HTTP_ROUTE_H_
 
 #include <regex>  // std::regex
 #include <string>  // std::string
@@ -8,12 +8,15 @@
 #include <optional>  // std::optional
 #include <initializer_list>  // std::initializer_list
 
-#include "http-server/requesthandler.h"
+#include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
 
 class IMiddlewareBuilder;
+
+namespace router {
 
 class Route {
 public:
@@ -51,7 +54,9 @@ private:
     std::vector<std::shared_ptr<IMiddlewareBuilder>> m_middleware_builders;
 };
 
-}  // namespace http_server
+}  // namespace router
+}  // namespace server
+}  // namespace http
 }  // namespace music_share
 
-#endif  // MUS_HTTPSERVER_ROUTE_H_
+#endif  // MUS_HTTP_ROUTE_H_

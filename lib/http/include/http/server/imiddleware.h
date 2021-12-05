@@ -1,23 +1,24 @@
-#ifndef MUS_HTTPSERVER_IMIDDLEWARE_H_
-#define MUS_HTTPSERVER_IMIDDLEWARE_H_
+#ifndef MUS_HTTP_SERVER_IMIDDLEWARE_H_
+#define MUS_HTTP_SERVER_IMIDDLEWARE_H_
 
 #include <optional>  // std::optional
 #include <functional>  // std::function
 #include <type_traits>  // std::is_base_of
 
-#include "http-server//requesthandler.h"  // music_share::RequestHandler
+#include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
 namespace music_share {
-namespace http_server {
+namespace http {
+namespace server {
 
 class IMiddleware {
 public:
     IMiddleware(RequestHandler handler);
     virtual ~IMiddleware() = default;
 
-    virtual Response operator()(const Request& request);
+    virtual common::Response operator()(const common::Request& request);
 protected:
-    Response get_response(const Request& request);
+    common::Response get_response(const common::Request& request);
 private:
     RequestHandler m_inner_handler;
 };
@@ -41,7 +42,8 @@ public:
     }
 };
 
-}  // namespace http_server
+}  // namespace server
+}  // namespace http
 }  // namespace music_share
 
-#endif  // MUS_HTTPSERVER_IMIDDLEWARE_H_
+#endif  // MUS_HTTP_SERVER_IMIDDLEWARE_H_

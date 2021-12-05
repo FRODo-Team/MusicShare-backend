@@ -5,7 +5,7 @@
 #include <string>  // std::string
 
 namespace music_share {
-namespace http_server {
+namespace http {
 namespace util {
 
 std::vector<std::string> split(const std::string& seq,
@@ -24,7 +24,7 @@ std::vector<std::string> split(const std::string& seq,
 }
 
 }  // namespace util
-}  // namespace http_server
+}  // namespace http
 }  // namespace music_share
 
 #endif  // MUS_HTTPSERVER_UTIL_H_
