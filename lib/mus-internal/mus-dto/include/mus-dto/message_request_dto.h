@@ -4,7 +4,8 @@
 #include <string>
 
 struct MessageRequestDTO {
-    MessageRequestDTO(std::string content_): content(content_) {}
+    MessageRequestDTO(const std::string& content_)
+                    : content(content_) {}
 
     std::string content;
 };

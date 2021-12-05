@@ -5,8 +5,9 @@
 #include <string>
 
 struct PlaylistResponseDTO {
-    PlaylistResponseDTO(uint32_t id_, uint32_t author_id_, uint32_t songs_count_,
-                        std::string title_)
+    PlaylistResponseDTO(uint32_t id_, uint32_t author_id_,
+                        uint32_t songs_count_,
+                        const std::string& title_)
                         : id(id_), author_id(author_id_),
                         songs_count(songs_count_),
                         title(title_) {}

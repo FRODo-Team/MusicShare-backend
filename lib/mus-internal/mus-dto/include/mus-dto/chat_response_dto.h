@@ -5,7 +5,7 @@
 
 struct ChatResponseDTO {
     ChatResponseDTO(uint32_t chat_id_, uint32_t user_first_id_,
-                    uint32_t user_second_id_):
+                    uint32_t user_second_id_) :
                     chat_id(chat_id_), user_first_id(user_first_id_),
                     user_second_id(user_second_id_) {}
 
