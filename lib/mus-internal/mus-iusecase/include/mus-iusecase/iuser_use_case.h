@@ -1,9 +1,8 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_IUSER_USE_CASE_H_
 
-#include <vector>
 #include <string>
-#include <optional>
+#include <vector>
 
 #include "mus-dto/user_request_dto.h"
 #include "mus-dto/user_response_dto.h"
@@ -18,17 +17,22 @@ public:
 
     IUserUseCase& operator=(const IUserUseCase& user_use_case) = default;
 
-    virtual std::optional<uint32_t> Create(UserRequestDTO user) = 0;
+    virtual uint32_t Create(const UserRequestDTO& user_dto) = 0;
 
-    virtual std::optional<UserResponseDTO> Update(uint32_t user_id, UserRequestDTO user) = 0;
+    virtual UserResponseDTO Update(uint32_t user_id,
+                                   const UserRequestDTO& user_dto) = 0;
 
-    virtual std::vector<UserResponseDTO> GetByUsername(std::string username) = 0;
+    virtual UserResponseDTO GetByUsername(const std::string& username) = 0;
 
-    virtual std::optional<UserResponseDTO> GetByNickname(std::string nickname) = 0;
+    virtual std::vector<UserResponseDTO> GetByNickname(const std::string& nickname) = 0;
 
-    virtual std::optional<UserResponseDTO> GetById(uint32_t id) = 0;
+    virtual UserResponseDTO GetById(uint32_t id) = 0;
 
-    virtual ~IUserUseCase() {};
+    virtual UserResponseDTO GetByEmail(const std::string& email) = 0;
+
+    virtual void DeleteById(uint32_t id) = 0;
+
+    virtual ~IUserUseCase() = default;
 };
 
 } // namespace music_share
