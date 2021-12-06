@@ -7,16 +7,10 @@
 #include <algorithm>  // std::pair
 
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
+#include "http/server/router/routetrie.h"
 
 namespace music_share {
 namespace http {
-
-namespace common {
-
-class Request;  // namespace common
-
-}  // namespace common
-
 namespace server {
 namespace router {
 

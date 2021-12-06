@@ -11,12 +11,14 @@ namespace server {
 IMiddleware::IMiddleware(RequestHandler inner_handler)
     : m_inner_handler(inner_handler) {}
 
-common::Response IMiddleware::operator()(const common::Request& request) {
-    return get_response(request);
+common::Response IMiddleware::operator()(const common::Request& request,
+                                         const Parameters& params) {
+    return get_response(request, params);
 }
 
-common::Response IMiddleware::get_response(const common::Request& request) {
-    return m_inner_handler(request);
+common::Response IMiddleware::get_response(const common::Request& request,
+                                           const Parameters& params) {
+    return m_inner_handler(request, params);
 }
 
 }  // namespace server
