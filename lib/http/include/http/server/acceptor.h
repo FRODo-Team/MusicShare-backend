@@ -2,18 +2,27 @@
 #define MUS_HTTP_SERVER_ACCEPTOR_H_
 
 #include <memory>  // std::shared_ptr
+#include <functional>
+#include <boost/asio.hpp>
+#include <boost/beast.hpp>
 
 namespace music_share {
 namespace http {
 namespace server {
 
 namespace router {
+
 class Router;
+
 }  // namespace router
 
-class Acceptor {
+class Acceptor: public std::enable_shared_from_this<Acceptor> {
 public:
-    Acceptor(std::shared_ptr<router::Router>& router);
+    //Acceptor(std::shared_ptr<Router>& router);
+    Acceptor(boost::asio::io_context& io,
+             const std::string& address,
+             const std::string& portnum,
+             std::weak_ptr<router::Router> router_ptr);
     ~Acceptor() = default;
 
     Acceptor(const Acceptor&) = delete;
@@ -22,9 +31,11 @@ public:
     void Run();
 private:
     void accept();
-    void on_accept();
+    void on_accept(boost::beast::error_code e, boost::asio::ip::tcp::socket);
 
-    std::shared_ptr<router::Router> m_router;
+    std::reference_wrapper<boost::asio::io_context> m_io;
+    boost::asio::ip::tcp::acceptor m_acceptor;
+    std::weak_ptr<router::Router> m_router;
 };
 
 }  // namespace server

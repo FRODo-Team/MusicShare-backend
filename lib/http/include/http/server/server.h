@@ -1,35 +1,41 @@
 #ifndef MUS_HTTP_SERVER_SERVER_H_
 #define MUS_HTTP_SERVER_SERVER_H_
 
-#include <thread>  // std::thread
 #include <memory>  // std::unique_ptr, std::shared_ptr
 #include <vector>  // std::vector
+#include <boost/asio.hpp>
 
 namespace music_share {
 namespace http {
 namespace server {
+namespace router {
+
+class Router;
+
+}  // namespace router
 
 class Acceptor;
-class Router;
 
 class Server {
 public:
-    Server(const std::string& portnum);
-    Server(const std::string& portnum, size_t workers_qty);
+    Server(const std::string& address, const std::string& portnum);
+    Server(const std::string& address, const std::string& portnum,
+           size_t workers_qty);
     ~Server() = default;
 
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 
+    std::shared_ptr<router::Router> Router();
+
     void Run();
 private:
     void on_stop();
 
-    std::string m_portnum;
     size_t m_workers_qty;
-    std::vector<std::thread> m_workers;
-    std::unique_ptr<Acceptor> m_acceptor;
-    std::shared_ptr<Router> m_router;
+    boost::asio::io_context m_io;
+    std::shared_ptr<router::Router> m_router;
+    std::shared_ptr<Acceptor> m_acceptor;
 };
 
 }  // namespace server

@@ -3,6 +3,7 @@
 #include <vector>  // std::vector
 
 #include "http/server/router/routetrie.h"  // music_share::http::server::router::RouteTrie
+#include "http/server/router/routenode.h"  // music_share::http::server::router::RouteNode
 #include "http/common/request.h"  // music_share::http::common::Request
 #include "util.h"  // music_share::util::split
 
@@ -17,9 +18,10 @@ Router::Router()
 
 std::pair<RequestHandler, std::map<std::string, std::string>>
 Router::RouteTo(const common::Request& request) {
-    std::vector<std::string> path_fragmets = util::split(request.Path(), "/");
+    std::vector<std::string> path_fragmets =
+        util::split(request.target().to_string(), "/");
 
-    return m_trie->Match(path_fragmets, request.Method());
+    return m_trie->Match(path_fragmets, request.method_string().to_string());
 }
 
 void Router::addRoute(const Route& route, std::string method) {

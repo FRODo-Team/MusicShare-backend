@@ -9,6 +9,7 @@
 #include <exception>  // std::exception
 
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
+#include "http/server/router/routenode.h"
 
 namespace music_share {
 namespace http {

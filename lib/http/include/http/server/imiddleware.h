@@ -16,9 +16,11 @@ public:
     IMiddleware(RequestHandler handler);
     virtual ~IMiddleware() = default;
 
-    virtual common::Response operator()(const common::Request& request);
+    virtual common::Response operator()(const common::Request& request,
+                                        const Parameters& params);
 protected:
-    common::Response get_response(const common::Request& request);
+    common::Response get_response(const common::Request& request,
+                                  const Parameters& params);
 private:
     RequestHandler m_inner_handler;
 };
