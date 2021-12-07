@@ -1,14 +1,14 @@
 #ifndef MUS_HTTP_COMMON_RESPONSE_H_
 #define MUS_HTTP_COMMON_RESPONSE_H_
 
-#include "http/common/message.h"  // http::common::Message
+#include <boost/beast/http/message.hpp>
+#include <boost/beast/http/string_body.hpp>
 
 namespace music_share {
 namespace http {
 namespace common {
 
-class Response : public Message {
-};
+using Response = boost::beast::http::response<boost::beast::http::string_body>;
 
 }  // namespace common
 }  // namespace http

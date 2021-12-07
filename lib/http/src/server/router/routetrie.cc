@@ -10,6 +10,9 @@
 
 #include "http/server/router/route.h"
 #include "http/server/router/routenode.h"
+#include "http/server/exception/notfound.h"
+#include "http/server/exception/methodnotallowed.h"
+#include "util.h"
 
 namespace {
 
@@ -27,7 +30,10 @@ int operator<=>(const music_share::http::server::router::RouteNode& a,
 
 int operator<=>(const NotParametricKey& a,
                 const music_share::http::server::router::RouteNode& b) {
-    return operator<=>(b, a);
+    if (b.pattern) {
+        return -1;
+    }
+    return strcmp(a.name.c_str(), b.name.c_str());
 }
 
 struct ParametricKey {
@@ -46,15 +52,16 @@ int operator<=>(const music_share::http::server::router::RouteNode& a,
 
 int operator<=>(const ParametricKey& a,
                 const music_share::http::server::router::RouteNode& b) {
-    return operator<=>(b, a);
+    if (!b.pattern) {
+        return 1;
+    }
+    return strcmp((a.name + a.pattern).c_str(),
+                  (b.name + b.pattern.value()).c_str());
 }
 
 }
 
-namespace music_share {
-namespace http {
-namespace server {
-namespace router {
+namespace music_share::http::server::router {
 
 using RouteNodeHolder = std::reference_wrapper<const RouteNode>;
 
@@ -105,8 +112,12 @@ void RouteTrie::AddRoute(const Route& route, const std::string method) {
 }
 
 std::pair<RequestHandler, std::map<std::string, std::string>>
-RouteTrie::Match(const std::vector<std::string>& path_frags,
-                 const std::string method) {
+RouteTrie::Match(const std::string& path, const std::string method) {
+    assert(path.size() > 0 && path[0] == '/' &&
+           "Path is required to be absolute");
+    auto path_frags = util::split(path.c_str() + 1, "/");
+
+    std::map<std::string, RequestHandler>::iterator handler_it;
     // route node, where we shall search handler
     // for specified path and method
     RouteNodeHolder last_visited = *m_root;
@@ -125,19 +136,6 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
         auto [current, idx, param_qty] = to_visit.top();
         to_visit.pop();
 
-        // if idx out of range path_frags, we achieved
-        // searching node on previous step
-        if (idx >= path_frags_qty) {
-            is_found = true;
-            break;
-        }
-
-        // skip empty path fragment
-        // (example: /some/path///to/ == /some/path/to)
-        if (path_frags[idx] == "") {
-            to_visit.push({current, idx + 1, param_qty});
-        }
-
         // erase path parameters of regected path
         // example:
         // if '/path/to/:a{.*}/smth' has been rejected
@@ -147,10 +145,32 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
             path_parameters.pop_back();
         }
 
-        // push current path parameter
-        assert(idx > 0 && "root route node is forbidden to be parametric");
         if (current.get().pattern) {
+            // push current path parameter
+            assert(idx > 0 && "root route node is forbidden to be parametric");
             path_parameters.emplace_back(current.get().name, path_frags[idx - 1]);
+        }
+
+        // if idx out of range path_frags, we achieved
+        // searching node on previous step
+        if (idx >= path_frags_qty) {
+            last_visited = current;
+            is_found = true;
+
+            auto& handlers = last_visited.get().handlers;
+            handler_it = handlers.find(method);
+            if (handler_it == handlers.end()) {
+                continue;
+            }
+
+            break;
+        }
+
+        // skip empty path fragment
+        // (example: /some/path///to/ == /some/path/to)
+        if (path_frags[idx] == "") {
+            to_visit.push({current, idx + 1, param_qty});
+            continue;
         }
 
         // push to 'to_visit' all parametric route nodes
@@ -177,13 +197,16 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
     }
 
     if (!is_found) {
-        throw NotExistingHandler(method);
+        return {[path](auto, auto) -> common::Response {
+            throw exception::NotFound(path);
+        }, Parameters()};
     }
 
     auto& handlers = last_visited.get().handlers;
-    auto handler_it = handlers.find(method);
     if (handler_it == handlers.end()) {
-        throw NotExistingHandler(method);
+        return {[method, path](auto, auto) -> common::Response {
+            throw exception::MethodNotAllowed(method, path);
+        }, Parameters()};
     }
 
     // move path parameters from vector to map
@@ -195,7 +218,4 @@ RouteTrie::Match(const std::vector<std::string>& path_frags,
     return {handler_it->second, path_params};
 }
 
-}  // namespace router
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+}  // namespace music_share::htttp::server::router

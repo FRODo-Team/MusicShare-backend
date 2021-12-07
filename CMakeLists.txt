@@ -3,9 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 project(mus CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+find_package(Threads REQUIRED)
 
 add_compile_options(-Wall -Werror -pedantic)
-add_compile_options("$<$<CONFIG:DEBUG>:-g3;-gdb>")
+add_compile_options("$<$<CONFIG:DEBUG>:-g3;-ggdb>")
 
 option(WITH_COVERAGE "Add coverage estimation")
 if(WITH_COVERAGE)
@@ -23,7 +24,6 @@ option(WITH_TESTS "Build tests" ON)
 if(WITH_TESTS)
     enable_testing()
     find_package(GTest REQUIRED)
-    find_package(Threads REQUIRED)
 endif()
 
 add_subdirectory(lib)
@@ -35,5 +35,5 @@ endif()
 
 add_executable(run_mus ${SOURCES})
 
-target_link_libraries(run_mus PUBLIC http-server ws-server mus-controller)
+target_link_libraries(run_mus PUBLIC http ws-server mus-controller)
 target_include_directories(run_mus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
