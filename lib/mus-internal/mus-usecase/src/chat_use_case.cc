@@ -1,8 +1,12 @@
 #include "mus-usecase/chat_use_case.h"
 
 #include <memory>
-
 #include <optional>
+
+#include "mus-exception/access_exception.h"
+#include "mus-exception/create_exception.h"
+#include "mus-exception/invalid_data_exception.h"
+#include "mus-exception/null_pointer_exception.h"
 
 using std::make_pair;
 using std::make_unique;
@@ -31,7 +35,7 @@ namespace music_share {
         m_chat_rep.Insert(*chat);
 
         if (!chat->GetId()) {
-            throw "Can`t create chat";
+            throw CreateException();
         }
 
         return *chat->GetId();
@@ -41,10 +45,10 @@ namespace music_share {
         optional<Chat> chat = m_chat_rep.Find(id);
 
         if (!chat) {
-            throw "Chat doesn`t exist";
+            throw InvalidDataException();
         }
         if (!chat->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return ChatResponseDTO(*chat->GetId(),
@@ -56,11 +60,11 @@ namespace music_share {
         optional<Chat> chat = m_chat_rep.Find(chat_id);
 
         if (!chat) {
-            throw "Chat doesn`t exist";
+            throw InvalidDataException();
         }
         if (chat->GetUserIds().first != user_id
             && chat->GetUserIds().second != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         m_chat_rep.Delete(*chat);
@@ -70,14 +74,14 @@ namespace music_share {
         vector<Chat> chats = m_chat_rep.FindByUserId(id);
 
         if (chats.empty()) {
-            throw "Chat doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<ChatResponseDTO> chats_dto;
         chats_dto.reserve(chats.size());
         for (const Chat& chat: chats) {
             if (!chat.GetId()) {
-                throw "Null id";
+                throw NullPointerException();
             }
             chats_dto.emplace_back(*chat.GetId(),
                                 chat.GetUserIds().first,
@@ -92,7 +96,7 @@ namespace music_share {
         Chat chat = m_chat_rep.FindByIdsOfUserPair(first_id, second_id);
 
         if (!chat.GetId()) {
-            throw "Chat doesn`t exist";
+            throw InvalidDataException();
         }
 
         return ChatResponseDTO(*chat.GetId(),

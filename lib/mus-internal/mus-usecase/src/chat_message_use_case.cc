@@ -3,6 +3,11 @@
 #include <memory>
 #include <optional>
 
+#include "mus-exception/access_exception.h"
+#include "mus-exception/create_exception.h"
+#include "mus-exception/invalid_data_exception.h"
+#include "mus-exception/null_pointer_exception.h"
+
 using std::make_unique;
 using std::optional;
 using std::string;
@@ -31,7 +36,7 @@ namespace music_share {
         m_chat_message_rep.Insert(*message);
 
         if (!message->GetId()) {
-            throw "Can`t create message";
+            throw CreateException();
         }
         return *message->GetId();
     }
@@ -40,10 +45,10 @@ namespace music_share {
         optional<ChatMessage> message = m_chat_message_rep.Find(id);
 
         if (!message) {
-            throw "Message doesn`t exist";
+            throw InvalidDataException();
         }
         if (!message->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return MessageResponseDTO(*message->GetId(),
@@ -58,22 +63,24 @@ namespace music_share {
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {
-            throw "Message doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<MessageResponseDTO> messages_dto;
         messages_dto.reserve(messages.size());
+
         for (const ChatMessage& message : messages) {
-            if (message.GetSenderId() == user_id) {
-                if (!message.GetId()) {
-                    throw "Null id";
-                }
-                messages_dto.emplace_back(*message.GetId(),
-                                       message.GetChatId(),
-                                       message.GetSenderId(),
-                                       message.GetContent(),
-                                       message.GetDatetime());
+            if (message.GetSenderId() != user_id) {
+                continue;
             }
+            if (!message.GetId()) {
+                throw NullPointerException();
+            }
+            messages_dto.emplace_back(*message.GetId(),
+                                      message.GetChatId(),
+                                      message.GetSenderId(),
+                                      message.GetContent(),
+                                      message.GetDatetime());
         }
 
         return messages_dto;
@@ -83,10 +90,10 @@ namespace music_share {
         optional<ChatMessage> message = m_chat_message_rep.Find(message_id);
 
         if (!message) {
-            throw "Message doesn`t exist";
+            throw InvalidDataException();
         }
         if (message->GetSenderId() != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         m_chat_message_rep.Delete(*message);
@@ -96,10 +103,10 @@ namespace music_share {
         optional<ChatMessage> message = m_chat_message_rep.Find(message_id);
 
         if (!message) {
-            throw "Message doesn`t exist";
+            throw InvalidDataException();
         }
         if (message->GetSenderId() != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         m_chat_message_rep.Update(*message);

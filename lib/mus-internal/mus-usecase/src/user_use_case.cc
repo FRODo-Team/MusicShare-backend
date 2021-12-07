@@ -3,6 +3,10 @@
 #include <memory>
 #include <optional>
 
+#include "mus-exception/create_exception.h"
+#include "mus-exception/invalid_data_exception.h"
+#include "mus-exception/null_pointer_exception.h"
+
 using std::make_unique;
 using std::nullopt;
 using std::optional;
@@ -32,7 +36,7 @@ namespace music_share {
         m_user_rep.Insert(*user);
 
         if (!user->GetId()) {
-            throw "Can`t create user";
+            throw CreateException();
         }
         return *user->GetId();
     }
@@ -57,10 +61,10 @@ namespace music_share {
         optional<User> user = m_user_rep.FindByUsername(username);
 
         if (!user) {
-            throw "User doesn`t exist";
+            throw InvalidDataException();
         }
         if (!user->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return UserResponseDTO(*user->GetId(),
@@ -72,14 +76,14 @@ namespace music_share {
         vector<User> users = m_user_rep.FindByNickname(nickname);
 
          if (users.empty()) {
-             throw "User doesn`t exist";
+             throw InvalidDataException();
          }
 
          vector<UserResponseDTO> users_dto;
          users_dto.reserve(users.size());
          for (const User& user : users) {
              if (!user.GetId()) {
-                 throw "Null id";
+                 throw NullPointerException();
              }
              users_dto.emplace_back(*user.GetId(),
                                    user.GetUsername(),
@@ -93,10 +97,10 @@ namespace music_share {
         optional<User> user = m_user_rep.FindByEmail(email);
 
         if (!user) {
-            throw "User doesn`t exist";
+            throw InvalidDataException();
         }
         if (!user->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return UserResponseDTO(*user->GetId(),
@@ -109,10 +113,10 @@ namespace music_share {
         optional<User> user = m_user_rep.Find(id);
 
         if (!user) {
-            throw "User doesn`t exist";
+            throw InvalidDataException();
         }
         if (!user->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return UserResponseDTO(*user->GetId(),
@@ -124,10 +128,10 @@ namespace music_share {
         optional<User> user = m_user_rep.Find(id);
 
         if (!user) {
-            throw "User doesn`t exist";
+            throw InvalidDataException();
         }
         if (!user->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         m_user_rep.Delete(*user);

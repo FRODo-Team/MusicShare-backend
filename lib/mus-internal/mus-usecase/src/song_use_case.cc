@@ -3,6 +3,10 @@
 #include <memory>
 #include <optional>
 
+#include "mus-exception/create_exception.h"
+#include "mus-exception/invalid_data_exception.h"
+#include "mus-exception/null_pointer_exception.h"
+
 using std::make_unique;
 using std::nullopt;
 using std::optional;
@@ -26,10 +30,10 @@ namespace music_share {
         optional<Song> song = m_song_rep.Find(id);
 
         if (!song) {
-            throw "Song doesn`t exist";
+            throw InvalidDataException();
         }
         if (!song->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return SongResponseDTO(*song->GetId(),
@@ -42,14 +46,14 @@ namespace music_share {
         vector<Song> songs = m_song_rep.FindByTitle(title);
 
         if (songs.empty()) {
-            throw "Song doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<SongResponseDTO> songs_dto;
         songs_dto.reserve(songs.size());
         for (const Song& song : songs) {
             if (!song.GetId()) {
-                throw "Null id";
+                throw NullPointerException();
             }
             songs_dto.emplace_back(*song.GetId(),
                                    song.GetTitle(),
@@ -64,14 +68,14 @@ namespace music_share {
         vector<Song> songs = m_song_rep.FindByArtist(artist);
 
         if (songs.empty()) {
-            throw "Song doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<SongResponseDTO> songs_dto;
         songs_dto.reserve(songs.size());
-        for (const Song& song: songs) {
+        for (const Song& song : songs) {
             if (!song.GetId()) {
-                throw "Null id";
+                throw NullPointerException();
             }
             songs_dto.emplace_back(*song.GetId(),
                                    song.GetTitle(),
@@ -94,7 +98,7 @@ namespace music_share {
         m_song_rep.Insert(*song);
 
         if (!song->GetId()) {
-            throw "Can`t create song";
+            throw CreateException();
         }
         return *song->GetId();
     }
@@ -123,10 +127,10 @@ namespace music_share {
         optional<Song> song = m_song_rep.Find(song_id);
 
         if (!song) {
-            throw "Song doesn`t exist";
+            throw InvalidDataException();
         }
         if (!song->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         m_song_rep.Delete(*song);

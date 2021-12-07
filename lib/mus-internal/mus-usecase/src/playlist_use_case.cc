@@ -3,6 +3,11 @@
 #include <memory>
 #include <optional>
 
+#include "mus-exception/access_exception.h"
+#include "mus-exception/create_exception.h"
+#include "mus-exception/invalid_data_exception.h"
+#include "mus-exception/null_pointer_exception.h"
+
 using std::make_unique;
 using std::nullopt;
 using std::optional;
@@ -32,7 +37,7 @@ namespace  music_share {
         m_playlist_rep.Insert(*playlist);
 
         if (!playlist->GetId()) {
-            throw "Can`t create playlist";
+            throw CreateException();
         }
         return *playlist->GetId();
     }
@@ -42,10 +47,10 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
         if (playlist->GetCreatorId() != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         m_playlist_rep.Delete(*playlist);
@@ -57,10 +62,10 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
         if (playlist->GetCreatorId() != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         for (const uint32_t& id : song.song_ids) {
@@ -75,10 +80,10 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
         if (playlist->GetCreatorId() != user_id) {
-            throw "No access";
+            throw AccessException();
         }
 
         playlist->RemoveSong(song_id);
@@ -89,17 +94,17 @@ namespace  music_share {
         vector<Playlist> playlists = m_playlist_rep.FindByUserId(user_id);
 
         if (playlists.empty()) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<PlaylistResponseDTO> playlists_dto;
         playlists_dto.reserve(playlists.size());
         for (const Playlist& playlist : playlists) {
             if (!playlist.GetId()) {
-                throw "Null id";
+                throw NullPointerException();
             }
             playlists_dto.emplace_back(*playlist.GetId(),
-                                    playlist.GetCreatorId(),
+                                       playlist.GetCreatorId(),
                                     static_cast<uint32_t>(playlist.GetSongIds().size()),
                                     playlist.GetTitle());
         }
@@ -111,14 +116,14 @@ namespace  music_share {
         vector<Playlist> playlists = m_playlist_rep.FindByTitle(title);
 
         if (playlists.empty()) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
 
         vector<PlaylistResponseDTO> playlists_dto;
         playlists_dto.reserve(playlists.size());
         for (const Playlist& playlist : playlists) {
             if (!playlist.GetId()) {
-                throw "Null id";
+                throw NullPointerException();
             }
             playlists_dto.emplace_back(*playlist.GetId(),
                                        playlist.GetCreatorId(),
@@ -133,10 +138,10 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(id);
 
         if (!playlist) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
         if (!playlist->GetId()) {
-            throw "Null id";
+            throw NullPointerException();
         }
 
         return PlaylistResponseDTO(*playlist->GetId(),
@@ -149,7 +154,7 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw "Playlist doesn`t exist";
+            throw InvalidDataException();
         }
 
         return playlist->GetSongIds();
