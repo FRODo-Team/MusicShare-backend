@@ -14,7 +14,7 @@
 namespace music_share::http::server::router {
 
 class Route;
-class RouteNode;
+struct RouteNode;
 
 class RouteTrie {
 public:
