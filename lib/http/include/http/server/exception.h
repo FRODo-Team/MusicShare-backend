@@ -1,17 +1,4 @@
-#ifndef MUS_HTTP_SERVER_EXCEPTION_H_
-#define MUS_HTTP_SERVER_EXCEPTION_H_
-
-#include <exception>
-
-namespace music_share {
-namespace http {
-namespace server {
-
-class Exception : public std::exception {
-};
-
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
-
-#endif  // MUS_HTTP_SERVER_EXCEPTION_H_
+#include "http/server/exception/exception.h"
+#include "http/server/exception/notfound.h"
+#include "http/server/exception/badrequest.h"
+#include "http/server/exception/methodnotallowed.h"

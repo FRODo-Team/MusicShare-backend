@@ -38,8 +38,7 @@ private:
     boost::beast::flat_buffer m_buffer;
     common::Request m_request;
     std::weak_ptr<router::Router> m_router;
-
-    //std::shared_ptr<Router> m_router;
+    std::shared_ptr<void> m_response;
 };
 
 

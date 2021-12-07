@@ -10,13 +10,13 @@
 
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
-namespace music_share {
-namespace http {
-namespace server {
+namespace music_share::http::server::middleware {
 
 class IMiddlewareBuilder;
 
-namespace router {
+}  // namespace music_share::http::server::middleware
+
+namespace music_share::http::server::router {
 
 class Route {
 public:
@@ -40,7 +40,7 @@ public:
     };
 
     Route(const std::string& path, RequestHandler handler,
-          std::initializer_list<std::shared_ptr<IMiddlewareBuilder>>
+          std::initializer_list<std::shared_ptr<middleware::IMiddlewareBuilder>>
           middleware_builders);
     ~Route() = default;
 
@@ -51,12 +51,10 @@ private:
     std::string m_path;
     RequestHandler m_handler;
     std::vector<PathNode> m_path_nodes;
-    std::vector<std::shared_ptr<IMiddlewareBuilder>> m_middleware_builders;
+    std::vector<std::shared_ptr<middleware::IMiddlewareBuilder>>
+    m_middleware_builders;
 };
 
-}  // namespace router
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+}  // namespace music_share::http::server::router
 
 #endif  // MUS_HTTP_ROUTE_H_

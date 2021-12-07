@@ -10,15 +10,12 @@
 
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 
-namespace music_share {
-namespace http {
-namespace server {
-namespace router {
+namespace music_share::http::server::router {
 
 struct RouteNode final {
     RouteNode(const std::string name,
               std::optional<std::string> pattern = std::nullopt);
-    ~RouteNode();
+    ~RouteNode() = default;
 
     RouteNode(const RouteNode&) = default;
     RouteNode& operator=(const RouteNode&) = default;
@@ -30,12 +27,11 @@ struct RouteNode final {
     std::map<std::string, RequestHandler> mutable handlers;
     std::set<RouteNode, std::less<>> mutable children;
 
-    friend int operator<=>(const RouteNode& a, const RouteNode& b);
 };
 
-}  // namespace router
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+int operator<=>(const RouteNode& a, const RouteNode& b);
+bool operator==(const RouteNode& a, const RouteNode& b);
+
+}  // namespace music_share::http::server::router
 
 #endif  // MUS_HTTP_ROUTENODE_H_

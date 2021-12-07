@@ -11,10 +11,7 @@
 #include "http/server/requesthandler.h"  // music_share::server::RequestHandler
 #include "http/server/router/routenode.h"
 
-namespace music_share {
-namespace http {
-namespace server {
-namespace router {
+namespace music_share::http::server::router {
 
 class Route;
 class RouteNode;
@@ -51,15 +48,11 @@ public:
 
     void AddRoute(const Route& route, const std::string method);
     std::pair<RequestHandler, std::map<std::string, std::string>>
-    Match(const std::vector<std::string>& path_frags,
-          const std::string method);
+    Match(const std::string& path, const std::string method);
 private:
     std::unique_ptr<RouteNode> m_root;
 };
 
-}  // namespace router
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+}  // namespace music_share::http::server::router
 
 #endif  // MUS_HTTP_ROUTETRIE_H_

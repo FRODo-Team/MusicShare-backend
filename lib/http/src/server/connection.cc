@@ -5,9 +5,7 @@
 #include "http/server/router/routetrie.h"
 #include "http/server/router/router.h"
 
-namespace music_share {
-namespace http {
-namespace server {
+namespace music_share::http::server {
 
 Connection::Connection(boost::asio::ip::tcp::socket&& socket,
                        std::weak_ptr<router::Router> router_ptr)
@@ -51,6 +49,12 @@ void Connection::on_read(boost::beast::error_code e, size_t transfered) {
     using ResponseMessage = http::message<false, http::string_body>;
     auto message =
         std::make_shared<ResponseMessage>(handler(m_request, params));
+    message->set(boost::beast::http::field::server,
+                 BOOST_BEAST_VERSION_STRING);
+    for (const auto& header_it: m_request.base()) {
+        message->set(header_it.name(), header_it.value());
+    }
+    m_response = message;
 
     boost::beast::http::async_write(
         m_stream, *message,
@@ -78,6 +82,4 @@ void Connection::close() {
         .shutdown(boost::asio::ip::tcp::socket::shutdown_send, e);
 }
 
-}  // namespace server
-}  // namespace http
-}  // namesp)ace music_share
+}  // namespace music_share::http::server

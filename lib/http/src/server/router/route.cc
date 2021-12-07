@@ -2,8 +2,8 @@
 
 #include <cstring>
 
-#include "http/server/imiddleware.h"
 #include "http/server/router/routenode.h"
+#include "http/server/middleware/middleware.h"
 #include "util.h"
 
 namespace {
@@ -13,15 +13,12 @@ const char* PATH_PARAM_RE = ":([a-zA-Z_]+[\\w_]*)\\((.*)\\)";
 
 }
 
-namespace music_share {
-namespace http {
-namespace server {
-namespace router {
+namespace music_share::http::server::router {
 
 std::optional<Route::PathNode>
 Route::PathNode::fromString(const std::string& node) {
     // not parametric node
-    if (node.size() > 0 && node[0] != ':') {
+    if (node.size() == 0 || (node.size() > 0 && node[0] != ':')) {
         if (std::regex_match(node, std::regex(PATH_NODE_RE))) {
             return PathNode{node, std::nullopt};
         }
@@ -34,8 +31,8 @@ Route::PathNode::fromString(const std::string& node) {
 
     // check if regex of parametric node is valid
     try {
-        std::string param_name = matches[0].str();
-        std::string param_pattern = matches[1].str();
+        std::string param_name = matches[1].str();
+        std::string param_pattern = matches[2].str();
         std::regex param_re = std::regex(param_pattern);
 
         return PathNode{param_name, param_pattern};
@@ -45,7 +42,8 @@ Route::PathNode::fromString(const std::string& node) {
 }
 
 Route::Route(const std::string& path, RequestHandler handler,
-             std::initializer_list<std::shared_ptr<IMiddlewareBuilder>>
+             std::initializer_list<
+                std::shared_ptr<middleware::IMiddlewareBuilder>>
                 middleware_builders)
     : m_path(path),
       m_handler(handler),
@@ -84,7 +82,4 @@ const std::vector<Route::PathNode>& Route::GetPathNodes() const {
     return m_path_nodes;
 }
 
-}  // namespace router
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+}  // namespace music_share::http::server::router
