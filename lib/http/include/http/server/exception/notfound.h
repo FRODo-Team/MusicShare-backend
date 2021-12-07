@@ -13,7 +13,7 @@ public:
         : Exception("Can't find resource for path: " + path),
           m_path(path) {}
 
-    inline std::string Path() const { return m_path; }
+    inline const std::string& Path() const { return m_path; }
 private:
     std::string m_path;
 };

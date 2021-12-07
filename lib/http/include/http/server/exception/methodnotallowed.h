@@ -15,8 +15,8 @@ public:
           m_method(method),
           m_path(path) {}
 
-    inline std::string Method() const { return m_method; }
-    inline std::string Path() const { return m_path; }
+    inline const std::string& Method() const { return m_method; }
+    inline const std::string& Path() const { return m_path; }
 private:
     std::string m_method;
     std::string m_path;
