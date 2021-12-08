@@ -112,28 +112,6 @@ namespace  music_share {
         return playlists_dto;
     }
 
-    vector<PlaylistResponseDTO> PlaylistUseCase::GetByTitle(const string& title) {
-        vector<Playlist> playlists = m_playlist_rep.FindByTitle(title);
-
-        if (playlists.empty()) {
-            throw InvalidDataException();
-        }
-
-        vector<PlaylistResponseDTO> playlists_dto;
-        playlists_dto.reserve(playlists.size());
-        for (const Playlist& playlist : playlists) {
-            if (!playlist.GetId()) {
-                throw NullPointerException();
-            }
-            playlists_dto.emplace_back(*playlist.GetId(),
-                                       playlist.GetCreatorId(),
-                                       static_cast<uint32_t>(playlist.GetSongIds().size()),
-                                       playlist.GetTitle());
-        }
-
-        return playlists_dto;
-    }
-
     PlaylistResponseDTO PlaylistUseCase::GetById(uint32_t id) {
         optional<Playlist> playlist = m_playlist_rep.Find(id);
 

@@ -41,23 +41,6 @@ namespace music_share {
         return *message->GetId();
     }
 
-    MessageResponseDTO ChatMessageUseCase::FindById(uint32_t id) {
-        optional<ChatMessage> message = m_chat_message_rep.Find(id);
-
-        if (!message) {
-            throw InvalidDataException();
-        }
-        if (!message->GetId()) {
-            throw NullPointerException();
-        }
-
-        return MessageResponseDTO(*message->GetId(),
-                                  message->GetChatId(),
-                                  message->GetSenderId(),
-                                  message->GetContent(),
-                                  message->GetDatetime());
-    }
-
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
                                                                    uint32_t chat_id) {
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
@@ -85,38 +68,5 @@ namespace music_share {
 
         return messages_dto;
     }
-
-    void ChatMessageUseCase::Delete(uint32_t user_id, uint32_t message_id) {
-        optional<ChatMessage> message = m_chat_message_rep.Find(message_id);
-
-        if (!message) {
-            throw InvalidDataException();
-        }
-        if (message->GetSenderId() != user_id) {
-            throw AccessException();
-        }
-
-        m_chat_message_rep.Delete(*message);
-    }
-
-    MessageResponseDTO ChatMessageUseCase::Update(uint32_t user_id, uint32_t message_id) {
-        optional<ChatMessage> message = m_chat_message_rep.Find(message_id);
-
-        if (!message) {
-            throw InvalidDataException();
-        }
-        if (message->GetSenderId() != user_id) {
-            throw AccessException();
-        }
-
-        m_chat_message_rep.Update(*message);
-
-        return MessageResponseDTO(message_id,
-                                  message->GetChatId(),
-                                  message->GetSenderId(),
-                                  message->GetContent(),
-                                  message->GetDatetime() );
-    }
-
 
 }  // namespace music_share

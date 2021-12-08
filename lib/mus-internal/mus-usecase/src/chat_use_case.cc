@@ -41,35 +41,6 @@ namespace music_share {
         return *chat->GetId();
     }
 
-    ChatResponseDTO ChatUseCase::GetById(uint32_t id) {
-        optional<Chat> chat = m_chat_rep.Find(id);
-
-        if (!chat) {
-            throw InvalidDataException();
-        }
-        if (!chat->GetId()) {
-            throw NullPointerException();
-        }
-
-        return ChatResponseDTO(*chat->GetId(),
-                               chat->GetUserIds().first,
-                               chat->GetUserIds().second);
-    }
-
-    void ChatUseCase::Delete(uint32_t user_id, uint32_t chat_id) {
-        optional<Chat> chat = m_chat_rep.Find(chat_id);
-
-        if (!chat) {
-            throw InvalidDataException();
-        }
-        if (chat->GetUserIds().first != user_id
-            && chat->GetUserIds().second != user_id) {
-            throw AccessException();
-        }
-
-        m_chat_rep.Delete(*chat);
-    }
-
     vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) {
         vector<Chat> chats = m_chat_rep.FindByUserId(id);
 

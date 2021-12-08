@@ -72,8 +72,16 @@ namespace music_share {
                                user->GetNickname());
     }
 
-    vector<UserResponseDTO> UserUseCase::GetByNickname(const string& nickname) {
-        vector<User> users = m_user_rep.FindByNickname(nickname);
+    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) {
+        vector<User> users;
+        users.reserve(nicknames.size());
+
+        for (const string& nickname : nicknames) {
+            vector<User> result_search = m_user_rep.FindByNickname(nickname);
+            users.insert(users.end(),
+                         result_search.begin(),
+                         result_search.end());
+        }
 
          if (users.empty()) {
              throw InvalidDataException();
@@ -93,22 +101,6 @@ namespace music_share {
          return users_dto;
     }
 
-    UserResponseDTO UserUseCase::GetByEmail(const string& email) {
-        optional<User> user = m_user_rep.FindByEmail(email);
-
-        if (!user) {
-            throw InvalidDataException();
-        }
-        if (!user->GetId()) {
-            throw NullPointerException();
-        }
-
-        return UserResponseDTO(*user->GetId(),
-                               user->GetUsername(),
-                               user->GetNickname());
-
-    }
-
     UserResponseDTO UserUseCase::GetById(uint32_t id) {
         optional<User> user = m_user_rep.Find(id);
 
@@ -122,19 +114,6 @@ namespace music_share {
         return UserResponseDTO(*user->GetId(),
                                user->GetUsername(),
                                user->GetNickname());
-    }
-
-    void UserUseCase::DeleteById(uint32_t id) {
-        optional<User> user = m_user_rep.Find(id);
-
-        if (!user) {
-            throw InvalidDataException();
-        }
-        if (!user->GetId()) {
-            throw NullPointerException();
-        }
-
-        m_user_rep.Delete(*user);
     }
 
 }  // namespace music_share
