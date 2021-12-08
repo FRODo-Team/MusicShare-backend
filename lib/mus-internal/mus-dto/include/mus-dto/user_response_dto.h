@@ -5,9 +5,11 @@
 #include <string>
 
 struct UserResponseDTO {
-    UserResponseDTO(uint32_t id_, std::string username_,
-                    std::string nickname_)
-                    : id(id_), username(username_), nickname(nickname_) {}
+    UserResponseDTO(uint32_t id_,
+                    const std::string& username_,
+                    const std::string& nickname_)
+                    : id(id_), username(username_),
+                    nickname(nickname_) {}
 
     uint32_t id;
     std::string username;

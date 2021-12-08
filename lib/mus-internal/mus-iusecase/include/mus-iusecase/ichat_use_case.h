@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <optional>
 
 #include "mus-dto/chat_request_dto.h"
 #include "mus-dto/chat_response_dto.h"
@@ -18,14 +17,15 @@ public:
 
     IChatUseCase& operator=(const IChatUseCase& chat_use_case) = default;
 
-    virtual std::optional<uint32_t> Create(uint32_t user_id, ChatRequestDTO chat) = 0;
+    virtual uint32_t Create(uint32_t user_id,
+                            const ChatRequestDTO& chat) = 0;
 
     virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) = 0;
 
-    virtual std::optional<ChatResponseDTO> GetByIdOfTwoUser(uint32_t first_id,
-                                                            uint32_t second_id) = 0;
+    virtual ChatResponseDTO GetByIdOfTwoUser(uint32_t first_id,
+                                             uint32_t second_id) = 0;
 
-    virtual ~IChatUseCase() {};
+    virtual ~IChatUseCase() = default;
 };
 
 } // namespace music_share

@@ -6,8 +6,8 @@
 #include <vector>
 
 struct PlaylistRequestDTO {
-    PlaylistRequestDTO(std::string name_,
-                       std::vector<uint32_t> song_ids_)
+    PlaylistRequestDTO(const std::string& name_,
+                       const std::vector<uint32_t>& song_ids_)
                         : name(name_), song_ids(song_ids_) {}
 
     std::string name;

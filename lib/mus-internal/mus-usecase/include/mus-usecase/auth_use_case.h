@@ -6,26 +6,26 @@
 
 namespace music_share {
 
-class AuthUseCase : public IAuthUseCase {
-public:
-    AuthUseCase() = delete;
+    class AuthUseCase : public IAuthUseCase {
+    public:
+        AuthUseCase() = delete;
 
-    AuthUseCase(IAuthRepository &auth_rep);
+        explicit AuthUseCase(IAuthRepository& auth_rep);
 
-    AuthUseCase(const AuthUseCase &auth_use_case);
+        AuthUseCase(const AuthUseCase& auth_use_case);
 
-    AuthUseCase &operator=(const AuthUseCase &auth_use_case);
+        AuthUseCase& operator=(const AuthUseCase& auth_use_case);
 
-    bool Authorization(UserRequestDTO& user) override;
+        bool Authorization(const UserRequestDTO& user) override;
 
-    bool Authentication(UserRequestDTO& user) override;
+        bool Authentication(const UserRequestDTO& user) override;
 
-    ~AuthUseCase();
+        ~AuthUseCase() = default;
 
-private:
-    IAuthRepository &m_auth_rep;
-};
+    private:
+        IAuthRepository &m_auth_rep;
+    };
 
-} // namespace music_share
+}  // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_USECASE_AUTH_USE_CASE_H_

@@ -4,7 +4,8 @@
 #include <cstdint>
 
 struct ChatRequestDTO {
-    ChatRequestDTO(uint32_t target_id_) : target_id(target_id_) {}
+    ChatRequestDTO(uint32_t target_id_)
+                    : target_id(target_id_) { }
 
     uint32_t target_id;
 };
