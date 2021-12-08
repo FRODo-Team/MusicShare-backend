@@ -124,7 +124,6 @@ TEST_F(TestUserUseCase, CreateExistUsername) {
     EXPECT_THROW(user_usecase->Create(*user_request), ExistException);
 }
 
-
 TEST_F(TestUserUseCase, Update) {
     UserResponseDTO user_response_expected(1,
                                            "user",
