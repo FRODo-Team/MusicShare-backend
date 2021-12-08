@@ -3,10 +3,10 @@
 #include <memory>
 #include <optional>
 
-#include "mus-exception/access_exception.h"
-#include "mus-exception/create_exception.h"
-#include "mus-exception/invalid_data_exception.h"
-#include "mus-exception/null_pointer_exception.h"
+#include "mus-usecase/exception/access_exception.h"
+#include "mus-usecase/exception/create_exception.h"
+#include "mus-usecase/exception/invalid_data_exception.h"
+#include "mus-usecase/exception/null_pointer_exception.h"
 
 using std::make_unique;
 using std::nullopt;
