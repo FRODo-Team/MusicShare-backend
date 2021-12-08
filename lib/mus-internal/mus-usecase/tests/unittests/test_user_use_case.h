@@ -165,10 +165,10 @@ TEST_F(TestUserUseCase, GetByUsernameNotExist) {
 
 TEST_F(TestUserUseCase, GetByUsernameNullPointer) {
     EXPECT_CALL(*user_rep, FindByUsername("user"))
-            .WillOnce(Return(Return(User("user", "user@mail.ru",
+            .WillOnce(Return(User("user", "user@mail.ru",
                                         "hash", "user",
                                         User::AccessLevel::Authorized,
-                                        nullopt))));
+                                        nullopt)));
 
     EXPECT_THROW(user_usecase->GetByUsername("user"), NullPointerException);
 }
