@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "mus-usecase/exception/create_exception.h"
+#include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 
@@ -27,6 +28,16 @@ namespace music_share {
     }
 
     uint32_t UserUseCase::Create(const UserRequestDTO& user_dto) {
+        optional<User> user_valid = m_user_rep.FindByUsername(user_dto.username);
+        if (user_valid) {
+            throw ExistException();
+        }
+
+        user_valid = m_user_rep.FindByEmail(user_dto.email);
+        if (user_valid) {
+            throw ExistException();
+        }
+
         auto user = make_unique<User>(user_dto.nickname,
                                                     user_dto.email,
                                                     user_dto.username,

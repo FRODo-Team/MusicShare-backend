@@ -5,6 +5,7 @@
 
 #include "mus-usecase/exception/access_exception.h"
 #include "mus-usecase/exception/create_exception.h"
+#include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 
@@ -29,6 +30,12 @@ namespace music_share {
 
     uint32_t ChatUseCase::Create(uint32_t user_id,
                                  const ChatRequestDTO& chat_request_dto) {
+        Chat chat_valid = m_chat_rep.FindByIdsOfUserPair(user_id,
+                                                         chat_request_dto.target_id);
+        if (chat_valid.GetId()) {
+            throw ExistException();
+        }
+
         auto chat = make_unique<Chat>(user_id,
                                                     chat_request_dto.target_id);
 
@@ -37,7 +44,6 @@ namespace music_share {
         if (!chat->GetId()) {
             throw CreateException();
         }
-
         return *chat->GetId();
     }
 
