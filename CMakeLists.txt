@@ -35,5 +35,5 @@ endif()
 
 add_executable(run_mus ${SOURCES})
 
-target_link_libraries(run_mus PUBLIC http ws-server mus-controller)
+target_link_libraries(run_mus PUBLIC http ws-server mus-delivery)
 target_include_directories(run_mus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)

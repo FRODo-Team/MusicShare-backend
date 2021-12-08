@@ -40,6 +40,9 @@ void Router::addRoute(const Route& route, std::string method) {
 void Router::GET(const Route& route) {
     addRoute(route, "GET");
 }
+void Router::PUT(const Route& route) {
+    addRoute(route, "PUT");
+}
 void Router::POST(const Route& route) {
     addRoute(route, "POST");
 }

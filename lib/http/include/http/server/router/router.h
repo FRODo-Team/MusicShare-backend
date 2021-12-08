@@ -28,6 +28,7 @@ public:
     RouteTo(const common::Request& request);
 
     void GET(const Route& route);
+    void PUT(const Route& route);
     void POST(const Route& route);
     void PATCH(const Route& route);
     void DELETE(const Route& route);
