@@ -2,7 +2,7 @@
 
 //#include "test_auth_use_case.h"
 //#include "test_chat_use_case.h"
-// #include "test_playlist_use_case.h"
+#include "test_playlist_use_case.h"
 // #include "test_song_use_case.h"
 #include "test_user_use_case.h"
 
