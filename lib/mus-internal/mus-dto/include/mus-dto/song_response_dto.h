@@ -5,8 +5,9 @@
 #include <string>
 
 struct SongResponseDTO {
-    SongResponseDTO(uint32_t id_, std::string name_,
-                    std::string author_, std::string path_)
+    SongResponseDTO(uint32_t id_, const std::string& name_,
+                    const std::string& author_,
+                    const std::string& path_)
                     : id(id_), name(name_), author(author_),
                       path(path_) {}
 

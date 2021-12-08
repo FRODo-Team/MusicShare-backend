@@ -1,8 +1,8 @@
 #ifndef MUS_INTERNAL_MUS_IUSECASE_IPLAYLIST_USE_CASE_H_
 #define MUS_INTERNAL_MUS_IUSECASE_IPLAYLIST_USE_CASE_H_
 
-#include <vector>
 #include <optional>
+#include <vector>
 
 #include "mus-dto/playlist_request_dto.h"
 #include "mus-dto/playlist_song_request_dto.h"
@@ -19,25 +19,25 @@ public:
 
     IPlaylistUseCase& operator=(const IPlaylistUseCase& playlist_use_case) = default;
 
-    virtual std::optional<uint32_t> Create(uint32_t user_id,
-                                           PlaylistRequestDTO playlist) = 0;
+    virtual uint32_t Create(uint32_t user_id,
+                            const PlaylistRequestDTO& playlist_dto) = 0;
 
-    virtual bool DeleteById(uint32_t user_id, uint32_t playlist_id) = 0;
+    virtual void DeleteById(uint32_t user_id, uint32_t playlist_id) = 0;
 
-    virtual bool AddSongById(PlaylistSongRequestDTO song, uint32_t playlist_id,
+    virtual void AddSongById(const PlaylistSongRequestDTO& song_dto,
+                             uint32_t playlist_id,
                              uint32_t user_id) = 0;
 
-    virtual bool DeleteSongById(uint32_t song_id, uint32_t playlist_id,
+    virtual void DeleteSongById(uint32_t song_id, uint32_t playlist_id,
                                 uint32_t user_id) = 0;
 
-    virtual  std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id,
-                                                          uint32_t author_id) = 0;
+    virtual std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id) = 0;
 
-    virtual  std::optional<PlaylistResponseDTO> GetById(uint32_t id) = 0;
+    virtual PlaylistResponseDTO GetById(uint32_t id) = 0;
 
-    virtual  std::vector<SongResponseDTO> GetSongs(uint32_t playlist_id) = 0;
+    virtual std::vector<uint32_t> GetSongs(uint32_t playlist_id) = 0;
 
-    virtual ~IPlaylistUseCase() {};
+    virtual ~IPlaylistUseCase() = default;
 };
 
 } // namespace music_share

@@ -1,34 +1,37 @@
 #ifndef MUS_INTERNAL_MUS_USECASE_CHAT_USE_CASE_H_
 #define MUS_INTERNAL_MUS_USECASE_CHAT_USE_CASE_H_
 
+#include <vector>
+
 #include "mus-iusecase/ichat_use_case.h"
 #include "mus-irepo/ichat_repository.h"
 
 namespace music_share {
 
-class ChatUseCase : public IChatUseCase {
-public:
-    ChatUseCase() = delete;
+    class ChatUseCase : public IChatUseCase {
+    public:
+        ChatUseCase() = delete;
 
-    ChatUseCase(const IChatRepository &chat_rep);
+        explicit ChatUseCase(IChatRepository &chat_rep);
 
-    ChatUseCase(const ChatUseCase &chat_use_case);
+        ChatUseCase(const ChatUseCase &chat_use_case);
 
-    ChatUseCase &operator=(const ChatUseCase &chat_use_case);
+        ChatUseCase &operator=(const ChatUseCase &chat_use_case);
 
-    std::optional <uint32_t> Create(uint32_t user_id, ChatRequestDTO chat) override;
+        uint32_t Create(uint32_t user_id,
+                        const ChatRequestDTO& chat) override;
 
-    std::vector <ChatResponseDTO> GetByIdOfOneUser(uint32_t id) override;
+        std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) override;
 
-    std::optional <ChatResponseDTO> GetByIdOfTwoUser(uint32_t first_id,
-                                                     uint32_t second_id) override;
+        ChatResponseDTO GetByIdOfTwoUser(uint32_t first_id,
+                                         uint32_t second_id) override;
 
-    ~ChatUseCase();
+        ~ChatUseCase() = default;
 
-private:
-    IChatRepository &m_chat_rep;
-};
+    private:
+        IChatRepository &m_chat_rep;
+    };
 
-} // namespace music_share
+}  // namespace music_share
 
 #endif  // MUS_INTERNAL_MUS_USECASE_CHAT_USE_CASE_H_

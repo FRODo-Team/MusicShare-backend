@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "mus-dto/message_response_dto.h"
 #include "mus-dto/message_request_dto.h"
+#include "mus-dto/message_response_dto.h"
 
 namespace music_share {
 
@@ -16,13 +16,14 @@ namespace music_share {
 
         IChatMessageUseCase &operator=(const IChatMessageUseCase &chat_message_use_case) = default;
 
-        virtual bool SendMessage(MessageRequestDTO message, uint32_t chat_id,
-                                 uint32_t user_id) = 0;
+        virtual uint32_t SendMessage(const MessageRequestDTO& message,
+                                     const std::string& datetime,
+                                     uint32_t chat_id, uint32_t user_id) = 0;
 
-        virtual std::vector <MessageResponseDTO> GetUserMessages(uint32_t user_id,
-                                                                 uint32_t chat_id) = 0;
+        virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
+                                                                uint32_t chat_id) = 0;
 
-        virtual ~IChatMessageUseCase() {};
+        virtual ~IChatMessageUseCase() = default;
     };
 
 }
