@@ -24,13 +24,6 @@ namespace music_share {
 
         std::vector<SongResponseDTO> GetByArtist(const std::string& artist) override;
 
-        uint32_t Create(const SongRequestDTO& song_dto) override;
-
-        SongResponseDTO Update(uint32_t song_id,
-                               const SongRequestDTO& song_dto) override;
-
-        void DeleteById(uint32_t song_id) override;
-
         ~SongUseCase() = default;
 
     private:

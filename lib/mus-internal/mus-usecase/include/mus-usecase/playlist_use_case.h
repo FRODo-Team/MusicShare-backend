@@ -39,8 +39,6 @@ namespace music_share {
 
         std::vector<uint32_t> GetSongs(uint32_t playlist_id) override;
 
-        std::vector<PlaylistResponseDTO> GetByTitle(const std::string& title) override;
-
         ~PlaylistUseCase() = default;
 
     private:

@@ -23,13 +23,6 @@ namespace music_share {
         virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
                                                                 uint32_t chat_id) = 0;
 
-        virtual MessageResponseDTO FindById(uint32_t id) = 0;
-
-        virtual void Delete(uint32_t user_id, uint32_t message_id) = 0;
-
-        virtual MessageResponseDTO Update(uint32_t user_id,
-                                          uint32_t message_id) = 0;
-
         virtual ~IChatMessageUseCase() = default;
     };
 

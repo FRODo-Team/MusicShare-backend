@@ -17,7 +17,7 @@ namespace music_share {
 
         UserUseCase(const UserUseCase& user_use_case);
 
-        UserUseCase &operator=(const UserUseCase& user_use_case);
+        UserUseCase& operator=(const UserUseCase& user_use_case);
 
         uint32_t Create(const UserRequestDTO& user_dto) override;
 
@@ -26,13 +26,9 @@ namespace music_share {
 
         UserResponseDTO GetByUsername(const std::string& username) override;
 
-        std::vector<UserResponseDTO> GetByNickname(const std::string& nickname) override;
-
-        UserResponseDTO GetByEmail(const std::string& email) override;
+        std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) override;
 
         UserResponseDTO GetById(uint32_t id) override;
-
-        void DeleteById(uint32_t id) override;
 
         ~UserUseCase() = default;
 

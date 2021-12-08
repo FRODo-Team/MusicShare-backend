@@ -21,14 +21,10 @@ namespace music_share {
         uint32_t Create(uint32_t user_id,
                         const ChatRequestDTO& chat) override;
 
-        ChatResponseDTO GetById(uint32_t id) override;
-
         std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) override;
 
         ChatResponseDTO GetByIdOfTwoUser(uint32_t first_id,
                                          uint32_t second_id) override;
-
-        void Delete(uint32_t user_id, uint32_t chat_id) override;
 
         ~ChatUseCase() = default;
 

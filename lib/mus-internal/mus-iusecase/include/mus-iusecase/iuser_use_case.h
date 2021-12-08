@@ -24,13 +24,9 @@ public:
 
     virtual UserResponseDTO GetByUsername(const std::string& username) = 0;
 
-    virtual std::vector<UserResponseDTO> GetByNickname(const std::string& nickname) = 0;
+    virtual std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) = 0;
 
     virtual UserResponseDTO GetById(uint32_t id) = 0;
-
-    virtual UserResponseDTO GetByEmail(const std::string& email) = 0;
-
-    virtual void DeleteById(uint32_t id) = 0;
 
     virtual ~IUserUseCase() = default;
 };
