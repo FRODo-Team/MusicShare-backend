@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "http/server.h"
+#include "http/common.h"
 
 namespace http = boost::beast::http;
 using namespace music_share::http::server;
@@ -16,6 +17,18 @@ public:
 
     Response operator()(const Request& r, const Parameters& params) {
         auto response = get_response(r, params);
+        size_t query_start = r.target().find('?');
+        auto qs = QueryString::fromString(r.target().substr(query_start + 1).to_string());
+        for (const auto& [key, value]: qs.Entries()) {
+            response.body() += key + " " + value + "\n";
+        }
+        auto [beg, end] = qs.GetAll("city");
+        std::vector<std::string> cities;
+        std::transform(beg, end, std::back_inserter(cities), [](auto it) { return it.second; });
+        for (const auto& city: cities) {
+            response.body() += city + " ";
+        }
+        response.body() += "\n";
         response.body() = response.body().data() + std::string("Hook!!!\n");
         return response;
     }

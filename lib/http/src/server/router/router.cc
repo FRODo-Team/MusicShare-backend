@@ -16,7 +16,9 @@ Router::Router()
 
 std::pair<RequestHandler, std::map<std::string, std::string>>
 Router::RouteTo(const common::Request& request) {
-    auto [handler, params] = m_trie->Match(request.target().to_string(),
+    auto path = request.target().to_string();
+
+    auto [handler, params] = m_trie->Match(path.substr(0, path.find('?')),
                                            request.method_string().to_string());
 
     for (auto it = m_middleware_builders.rbegin();
