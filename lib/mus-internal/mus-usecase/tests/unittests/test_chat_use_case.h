@@ -72,8 +72,8 @@ TEST_F(TestChatUseCase, CreateSuccess) {
             .WillOnce(Return(Chat(1, 2)));
 
     EXPECT_CALL(*chat_rep, Insert(ChatEqualement(*chat)))
-            .WillOnce(Invoke([](Chat& chat_out) {
-                chat_out = Chat(1, 2, 1);
+            .WillOnce(Invoke([this](Chat& chat_out) {
+                chat_out = *this->chat;
             }));
 
     EXPECT_EQ(chat_usecase->Create(1, *chat_request), id_expected);

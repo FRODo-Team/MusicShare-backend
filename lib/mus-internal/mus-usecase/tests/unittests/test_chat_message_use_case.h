@@ -71,9 +71,8 @@ TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
     uint32_t id_expected = 1;
 
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
-            .WillOnce(Invoke([](ChatMessage& chat_message_out) {
-                chat_message_out = ChatMessage(1, "datetime",
-                                               "message", 1, 1);
+            .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
+                chat_message_out = *this->chat_message;
             }));
 
     EXPECT_EQ(chat_message_usecase->SendMessage(*message_request, "datetime",
