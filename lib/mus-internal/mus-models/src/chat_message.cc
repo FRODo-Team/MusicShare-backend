@@ -14,6 +14,14 @@ ChatMessage::ChatMessage(uint32_t sender_id,
         m_chat_id(chat_id),
         m_id(id) { }
 
+ChatMessage::ChatMessage(const ChatMessage& other, uint32_t id)
+        :
+        m_sender_id(other.m_sender_id),
+        m_datetime(other.m_datetime),
+        m_content(other.m_content),
+        m_chat_id(other.m_chat_id),
+        m_id(id) { }
+
 void ChatMessage::SetDatetime(const std::string &datetime) {
     m_datetime = datetime;
 }

@@ -20,8 +20,8 @@ public:
     void Delete(const Chat& chat) override;
 
     std::vector<Chat> FindByUserId(uint32_t user_id) override;
-    Chat FindByIdsOfUserPair(uint32_t first_user_id,
-                             uint32_t second_user_id) override;
+    std::optional<Chat> FindByIdsOfUserPair(uint32_t first_user_id,
+                                            uint32_t second_user_id) override;
 
 private:
     class SqlMapper {
