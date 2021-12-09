@@ -40,16 +40,16 @@ protected:
 };
 
 const std::string TestSongRepositoryPostgres::s_ConnectionString =
-        DatabaseObject::MakeConnectionString("localhost", 5432, "sunz", "123123123", "mus_test");
+        DatabaseObject::MakeConnectionString("localhost", 5432, "sunz", "123123123", "mus_test_song");
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestSongRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestSongRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 

@@ -44,16 +44,16 @@ protected:
 };
 
 const std::string TestUserRepositoryPostgres::s_ConnectionString =
-        DatabaseObject::MakeConnectionString("localhost", 5432, "sunz", "123123123", "mus_test");
+        DatabaseObject::MakeConnectionString("localhost", 5432, "sunz", "123123123", "mus_test_user");
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-    std::string{ "/home/sunz/bmstu/park.vk/cxx/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 
@@ -69,7 +69,7 @@ TEST_F(TestUserRepositoryPostgres, FindNotExistingUser) {
     ASSERT_FALSE(actual_user.has_value());
 }
 
-TEST_F(TestUserRepositoryPostgres, Insert) {
+TEST_F(TestUserRepositoryPostgres, Insert)   {
     // arrange
     User expected_user("username1", "mail1@mail.ru",
                        "123", "nickname1",
