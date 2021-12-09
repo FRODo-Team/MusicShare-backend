@@ -82,11 +82,8 @@ TEST_F(TestUserUseCase, CreateSuccess) {
             .Times(AtLeast(1));
 
     EXPECT_CALL(*user_rep, Insert(UserEqualement(*user)))
-                .WillOnce(Invoke([](User& user_out) {
-                    user_out = User("user", "user@mail.ru",
-                                    "hash", "user",
-                                    User::AccessLevel::Authorized,
-                                    1);
+                .WillOnce(Invoke([this](User& user_out) {
+                    user_out = *this->user;
                 }));
 
     EXPECT_EQ(user_usecase->Create(*user_request), id_expected);
