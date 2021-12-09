@@ -47,13 +47,15 @@ void ChatMessageHandler::Config(http::server::router::Router& router) {
 uint32_t
 ChatMessageHandler::SendMessage(const MessageRequestDTO& message,
                               uint32_t chat_id, uint32_t user_id) {
-    return chat_id;
+    return m_usecase.SendMessage(message, chat_id, user_id);
+    //return chat_id;
 }
 
 std::vector<MessageResponseDTO>
 ChatMessageHandler::GetUserMessages(uint32_t user_id,
                                     uint32_t chat_id) {
-    return {MessageResponseDTO(1, chat_id, user_id, "hi duuude", "dome date")};
+    return m_usecase.GetUserMessages(user_id, chat_id);
+    //return {MessageResponseDTO(1, chat_id, user_id, "hi duuude", "dome date")};
 }
 
 }  // namespace music_share::delivery

@@ -17,14 +17,14 @@ public:
     std::vector<UserResponseDTO>
     GetUsers(const std::vector<std::string>& nicknames);
 
-    std::string
+    uint32_t
     CreateUser(const UserRequestDTO& request);
 
     UserResponseDTO
     GetUserById(uint32_t id);
 
     UserResponseDTO
-    UpdateUserById(uint32_t id);
+    UpdateUserById(uint32_t id, const UserRequestDTO& request);
 private:
     [[maybe_unused]] IUserUseCase& m_usecase;
 };

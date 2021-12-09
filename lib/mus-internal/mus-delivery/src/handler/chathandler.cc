@@ -59,12 +59,17 @@ void ChatHandler::Config(http::server::router::Router& router) {
 
 uint32_t
 ChatHandler::Create(uint32_t user_id, const ChatRequestDTO& chat) {
-    return user_id;
+    return m_usecase.Create(user_id, chat);
+    //return user_id;
 }
 
 std::vector<ChatResponseDTO>
 ChatHandler::GetAll(std::optional<uint32_t> companion_id) {
-    return {ChatResponseDTO(1, 1, companion_id.has_value() ? companion_id.value() : 1)};
+    if (companion_id.has_value()) {
+        return {m_usecase.GetByIdOfTwoUser(1, companion_id.value())};
+    }
+    return m_usecase.GetByIdOfOneUser(1);
+    //return {ChatResponseDTO(1, 1, companion_id.has_value() ? companion_id.value() : 1)};
 }
 
 }  // namespace music_share::delivery

@@ -40,13 +40,14 @@ void UserHandler::Config(http::server::router::Router& router) {
     router.POST(http::server::router::Route(
         prefix,
         [this, prefix](auto request, auto) {
-            auto path = "/" + CreateUser(
+            uint32_t id = CreateUser(
                 nlohmann::json::parse(request.body())
                     .template get<UserRequestDTO>()
             );
 
             http::common::Response response;
-            response.set(http::common::header::location, prefix + path);
+            response.set(http::common::header::location,
+                         prefix + "/" + std::to_string(id));
             return response;
         }, {}
     ));
@@ -68,9 +69,12 @@ void UserHandler::Config(http::server::router::Router& router) {
 
     router.PUT(http::server::router::Route(
         prefix + "/:id([0-9]+)",
-        [this](auto, auto params) {
+        [this](http::common::Request request, auto params) {
             uint32_t id = atoi(params["id"].c_str());
-            auto body = UpdateUserById(id);
+            auto body = UpdateUserById(id,
+                nlohmann::json::parse(request.body())
+                    .template get<UserRequestDTO>()
+            );
 
             http::common::Response response;
             response.set(http::common::header::content_type,
@@ -84,32 +88,37 @@ void UserHandler::Config(http::server::router::Router& router) {
 
 std::vector<UserResponseDTO>
 UserHandler::GetUsers(const std::vector<std::string>& nicknames) {
-    std::vector<UserResponseDTO> res;
+    return m_usecase.GetByNicknames(nicknames);
 
-    std::ranges::transform(
-        nicknames,
-        back_inserter(res),
-        [](auto it) {
-            return UserResponseDTO(1, "", it);
-        }
-    );
+    //std::vector<UserResponseDTO> res;
 
-    return res;
+    //std::ranges::transform(
+        //nicknames,
+        //back_inserter(res),
+        //[](auto it) {
+            //return UserResponseDTO(1, "", it);
+        //}
+    //);
+
+    //return res;
 }
 
-std::string
+uint32_t
 UserHandler::CreateUser(const UserRequestDTO& request) {
-    return request.username;
+    return m_usecase.Create(request);
+    //return request.username;
 }
 
 UserResponseDTO
 UserHandler::GetUserById(uint32_t id) {
-    return UserResponseDTO(id, "", "");
+    return m_usecase.GetById(id);
+    //return UserResponseDTO(id, "", "");
 }
 
 UserResponseDTO
-UserHandler::UpdateUserById(uint32_t id) {
-    return UserResponseDTO(id, "", "");
+UserHandler::UpdateUserById(uint32_t id, const UserRequestDTO& request) {
+    return m_usecase.Update(id, request);
+    //return UserResponseDTO(id, "", "");
 }
 
 }  // namespace music_share::delivery
