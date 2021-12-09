@@ -1,6 +1,9 @@
 #ifndef MUS_INTERNAL_MUS_DTO_MESSAGE_RESPONSE_DTO_H_
 #define MUS_INTERNAL_MUS_DTO_MESSAGE_RESPONSE_DTO_H_
 
+#include "reflectable/reflectable.h"
+
+#include <tuple>
 #include <cstdint>
 #include <string>
 
@@ -17,6 +20,14 @@ struct MessageResponseDTO {
     uint32_t sender_id;
     std::string content;
     std::string datetime;
+
+    constexpr static auto properties = std::tuple(
+        music_share::reflectable::Property(&MessageResponseDTO::id, "id"),
+        music_share::reflectable::Property(&MessageResponseDTO::chat_id, "chatId"),
+        music_share::reflectable::Property(&MessageResponseDTO::sender_id, "senderId"),
+        music_share::reflectable::Property(&MessageResponseDTO::content, "content"),
+        music_share::reflectable::Property(&MessageResponseDTO::datetime, "datetime")
+    );
 };
 
 #endif  // MUS_INTERNAL_MUS_DTO_MESSAGE_RESPONSE_DTO_H_

@@ -1,8 +1,11 @@
 #ifndef MUS_INTERNAL_MUS_DTO_USER_RESPONSE_DTO_H_
 #define MUS_INTERNAL_MUS_DTO_USER_RESPONSE_DTO_H_
 
-#include <cstdint>
+#include "reflectable/reflectable.h"
+
+#include <tuple>
 #include <string>
+#include <cstdint>
 
 struct UserResponseDTO {
     UserResponseDTO(uint32_t id_,
@@ -14,6 +17,12 @@ struct UserResponseDTO {
     uint32_t id;
     std::string username;
     std::string nickname;
+
+    constexpr static auto properties = std::tuple(
+        music_share::reflectable::Property(&UserResponseDTO::id, "id"),
+        music_share::reflectable::Property(&UserResponseDTO::username, "username"),
+        music_share::reflectable::Property(&UserResponseDTO::nickname, "nickname")
+    );
 };
 
 #endif  // MUS_INTERNAL_MUS_DTO_USER_RESPONSE_DTO_H_
