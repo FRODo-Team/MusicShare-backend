@@ -64,13 +64,15 @@ void SongHandler::Config(http::server::router::Router& router) {
 
 SongResponseDTO
 SongHandler::GetById(uint32_t id) {
-    return SongResponseDTO(id, "", "", "");
+    return m_usecase.GetById(id);
+    //return SongResponseDTO(id, "", "", "");
 }
 
 std::vector<SongResponseDTO>
 SongHandler::GetByTitleOrArtist(const std::vector<std::string>& titles,
                                 const std::vector<std::string>& artists) {
-    return {SongResponseDTO(1, "", "", "")};
+    return m_usecase.GetByArtist(artists[0]);
+    //return {SongResponseDTO(1, "", "", "")};
 }
 
 }  // namespace music_share::delivery
