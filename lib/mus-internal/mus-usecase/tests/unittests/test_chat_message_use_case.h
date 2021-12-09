@@ -75,16 +75,18 @@ TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
                 chat_message_out = *this->chat_message;
             }));
 
-    EXPECT_EQ(chat_message_usecase->SendMessage(*message_request, "datetime",
-                                                1, 1), id_expected);
+    EXPECT_EQ(chat_message_usecase->SendMessage(*message_request,
+                                                1,1,
+                                                "datetime"), id_expected);
 }
 
 TEST_F(TestChatMessageUseCase, SendMessageException) {
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .Times(AtLeast(1));
 
-    EXPECT_THROW(chat_message_usecase->SendMessage(*message_request, "datetime",
-                                                   1, 1), CreateException);
+    EXPECT_THROW(chat_message_usecase->SendMessage(*message_request,
+                                                   1, 1,
+                                                   "datetime"), CreateException);
 }
 
 TEST_F(TestChatMessageUseCase, GetUserMessagesSuccess) {
