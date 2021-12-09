@@ -63,11 +63,11 @@ public:
 int main(void) {
     Server server("localhost", "8580");
 
-    server.Router()->Require(MiddlewareBuilder<InternalServerError>::Create());
-    server.Router()->Require(MiddlewareBuilder<MethodNotAllowed>::Create());
-    server.Router()->Require(MiddlewareBuilder<NotFound>::Create());
+    server.Router().Require(MiddlewareBuilder<InternalServerError>::Create());
+    server.Router().Require(MiddlewareBuilder<MethodNotAllowed>::Create());
+    server.Router().Require(MiddlewareBuilder<NotFound>::Create());
 
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/",
             [](auto, auto) {
@@ -79,7 +79,7 @@ int main(void) {
             }, {}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude",
             [](auto, auto) {
@@ -91,7 +91,7 @@ int main(void) {
             }, {MiddlewareBuilder<MW1>::Create(), MiddlewareBuilder<MW2>::Create()}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)",
             [](auto, auto params) {
@@ -103,7 +103,7 @@ int main(void) {
             }, {}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/bye",
             [](auto, auto params) {
@@ -115,7 +115,7 @@ int main(void) {
             }, { MiddlewareBuilder<MyMW>::Create() }
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/notbye",
             [](auto, auto params) {
@@ -127,7 +127,7 @@ int main(void) {
             }, { MiddlewareBuilder<MyMW>::Create() }
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/notbye/:name(\\w+)",
             [](auto, auto params) {

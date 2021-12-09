@@ -51,9 +51,9 @@ void Connection::on_read(boost::beast::error_code e, size_t transfered) {
         std::make_shared<ResponseMessage>(handler(m_request, params));
     message->set(boost::beast::http::field::server,
                  BOOST_BEAST_VERSION_STRING);
-    for (const auto& header_it: m_request.base()) {
-        message->set(header_it.name(), header_it.value());
-    }
+    //for (const auto& header_it: m_request.base()) {
+        //message->set(header_it.name(), header_it.value());
+    //}
     m_response = message;
 
     boost::beast::http::async_write(

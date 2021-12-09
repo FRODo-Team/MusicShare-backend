@@ -11,11 +11,12 @@ namespace music_share::delivery {
 
 class UserHandler final {
 public:
-    UserHandler(IUserUseCase& usecase);
+    //UserHandler(IUserUseCase& usecase);
+    UserHandler() = default;
     void Config(http::server::router::Router& router);
 
     std::vector<UserResponseDTO>
-    GetUsers(const std::string& nickname);
+    GetUsers(const std::vector<std::string>& nicknames);
 
     std::string
     CreateUser(const UserRequestDTO& request);
@@ -26,7 +27,7 @@ public:
     UserResponseDTO
     UpdateUserById(uint32_t id);
 private:
-    IUserUseCase& m_usecase;
+    //[[maybe_unused]] IUserUseCase& m_usecase;
 };
 
 }  // namespace music_share::delivery
