@@ -9,6 +9,9 @@
 
 namespace music_share::delivery {
 
+ChatHandler::ChatHandler(IChatUseCase& usecase)
+    : m_usecase(usecase) {}
+
 void ChatHandler::Config(http::server::router::Router& router) {
     std::string prefix = "/api/v1/chats";
 

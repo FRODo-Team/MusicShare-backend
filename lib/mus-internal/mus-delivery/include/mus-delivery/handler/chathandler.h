@@ -12,8 +12,7 @@ namespace music_share::delivery {
 
 class ChatHandler final {
 public:
-    //ChatHandler(IChatUseCase& usecase);
-    ChatHandler() = default;
+    ChatHandler(IChatUseCase& usecase);
     void Config(http::server::router::Router& router);
 
     uint32_t
@@ -22,7 +21,7 @@ public:
     std::vector<ChatResponseDTO>
     GetAll(std::optional<uint32_t> companion_id = std::nullopt);
 private:
-    //[[maybe_unused]] IChatUseCase& m_usecase;
+    [[maybe_unused]] IChatUseCase& m_usecase;
 };
 
 }  // namespace music_share::delivery

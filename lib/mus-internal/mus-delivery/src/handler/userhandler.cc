@@ -9,7 +9,7 @@
 
 namespace music_share::delivery {
 
-//UserHandler::UserHandler(IUserUseCase& usecase) : m_usecase(usecase) {}
+UserHandler::UserHandler(IUserUseCase& usecase) : m_usecase(usecase) {}
 
 void UserHandler::Config(http::server::router::Router& router) {
     std::string prefix = "/api/v1/users";

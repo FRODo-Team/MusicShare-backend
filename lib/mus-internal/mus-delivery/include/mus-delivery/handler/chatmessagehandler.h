@@ -11,8 +11,7 @@ namespace music_share::delivery {
 
 class ChatMessageHandler final {
 public:
-    //ChatMessageHandler(IChatMessageUseCase& usecase);
-    ChatMessageHandler() = default;
+    ChatMessageHandler(IChatMessageUseCase& usecase);
     void Config(http::server::router::Router& router);
 
     uint32_t
@@ -24,7 +23,7 @@ public:
                     uint32_t chat_id);
 
 private:
-    //[[maybe_unused]] IChatMessageUseCase& m_usecase;
+    [[maybe_unused]] IChatMessageUseCase& m_usecase;
 };
 
 }  // namespace music_share::delivery

@@ -11,8 +11,7 @@ namespace music_share::delivery {
 
 class SongHandler final {
 public:
-    //SongHandler(ISongUseCase& usecase);
-    SongHandler() = default;
+    SongHandler(ISongUseCase& usecase);
     void Config(http::server::router::Router& router);
 
     
@@ -23,7 +22,7 @@ public:
     GetByTitleOrArtist(const std::vector<std::string>& titles,
                        const std::vector<std::string>& artists);
 private:
-    //[[maybe_unused]] ISongUseCase& m_usecase;
+    [[maybe_unused]] ISongUseCase& m_usecase;
 };
 
 }  // namespace music_share::delivery
