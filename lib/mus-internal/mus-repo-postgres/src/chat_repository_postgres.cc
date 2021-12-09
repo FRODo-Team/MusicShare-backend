@@ -41,8 +41,9 @@ std::vector<Chat> ChatRepositoryPostgres::FindByUserId(uint32_t user_id) {
     return result;
 }
 
-Chat ChatRepositoryPostgres::FindByIdsOfUserPair(uint32_t first_user_id,
-                                                uint32_t second_user_id)
+std::optional<Chat> ChatRepositoryPostgres::FindByIdsOfUserPair(
+        uint32_t first_user_id,
+        uint32_t second_user_id)
 {
     std::string query =
             "SELECT * FROM " + m_table_name + " " +
@@ -50,6 +51,9 @@ Chat ChatRepositoryPostgres::FindByIdsOfUserPair(uint32_t first_user_id,
             "AND user_id_2=" + SqlUtils::ValueToSqlFormat(second_user_id);
 
     pqxx::result response = m_crud_repository.ExecuteQuery(query);
+    if (response.empty()) {
+        return { };
+    }
 
     return SqlMapper::ToDomainObject(response[0]);
 }
