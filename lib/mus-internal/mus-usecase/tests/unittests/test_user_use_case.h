@@ -103,7 +103,7 @@ TEST_F(TestUserUseCase, CreateException) {
 }
 
 TEST_F(TestUserUseCase, CreateExistEmail) {
-    user_request->email = "user1@mail.ru";
+    user_request->username = "user2";
 
     EXPECT_CALL(*user_rep, FindByUsername(user_request->username))
             .Times(AtLeast(1));
@@ -116,8 +116,6 @@ TEST_F(TestUserUseCase, CreateExistEmail) {
 }
 
 TEST_F(TestUserUseCase, CreateExistUsername) {
-    user_request->username = "user2";
-
     EXPECT_CALL(*user_rep, FindByUsername(user_request->username))
             .WillOnce(Return(*user));
 
