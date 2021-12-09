@@ -80,8 +80,10 @@ TEST_F(TestPlaylistUseCase, CreateSuccess) {
     uint32_t id_expected = 1;
 
     EXPECT_CALL(*playlist_rep, Insert(PlaylistEqualement(*playlist)))
-            .WillOnce(Invoke([this](Playlist& playlist_out) {
-                playlist_out = *this->playlist;
+            .WillOnce(Invoke([](Playlist& playlist_out) {
+                vector<uint32_t> song_ids(1, 2);
+                playlist_out = Playlist("playlist", 1,
+                                        song_ids, 1);
             }));
 
     EXPECT_EQ(playlist_usecase->Create(1, *playlist_request),
