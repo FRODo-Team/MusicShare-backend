@@ -82,8 +82,11 @@ TEST_F(TestUserUseCase, CreateSuccess) {
             .Times(AtLeast(1));
 
     EXPECT_CALL(*user_rep, Insert(UserEqualement(*user)))
-                .WillOnce(Invoke([this](User& user_out) {
-                    user_out = *this->user;
+                .WillOnce(Invoke([](User& user_out) {
+                    user_out = User("user", "user@mail.ru",
+                                    "hash", "user",
+                                    User::AccessLevel::Authorized,
+                                    1);
                 }));
 
     EXPECT_EQ(user_usecase->Create(*user_request), id_expected);
@@ -110,7 +113,7 @@ TEST_F(TestUserUseCase, CreateExistEmail) {
 
     EXPECT_CALL(*user_rep, FindByEmail(user_request->email))
             .Times(AtLeast(1))
-            .WillOnce(Return( *user));
+            .WillOnce(Return(*user));
 
     EXPECT_THROW(user_usecase->Create(*user_request), ExistException);
 }

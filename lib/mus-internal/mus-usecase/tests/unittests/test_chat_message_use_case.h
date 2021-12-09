@@ -129,4 +129,3 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesNullPointer) {
     EXPECT_THROW(chat_message_usecase->GetUserMessages(1, 1),
                  NullPointerException);
 }
-

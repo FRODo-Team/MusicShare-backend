@@ -144,8 +144,10 @@ TEST_F(TestChatUseCase, GetByIdOfTwoUserSuccess) {
     ChatResponseDTO chats_response = chat_usecase->GetByIdOfTwoUser(1, 2);
 
     EXPECT_EQ(chats_response.chat_id, chats_response_expected.chat_id);
-    EXPECT_EQ(chats_response.user_first_id, chats_response_expected.user_first_id);
-    EXPECT_EQ(chats_response.user_second_id, chats_response_expected.user_second_id);
+    EXPECT_EQ(chats_response.user_first_id,
+              chats_response_expected.user_first_id);
+    EXPECT_EQ(chats_response.user_second_id,
+              chats_response_expected.user_second_id);
 }
 
 TEST_F(TestChatUseCase, GetByIdOfTwoUserInvalidData) {
