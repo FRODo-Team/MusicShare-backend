@@ -1,4 +1,12 @@
 #include "http/server.h"
+#include "mus-repo-postgres/user_repository_postgres.h"
+#include "mus-repo-postgres/song_repository_postgres.h"
+#include "mus-repo-postgres/chat_repository_postgres.h"
+#include "mus-repo-postgres/chat_message_repository_postgres.h"
+#include "mus-usecase/user_use_case.h"
+#include "mus-usecase/song_use_case.h"
+#include "mus-usecase/chat_use_case.h"
+#include "mus-usecase/chat_message_use_case.h"
 #include "mus-delivery/handler/userhandler.h"
 #include "mus-delivery/handler/songhandler.h"
 #include "mus-delivery/handler/chathandler.h"
@@ -10,6 +18,19 @@ using namespace music_share::http::server::middleware;
 
 int main(void) {
     Server server("localhost", "8080");
+
+    std::string c = DatabaseObject::MakeConnectionString(
+        "localhost",
+        5432,
+        "program",
+        "test",
+        "mus_test"
+    );
+
+    UserRepositoryPostgres user_repo(c);
+    SongRepositoryPostgres song_repo(c);
+    ChatRepositoryPostgres chat_repo(c);
+    ChatMessageRepositoryPostgres chat_message_repo(c);
 
     server.Router().Require(MiddlewareBuilder<InternalServerError>::Create());
     server.Router().Require(MiddlewareBuilder<MethodNotAllowed>::Create());
