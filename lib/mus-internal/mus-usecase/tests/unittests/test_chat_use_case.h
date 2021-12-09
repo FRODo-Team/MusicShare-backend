@@ -37,7 +37,7 @@ using music_share::ChatUseCase;
 class MockChatRepository : public IChatRepository {
 public:
     MOCK_METHOD1(FindByUserId, vector<Chat>(uint32_t));
-    MOCK_METHOD2(FindByIdsOfUserPair, Chat(uint32_t, uint32_t));
+    MOCK_METHOD2(FindByIdsOfUserPair, optional<Chat>(uint32_t, uint32_t));
     MOCK_METHOD1(Find, optional<Chat>(uint32_t));
     MOCK_METHOD1(Insert, void(Chat&));
     MOCK_METHOD1(Update, void(const Chat&));
@@ -69,7 +69,7 @@ TEST_F(TestChatUseCase, CreateSuccess) {
     uint32_t id_expected = 1;
 
     EXPECT_CALL(*chat_rep, FindByIdsOfUserPair(1, 2))
-            .WillOnce(Return(Chat(1, 2)));
+            .WillOnce(Return(nullopt));
 
     EXPECT_CALL(*chat_rep, Insert(ChatEqualement(*chat)))
             .WillOnce(Invoke([this](Chat& chat_out) {
@@ -81,7 +81,7 @@ TEST_F(TestChatUseCase, CreateSuccess) {
 
 TEST_F(TestChatUseCase, CreateException) {
     EXPECT_CALL(*chat_rep, FindByIdsOfUserPair(1, 2))
-            .WillOnce(Return(Chat(1, 2)));
+            .WillOnce(Return(nullopt));
 
     EXPECT_CALL(*chat_rep, Insert(ChatEqualement(*chat)))
             .Times(AtLeast(1));
