@@ -30,9 +30,9 @@ namespace music_share {
 
     uint32_t ChatUseCase::Create(uint32_t user_id,
                                  const ChatRequestDTO& chat_request_dto) {
-        Chat chat_valid = m_chat_rep.FindByIdsOfUserPair(user_id,
+        optional<Chat> chat_valid = m_chat_rep.FindByIdsOfUserPair(user_id,
                                                          chat_request_dto.target_id);
-        if (chat_valid.GetId()) {
+        if (chat_valid) {
             throw ExistException();
         }
 
@@ -70,15 +70,15 @@ namespace music_share {
 
     ChatResponseDTO ChatUseCase::GetByIdOfTwoUser(uint32_t first_id,
                                                   uint32_t second_id) {
-        Chat chat = m_chat_rep.FindByIdsOfUserPair(first_id, second_id);
+        optional<Chat> chat = m_chat_rep.FindByIdsOfUserPair(first_id, second_id);
 
-        if (!chat.GetId()) {
+        if (!chat) {
             throw InvalidDataException();
         }
 
-        return ChatResponseDTO(*chat.GetId(),
-                               chat.GetUserIds().first,
-                               chat.GetUserIds().second);
+        return ChatResponseDTO(*chat->GetId(),
+                               chat->GetUserIds().first,
+                               chat->GetUserIds().second);
     }
 
 }  // namespace music_share
