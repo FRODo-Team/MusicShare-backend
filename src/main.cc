@@ -32,17 +32,22 @@ int main(void) {
     ChatRepositoryPostgres chat_repo(c);
     ChatMessageRepositoryPostgres chat_message_repo(c);
 
+    UserUseCase user_usecase(user_repo);
+    SongUseCase song_usecase(song_repo);
+    ChatUseCase chat_usecase(chat_repo);
+    ChatMessageUseCase chat_message_usecase(chat_message_repo);
+
     server.Router().Require(MiddlewareBuilder<InternalServerError>::Create());
     server.Router().Require(MiddlewareBuilder<MethodNotAllowed>::Create());
     server.Router().Require(MiddlewareBuilder<NotFound>::Create());
 
-    delivery::UserHandler user_handler;
+    delivery::UserHandler user_handler(user_usecase);
     user_handler.Config(server.Router());
-    delivery::SongHandler song_handler;
+    delivery::SongHandler song_handler(song_usecase);
     song_handler.Config(server.Router());
-    delivery::ChatHandler chat_handler;
+    delivery::ChatHandler chat_handler(chat_usecase);
     chat_handler.Config(server.Router());
-    delivery::ChatMessageHandler chat_message_handler;
+    delivery::ChatMessageHandler chat_message_handler(chat_message_usecase);
     chat_message_handler.Config(server.Router());
 
     server.Run();

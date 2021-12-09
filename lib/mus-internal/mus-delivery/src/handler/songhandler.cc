@@ -9,6 +9,9 @@
 
 namespace music_share::delivery {
 
+SongHandler::SongHandler(ISongUseCase& usecase)
+    : m_usecase(usecase) {}
+
 void SongHandler::Config(http::server::router::Router& router) {
     std::string prefix = "/api/v1/songs";
 
