@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(mus-dto INTERFACE)
 
+target_link_libraries(mus-dto INTERFACE reflectable)
 target_include_directories(mus-dto INTERFACE include/)
