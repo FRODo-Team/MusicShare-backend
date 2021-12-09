@@ -39,7 +39,7 @@ Route::PathNode::fromString(const std::string& node) {
         std::regex param_re = std::regex(param_pattern);
 
         return PathNode{param_name, param_pattern};
-    } catch (std::regex_error) {
+    } catch (const std::regex_error&) {
         return std::nullopt;
     }
 }
