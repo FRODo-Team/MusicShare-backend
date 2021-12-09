@@ -1,5 +1,6 @@
 #include "mus-usecase/chat_message_use_case.h"
 
+#include <chrono>
 #include <memory>
 #include <optional>
 
@@ -8,10 +9,12 @@
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 
+using std::ctime;
 using std::make_unique;
 using std::optional;
 using std::string;
 using std::vector;
+using std::time_t;
 
 namespace music_share {
 
@@ -26,13 +29,19 @@ namespace music_share {
         return *this;
     }
 
-    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_request_dto,
-                                         const string& datetime, uint32_t chat_id,
-                                         uint32_t user_id) {
+    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_dto, uint32_t chat_id,
+                                             uint32_t user_id,
+                                             optional<string> datetime) {
+        if (!datetime) {
+            auto time = std::chrono::system_clock::now();
+            time_t end_time = std::chrono::system_clock::to_time_t(time);
+            datetime = ctime(&end_time);
+        }
+
         auto message = make_unique<ChatMessage>(user_id,
-                                                                    datetime,
-                                                                    message_request_dto.content,
-                                                                    chat_id);
+                                                *datetime,
+                                                message_dto.content,
+                                                chat_id);
         m_chat_message_rep.Insert(*message);
 
         if (!message->GetId()) {

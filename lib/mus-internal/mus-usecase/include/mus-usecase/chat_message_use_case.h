@@ -20,8 +20,9 @@ namespace music_share {
 
         ChatMessageUseCase& operator=(const ChatMessageUseCase& chat_message_use_case);
 
-        uint32_t SendMessage(const MessageRequestDTO& message, const std::string& datetime,
-                         uint32_t chat_id, uint32_t user_id) override;
+        uint32_t SendMessage(const MessageRequestDTO& message_dto, uint32_t chat_id,
+                             uint32_t user_id,
+                             std::optional<std::string> datetime = std::nullopt) override;
 
         std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
                                                         uint32_t chat_id) override;
