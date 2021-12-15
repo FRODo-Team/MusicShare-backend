@@ -71,11 +71,11 @@ std::string QueryString::decode(const std::string& value) {
             decoded << ' ';
         } else if (c == '%') {
             unsigned int chr;
-            char d1, d2;
+            char hi, lo;
             std::stringstream ss;
 
-            encoded >> d1 >> d2;
-            ss << d1 << d2;
+            encoded >> hi >> lo;
+            ss << hi << lo;
 
             ss >> std::hex >> chr;
             decoded << (char)chr;
