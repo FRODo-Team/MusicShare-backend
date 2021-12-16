@@ -51,7 +51,7 @@ namespace music_share {
     }
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
-                                                                   uint32_t chat_id) {
+                                                                   uint32_t chat_id) const {
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {

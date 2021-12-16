@@ -90,7 +90,7 @@ namespace  music_share {
         m_playlist_rep.Update(*playlist);
     }
 
-    vector<PlaylistResponseDTO> PlaylistUseCase::GetByUserId(uint32_t user_id) {
+    vector<PlaylistResponseDTO> PlaylistUseCase::GetByUserId(uint32_t user_id) const {
         vector<Playlist> playlists = m_playlist_rep.FindByUserId(user_id);
 
         if (playlists.empty()) {
@@ -112,7 +112,7 @@ namespace  music_share {
         return playlists_dto;
     }
 
-    PlaylistResponseDTO PlaylistUseCase::GetById(uint32_t id) {
+    PlaylistResponseDTO PlaylistUseCase::GetById(uint32_t id) const {
         optional<Playlist> playlist = m_playlist_rep.Find(id);
 
         if (!playlist) {

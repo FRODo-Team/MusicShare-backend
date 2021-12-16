@@ -68,7 +68,7 @@ namespace music_share {
                                user_dto.nickname);
     }
 
-    UserResponseDTO UserUseCase::GetByUsername(const string& username) {
+    UserResponseDTO UserUseCase::GetByUsername(const string& username) const {
         optional<User> user = m_user_rep.FindByUsername(username);
 
         if (!user) {
@@ -83,7 +83,7 @@ namespace music_share {
                                user->GetNickname());
     }
 
-    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) {
+    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) const {
         vector<User> users;
         users.reserve(nicknames.size());
 
@@ -112,7 +112,7 @@ namespace music_share {
          return users_dto;
     }
 
-    UserResponseDTO UserUseCase::GetById(uint32_t id) {
+    UserResponseDTO UserUseCase::GetById(uint32_t id) const {
         optional<User> user = m_user_rep.Find(id);
 
         if (!user) {

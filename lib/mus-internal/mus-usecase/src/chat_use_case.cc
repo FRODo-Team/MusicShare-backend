@@ -47,7 +47,7 @@ namespace music_share {
         return *chat->GetId();
     }
 
-    vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) {
+    vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) const {
         vector<Chat> chats = m_chat_rep.FindByUserId(id);
 
         if (chats.empty()) {
@@ -69,7 +69,7 @@ namespace music_share {
     }
 
     ChatResponseDTO ChatUseCase::GetByIdOfTwoUser(uint32_t first_id,
-                                                  uint32_t second_id) {
+                                                  uint32_t second_id) const {
         optional<Chat> chat = m_chat_rep.FindByIdsOfUserPair(first_id, second_id);
 
         if (!chat) {

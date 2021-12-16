@@ -26,7 +26,7 @@ namespace music_share {
         return *this;
     }
 
-    SongResponseDTO SongUseCase::GetById(uint32_t id) {
+    SongResponseDTO SongUseCase::GetById(uint32_t id) const {
         optional<Song> song = m_song_rep.Find(id);
 
         if (!song) {
@@ -42,7 +42,7 @@ namespace music_share {
                                song->GetUrl());
     }
 
-    vector<SongResponseDTO> SongUseCase::GetByTitle(const string& title) {
+    vector<SongResponseDTO> SongUseCase::GetByTitle(const string& title) const {
         vector<Song> songs = m_song_rep.FindByTitle(title);
 
         if (songs.empty()) {
@@ -64,7 +64,7 @@ namespace music_share {
         return songs_dto;
     }
 
-    vector<SongResponseDTO> SongUseCase::GetByArtist(const string& artist) {
+    vector<SongResponseDTO> SongUseCase::GetByArtist(const string& artist) const {
         vector<Song> songs = m_song_rep.FindByArtist(artist);
 
         if (songs.empty()) {
