@@ -38,10 +38,10 @@ namespace music_share {
             throw ExistException();
         }
 
-        auto user = make_unique<User>(user_dto.nickname,
+        auto user = make_unique<User>(user_dto.username,
                                                     user_dto.email,
-                                                    user_dto.username,
                                                     user_dto.password,
+                                                    user_dto.nickname,
                                                     User::AccessLevel::Authorized);
 
         m_user_rep.Insert(*user);
