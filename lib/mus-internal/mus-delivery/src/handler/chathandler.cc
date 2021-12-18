@@ -50,6 +50,7 @@ void ChatHandler::Config(http::server::router::Router& router) {
             );
 
             http::common::Response response;
+            response.result(http::common::status::created);
             response.set(http::common::header::location,
                          prefix + "/" + std::to_string(id));
             return response;
