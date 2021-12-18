@@ -28,13 +28,13 @@ namespace music_share {
     }
 
     uint32_t UserUseCase::Create(const UserRequestDTO& user_dto) {
-        optional<User> user_valid = m_user_rep.FindByUsername(user_dto.username);
-        if (user_valid) {
+        optional<User> user_exist = m_user_rep.FindByUsername(user_dto.username);
+        if (user_exist) {
             throw ExistException();
         }
 
-        user_valid = m_user_rep.FindByEmail(user_dto.email);
-        if (user_valid) {
+        user_exist = m_user_rep.FindByEmail(user_dto.email);
+        if (user_exist) {
             throw ExistException();
         }
 

@@ -29,7 +29,8 @@ namespace music_share {
         return *this;
     }
 
-    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_dto, uint32_t chat_id,
+    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_dto,
+                                             uint32_t chat_id,
                                              uint32_t user_id,
                                              optional<string> datetime) {
         if (!datetime) {
