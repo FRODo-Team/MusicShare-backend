@@ -1,4 +1,5 @@
 #include "http/server.h"
+#include "config-parser/config.h"
 #include "mus-repo-postgres/user_repository_postgres.h"
 #include "mus-repo-postgres/song_repository_postgres.h"
 #include "mus-repo-postgres/playlist_repository_postgres.h"
@@ -20,15 +21,29 @@ using namespace music_share::http::server;
 using namespace music_share::http::server::middleware;
 
 int main(void) {
-    Server server("localhost", "8080");
+    config_parser::Config conf("mus_app");
+    auto db_conf = conf["db"];
+
+    Server server(conf["host"].Get<std::string>(), conf["port"].Get<std::string>());
 
     std::string c = DatabaseObject::MakeConnectionString(
-        "localhost",
-        5432,
-        "program",
-        "test",
-        "mus_test"
+        db_conf["host"].Get<std::string>(),
+        db_conf["port"].Get<int>(),
+        db_conf["user"].Get<std::string>(),
+        db_conf["password"].Get<std::string>(),
+        db_conf["database"].Get<std::string>()
     );
+    //config_parser::Config conf("mus_app");
+
+    //Server server(conf["host"].Get<std::string>(), conf["port"].Get<std::string>());
+
+    //std::string c = DatabaseObject::MakeConnectionString(
+        //"localhost",
+        //5432,
+        //"program",
+        //"test",
+        //"mus_test"
+    //);
 
     UserRepositoryPostgres user_repo(c);
     SongRepositoryPostgres song_repo(c);
