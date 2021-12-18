@@ -41,7 +41,7 @@ public:
 
     Route(const std::string& path, RequestHandler handler,
           std::initializer_list<std::shared_ptr<middleware::IMiddlewareBuilder>>
-          middleware_builders);
+          middleware_builders = {});
     ~Route() = default;
 
     std::string GetPath() const;

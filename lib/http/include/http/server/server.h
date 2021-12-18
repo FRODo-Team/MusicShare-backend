@@ -26,7 +26,7 @@ public:
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 
-    std::shared_ptr<router::Router> Router();
+    router::Router& Router();
 
     void Run();
 private:

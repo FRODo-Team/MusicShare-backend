@@ -1,6 +1,9 @@
 #ifndef MUS_INTERNAL_MUS_DTO_USER_REQUEST_DTO_H_
 #define MUS_INTERNAL_MUS_DTO_USER_REQUEST_DTO_H_
 
+#include "reflectable/reflectable.h"
+
+#include <tuple>
 #include <cstdint>
 #include <string>
 
@@ -16,6 +19,13 @@ struct UserRequestDTO {
     std::string password;
     std::string nickname;
     std::string email;
+
+    constexpr static auto properties = std::tuple(
+        music_share::reflectable::Property(&UserRequestDTO::username, "username"),
+        music_share::reflectable::Property(&UserRequestDTO::password, "password"),
+        music_share::reflectable::Property(&UserRequestDTO::nickname, "nickname"),
+        music_share::reflectable::Property(&UserRequestDTO::email, "email")
+    );
 };
 
 #endif  // MUS_INTERNAL_MUS_DTO_USER_REQUEST_DTO_H_

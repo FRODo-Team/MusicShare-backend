@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "http/server.h"
+#include "http/common.h"
 
 namespace http = boost::beast::http;
 using namespace music_share::http::server;
@@ -16,6 +17,18 @@ public:
 
     Response operator()(const Request& r, const Parameters& params) {
         auto response = get_response(r, params);
+        size_t query_start = r.target().find('?');
+        auto qs = QueryString::fromString(r.target().substr(query_start + 1).to_string());
+        for (const auto& [key, value]: qs.Entries()) {
+            response.body() += key + " " + value + "\n";
+        }
+        auto [beg, end] = qs.GetAll("city");
+        std::vector<std::string> cities;
+        std::transform(beg, end, std::back_inserter(cities), [](auto it) { return it.second; });
+        for (const auto& city: cities) {
+            response.body() += city + " ";
+        }
+        response.body() += "\n";
         response.body() = response.body().data() + std::string("Hook!!!\n");
         return response;
     }
@@ -50,11 +63,11 @@ public:
 int main(void) {
     Server server("localhost", "8580");
 
-    server.Router()->Require(MiddlewareBuilder<InternalServerError>::Create());
-    server.Router()->Require(MiddlewareBuilder<MethodNotAllowed>::Create());
-    server.Router()->Require(MiddlewareBuilder<NotFound>::Create());
+    server.Router().Require(MiddlewareBuilder<InternalServerError>::Create());
+    server.Router().Require(MiddlewareBuilder<MethodNotAllowed>::Create());
+    server.Router().Require(MiddlewareBuilder<NotFound>::Create());
 
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/",
             [](auto, auto) {
@@ -66,7 +79,7 @@ int main(void) {
             }, {}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude",
             [](auto, auto) {
@@ -78,7 +91,7 @@ int main(void) {
             }, {MiddlewareBuilder<MW1>::Create(), MiddlewareBuilder<MW2>::Create()}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)",
             [](auto, auto params) {
@@ -90,7 +103,7 @@ int main(void) {
             }, {}
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/bye",
             [](auto, auto params) {
@@ -102,7 +115,7 @@ int main(void) {
             }, { MiddlewareBuilder<MyMW>::Create() }
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/notbye",
             [](auto, auto params) {
@@ -114,7 +127,7 @@ int main(void) {
             }, { MiddlewareBuilder<MyMW>::Create() }
         )
     );
-    server.Router()->GET(
+    server.Router().GET(
         router::Route(
             "/duuude/:id([0-9]+)/notbye/:name(\\w+)",
             [](auto, auto params) {

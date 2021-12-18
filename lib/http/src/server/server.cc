@@ -37,8 +37,8 @@ void Server::Run() {
     }
 }
 
-std::shared_ptr<router::Router> Server::Router() {
-    return m_router;
+router::Router& Server::Router() {
+    return *m_router;
 }
 
 void Server::on_stop() {

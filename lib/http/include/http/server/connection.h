@@ -7,9 +7,7 @@
 
 #include "http/common/request.h"
 
-namespace music_share {
-namespace http {
-namespace server {
+namespace music_share::http::server {
 
 namespace router {
 
@@ -42,8 +40,6 @@ private:
 };
 
 
-}  // namespace server
-}  // namespace http
-}  // namespace music_share
+}  // namespace music_share::http::server
 
 #endif  // MUS_HTTP_SERVER_CONNECTION_H_
