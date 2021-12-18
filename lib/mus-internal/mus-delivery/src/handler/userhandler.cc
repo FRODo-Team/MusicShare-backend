@@ -32,6 +32,8 @@ void UserHandler::Config(http::server::router::Router& router) {
             auto users = GetUsers(nicknames);
 
             http::common::Response response;
+            response.set(http::common::header::content_type,
+                         "application/json");
             response.body() = nlohmann::json(users).dump();
             return response;
         }, {}
@@ -46,6 +48,7 @@ void UserHandler::Config(http::server::router::Router& router) {
             );
 
             http::common::Response response;
+            response.result(http::common::status::created);
             response.set(http::common::header::location,
                          prefix + "/" + std::to_string(id));
             return response;

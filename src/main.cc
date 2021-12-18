@@ -2,14 +2,17 @@
 #include "config-parser/config.h"
 #include "mus-repo-postgres/user_repository_postgres.h"
 #include "mus-repo-postgres/song_repository_postgres.h"
+#include "mus-repo-postgres/playlist_repository_postgres.h"
 #include "mus-repo-postgres/chat_repository_postgres.h"
 #include "mus-repo-postgres/chat_message_repository_postgres.h"
 #include "mus-usecase/user_use_case.h"
 #include "mus-usecase/song_use_case.h"
+#include "mus-usecase/playlist_use_case.h"
 #include "mus-usecase/chat_use_case.h"
 #include "mus-usecase/chat_message_use_case.h"
 #include "mus-delivery/handler/userhandler.h"
 #include "mus-delivery/handler/songhandler.h"
+#include "mus-delivery/handler/playlisthandler.h"
 #include "mus-delivery/handler/chathandler.h"
 #include "mus-delivery/handler/chatmessagehandler.h"
 
@@ -44,11 +47,13 @@ int main(void) {
 
     UserRepositoryPostgres user_repo(c);
     SongRepositoryPostgres song_repo(c);
+    PlaylistRepositoryPostgres playlist_repo(c);
     ChatRepositoryPostgres chat_repo(c);
     ChatMessageRepositoryPostgres chat_message_repo(c);
 
     UserUseCase user_usecase(user_repo);
     SongUseCase song_usecase(song_repo);
+    PlaylistUseCase playlist_usecase(playlist_repo);
     ChatUseCase chat_usecase(chat_repo);
     ChatMessageUseCase chat_message_usecase(chat_message_repo);
 
@@ -57,12 +62,15 @@ int main(void) {
     server.Router().Require(MiddlewareBuilder<NotFound>::Create());
 
     delivery::UserHandler user_handler(user_usecase);
-    user_handler.Config(server.Router());
     delivery::SongHandler song_handler(song_usecase);
-    song_handler.Config(server.Router());
+    delivery::PlaylistHandler playlist_handler(playlist_usecase);
     delivery::ChatHandler chat_handler(chat_usecase);
-    chat_handler.Config(server.Router());
     delivery::ChatMessageHandler chat_message_handler(chat_message_usecase);
+
+    user_handler.Config(server.Router());
+    song_handler.Config(server.Router());
+    playlist_handler.Config(server.Router());
+    chat_handler.Config(server.Router());
     chat_message_handler.Config(server.Router());
 
     server.Run();
