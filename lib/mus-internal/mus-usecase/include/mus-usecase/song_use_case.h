@@ -18,11 +18,11 @@ namespace music_share {
 
         SongUseCase &operator=(const SongUseCase& song_use_case);
 
-        SongResponseDTO GetById(uint32_t id) override;
+        SongResponseDTO GetById(uint32_t id) const override;
 
-        std::vector<SongResponseDTO> GetByTitle(const std::string& title) override;
+        std::vector<SongResponseDTO> GetByTitle(const std::string& title) const override;
 
-        std::vector<SongResponseDTO> GetByArtist(const std::string& artist) override;
+        std::vector<SongResponseDTO> GetByArtist(const std::string& artist) const override;
 
         ~SongUseCase() = default;
 

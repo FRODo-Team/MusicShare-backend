@@ -19,10 +19,10 @@ namespace music_share {
 
         virtual uint32_t SendMessage(const MessageRequestDTO& message_dto,
                                      uint32_t chat_id, uint32_t user_id,
-                                     std::optional<std::string> datetime = std::nullopt) = 0;
+                                     std::optional<std::string> datetime) = 0;
 
         virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
-                                                                uint32_t chat_id) = 0;
+                                                                uint32_t chat_id) const = 0;
 
         virtual ~IChatMessageUseCase() = default;
     };
