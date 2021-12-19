@@ -22,11 +22,11 @@ public:
     virtual UserResponseDTO Update(uint32_t user_id,
                                    const UserRequestDTO& user_dto) = 0;
 
-    virtual UserResponseDTO GetByUsername(const std::string& username) = 0;
+    virtual UserResponseDTO GetByUsername(const std::string& username) const = 0;
 
-    virtual std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) = 0;
+    virtual std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string> nicknames) const = 0;
 
-    virtual UserResponseDTO GetById(uint32_t id) = 0;
+    virtual UserResponseDTO GetById(uint32_t id) const = 0;
 
     virtual ~IUserUseCase() = default;
 };

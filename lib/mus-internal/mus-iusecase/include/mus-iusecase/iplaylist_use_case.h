@@ -31,11 +31,11 @@ public:
     virtual void DeleteSongById(uint32_t song_id, uint32_t playlist_id,
                                 uint32_t user_id) = 0;
 
-    virtual std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id) = 0;
+    virtual std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id) const = 0;
 
-    virtual PlaylistResponseDTO GetById(uint32_t id) = 0;
+    virtual PlaylistResponseDTO GetById(uint32_t id) const = 0;
 
-    virtual std::vector<uint32_t> GetSongs(uint32_t playlist_id) = 0;
+    virtual std::vector<uint32_t> GetSongs(uint32_t playlist_id) const = 0;
 
     virtual ~IPlaylistUseCase() = default;
 };

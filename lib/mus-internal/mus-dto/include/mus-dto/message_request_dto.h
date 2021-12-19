@@ -7,13 +7,17 @@
 #include <string>
 
 struct MessageRequestDTO {
-    MessageRequestDTO(const std::string& content_)
-                    : content(content_) {}
+    MessageRequestDTO(const std::string& content_,
+                      std::optional<uint32_t> playlist_id_ = {})
+                    : content(content_),
+                      playlist_id(playlist_id_) {}
 
     std::string content;
+    std::optional<uint32_t> playlist_id;
 
     constexpr static auto properties = std::tuple(
-        music_share::reflectable::Property(&MessageRequestDTO::content, "content")
+        music_share::reflectable::Property(&MessageRequestDTO::content, "content"),
+        music_share::reflectable::Property(&MessageRequestDTO::playlist_id, "playlistId")
     );
 };
 

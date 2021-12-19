@@ -28,28 +28,28 @@ namespace music_share {
     }
 
     uint32_t UserUseCase::Create(const UserRequestDTO& user_dto) {
-        optional<User> user_valid = m_user_rep.FindByUsername(user_dto.username);
-        if (user_valid) {
+        optional<User> user_exist = m_user_rep.FindByUsername(user_dto.username);
+        if (user_exist) {
             throw ExistException();
         }
 
-        user_valid = m_user_rep.FindByEmail(user_dto.email);
-        if (user_valid) {
+        user_exist = m_user_rep.FindByEmail(user_dto.email);
+        if (user_exist) {
             throw ExistException();
         }
 
-        auto user = make_unique<User>(user_dto.nickname,
-                                                    user_dto.email,
-                                                    user_dto.username,
-                                                    user_dto.password,
-                                                    User::AccessLevel::Authorized);
+        User user(user_dto.username,
+                  user_dto.email,
+                  user_dto.password,
+                  user_dto.nickname,
+                  User::AccessLevel::Authorized);
 
-        m_user_rep.Insert(*user);
+        m_user_rep.Insert(user);
 
-        if (!user->GetId()) {
+        if (!user.GetId()) {
             throw CreateException();
         }
-        return *user->GetId();
+        return *user.GetId();
     }
 
     UserResponseDTO UserUseCase::Update(uint32_t user_id,
@@ -68,7 +68,7 @@ namespace music_share {
                                user_dto.nickname);
     }
 
-    UserResponseDTO UserUseCase::GetByUsername(const string& username) {
+    UserResponseDTO UserUseCase::GetByUsername(const string& username) const {
         optional<User> user = m_user_rep.FindByUsername(username);
 
         if (!user) {
@@ -83,20 +83,24 @@ namespace music_share {
                                user->GetNickname());
     }
 
-    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) {
+    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string> nicknames) const {
         vector<User> users;
-        users.reserve(nicknames.size());
 
-        for (const string& nickname : nicknames) {
-            vector<User> result_search = m_user_rep.FindByNickname(nickname);
-            users.insert(users.end(),
-                         result_search.begin(),
-                         result_search.end());
+        if (nicknames.empty()) {
+            users = m_user_rep.FetchAll();
+        } else {
+            users.reserve(nicknames.size());
+            for (const string& nickname : nicknames) {
+                vector<User> found_users = m_user_rep.FindByNickname(nickname);
+                users.insert(users.end(),
+                             found_users.begin(),
+                             found_users.end());
+            }
         }
 
-         if (users.empty()) {
-             throw InvalidDataException();
-         }
+        if (users.empty()) {
+            return {};
+        }
 
          vector<UserResponseDTO> users_dto;
          users_dto.reserve(users.size());
@@ -112,7 +116,7 @@ namespace music_share {
          return users_dto;
     }
 
-    UserResponseDTO UserUseCase::GetById(uint32_t id) {
+    UserResponseDTO UserUseCase::GetById(uint32_t id) const {
         optional<User> user = m_user_rep.Find(id);
 
         if (!user) {

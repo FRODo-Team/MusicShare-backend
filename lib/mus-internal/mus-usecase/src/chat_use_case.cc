@@ -30,28 +30,28 @@ namespace music_share {
 
     uint32_t ChatUseCase::Create(uint32_t user_id,
                                  const ChatRequestDTO& chat_request_dto) {
-        optional<Chat> chat_valid = m_chat_rep.FindByIdsOfUserPair(user_id,
+        optional<Chat> chat_exist = m_chat_rep.FindByIdsOfUserPair(user_id,
                                                          chat_request_dto.target_id);
-        if (chat_valid) {
+        if (chat_exist) {
             throw ExistException();
         }
 
-        auto chat = make_unique<Chat>(user_id,
-                                                    chat_request_dto.target_id);
+        Chat chat(user_id,
+                chat_request_dto.target_id);
 
-        m_chat_rep.Insert(*chat);
+        m_chat_rep.Insert(chat);
 
-        if (!chat->GetId()) {
+        if (!chat.GetId()) {
             throw CreateException();
         }
-        return *chat->GetId();
+        return *chat.GetId();
     }
 
-    vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) {
+    vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) const {
         vector<Chat> chats = m_chat_rep.FindByUserId(id);
 
         if (chats.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<ChatResponseDTO> chats_dto;
@@ -69,8 +69,9 @@ namespace music_share {
     }
 
     ChatResponseDTO ChatUseCase::GetByIdOfTwoUser(uint32_t first_id,
-                                                  uint32_t second_id) {
-        optional<Chat> chat = m_chat_rep.FindByIdsOfUserPair(first_id, second_id);
+                                                  uint32_t second_id) const {
+        optional<Chat> chat = m_chat_rep.FindByIdsOfUserPair(first_id,
+                                                             second_id);
 
         if (!chat) {
             throw InvalidDataException();

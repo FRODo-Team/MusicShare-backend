@@ -20,10 +20,10 @@ public:
     virtual uint32_t Create(uint32_t user_id,
                             const ChatRequestDTO& chat) = 0;
 
-    virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) = 0;
+    virtual std::vector<ChatResponseDTO> GetByIdOfOneUser(uint32_t id) const = 0;
 
     virtual ChatResponseDTO GetByIdOfTwoUser(uint32_t first_id,
-                                             uint32_t second_id) = 0;
+                                             uint32_t second_id) const = 0;
 
     virtual ~IChatUseCase() = default;
 };

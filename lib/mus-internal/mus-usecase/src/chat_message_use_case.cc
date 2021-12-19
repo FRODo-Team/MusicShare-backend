@@ -12,6 +12,7 @@
 using std::ctime;
 using std::make_unique;
 using std::optional;
+using std::nullopt;
 using std::string;
 using std::vector;
 using std::time_t;
@@ -29,7 +30,8 @@ namespace music_share {
         return *this;
     }
 
-    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_dto, uint32_t chat_id,
+    uint32_t ChatMessageUseCase::SendMessage(const MessageRequestDTO& message_dto,
+                                             uint32_t chat_id,
                                              uint32_t user_id,
                                              optional<string> datetime) {
         if (!datetime) {
@@ -38,24 +40,53 @@ namespace music_share {
             datetime = ctime(&end_time);
         }
 
-        auto message = make_unique<ChatMessage>(user_id,
-                                                *datetime,
-                                                message_dto.content,
-                                                chat_id);
-        m_chat_message_rep.Insert(*message);
+        ChatMessage message(user_id,
+                            *datetime,
+                            message_dto.content,
+                            chat_id,
+                            nullopt,
+                            message_dto.playlist_id);
+        m_chat_message_rep.Insert(message);
 
-        if (!message->GetId()) {
+        if (!message.GetId()) {
             throw CreateException();
         }
-        return *message->GetId();
+        return *message.GetId();
+    }
+
+    vector<MessageResponseDTO> ChatMessageUseCase::GetByUserId(uint32_t user_id,
+                                                                optional<string> since_datetime) const {
+        vector<ChatMessage> messages = m_chat_message_rep.FindByUserId(user_id,
+                                                                       since_datetime);
+
+        if (messages.empty()) {
+            return {};
+        }
+
+        vector<MessageResponseDTO> messages_dto;
+        messages_dto.reserve(messages.size());
+
+        for (const ChatMessage& message : messages) {
+            if (!message.GetId()) {
+                throw NullPointerException();
+            }
+            messages_dto.emplace_back(*message.GetId(),
+                                      message.GetChatId(),
+                                      message.GetSenderId(),
+                                      message.GetContent(),
+                                      message.GetDatetime(),
+                                      message.GetPlaylistId());
+        }
+
+        return messages_dto;
     }
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
-                                                                   uint32_t chat_id) {
+                                                                   uint32_t chat_id) const {
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<MessageResponseDTO> messages_dto;
@@ -72,7 +103,8 @@ namespace music_share {
                                       message.GetChatId(),
                                       message.GetSenderId(),
                                       message.GetContent(),
-                                      message.GetDatetime());
+                                      message.GetDatetime(),
+                                      message.GetPlaylistId());
         }
 
         return messages_dto;

@@ -33,11 +33,11 @@ namespace music_share {
         void DeleteSongById(uint32_t song_id, uint32_t playlist_id,
                             uint32_t user_id) override;
 
-        std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id) override;
+        std::vector<PlaylistResponseDTO> GetByUserId(uint32_t user_id) const override;
 
-        PlaylistResponseDTO GetById(uint32_t id) override;
+        PlaylistResponseDTO GetById(uint32_t id) const override;
 
-        std::vector<uint32_t> GetSongs(uint32_t playlist_id) override;
+        std::vector<uint32_t> GetSongs(uint32_t playlist_id) const override;
 
         ~PlaylistUseCase() = default;
 

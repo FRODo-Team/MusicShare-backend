@@ -22,7 +22,10 @@ namespace music_share {
                                      std::optional<std::string> datetime = std::nullopt) = 0;
 
         virtual std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
-                                                                uint32_t chat_id) = 0;
+                                                                uint32_t chat_id) const = 0;
+
+        virtual std::vector<MessageResponseDTO> GetByUserId(uint32_t user_id,
+                                                            std::optional<std::string> since_datetime) const = 0;
 
         virtual ~IChatMessageUseCase() = default;
     };

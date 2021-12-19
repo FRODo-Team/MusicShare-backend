@@ -24,11 +24,11 @@ namespace music_share {
         UserResponseDTO Update(uint32_t user_id,
                                const UserRequestDTO& user_dto) override;
 
-        UserResponseDTO GetByUsername(const std::string& username) override;
+        UserResponseDTO GetByUsername(const std::string& username) const override;
 
-        std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) override;
+        std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string> nicknames) const override;
 
-        UserResponseDTO GetById(uint32_t id) override;
+        UserResponseDTO GetById(uint32_t id) const override;
 
         ~UserUseCase() = default;
 
