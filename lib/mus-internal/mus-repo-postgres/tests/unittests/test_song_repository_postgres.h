@@ -50,12 +50,12 @@ const std::string TestSongRepositoryPostgres::s_ConnectionString =
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestSongRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestSongRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 
@@ -317,4 +317,15 @@ TEST_F(TestSongRepositoryPostgres, FindByArtist) {
         EXPECT_STREQ(actual_song.GetGenre()->c_str(),
                      expected_song.GetGenre()->c_str());
     }
+}
+
+TEST_F(TestSongRepositoryPostgres, FetchAllNoLimit) {
+    // arrange
+    const size_t expectedSongCount = 3;
+
+    // act
+    auto repo = std::make_unique<SongRepositoryPostgres>(s_ConnectionString);
+    std::vector<Song> actual_songs = repo->FetchAll();
+
+    ASSERT_EQ(actual_songs.size(), expectedSongCount);
 }

@@ -50,13 +50,13 @@ const std::string TestChatMessageRepositoryPostgres::s_ConnectionString =
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestChatMessageRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" },
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0002_021221_MUS-28_populate.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" },
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0002_021221_MUS-28_populate.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestChatMessageRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 TEST_F(TestChatMessageRepositoryPostgres, FindNotExistingChatMessage) {

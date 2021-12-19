@@ -61,12 +61,12 @@ const std::string TestPlaylistRepositoryPostgres::s_ConnectionString =
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestPlaylistRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestPlaylistRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 
