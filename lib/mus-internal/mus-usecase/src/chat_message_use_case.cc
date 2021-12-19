@@ -39,16 +39,16 @@ namespace music_share {
             datetime = ctime(&end_time);
         }
 
-        auto message = make_unique<ChatMessage>(user_id,
-                                                *datetime,
-                                                message_dto.content,
-                                                chat_id);
-        m_chat_message_rep.Insert(*message);
+        ChatMessage message(user_id,
+                            *datetime,
+                            message_dto.content,
+                            chat_id);
+        m_chat_message_rep.Insert(message);
 
-        if (!message->GetId()) {
+        if (!message.GetId()) {
             throw CreateException();
         }
-        return *message->GetId();
+        return *message.GetId();
     }
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
@@ -56,7 +56,7 @@ namespace music_share {
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<MessageResponseDTO> messages_dto;

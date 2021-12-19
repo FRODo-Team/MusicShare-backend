@@ -38,18 +38,18 @@ namespace music_share {
             throw ExistException();
         }
 
-        auto user = make_unique<User>(user_dto.username,
-                                                    user_dto.email,
-                                                    user_dto.password,
-                                                    user_dto.nickname,
-                                                    User::AccessLevel::Authorized);
+        User user(user_dto.username,
+                  user_dto.email,
+                  user_dto.password,
+                  user_dto.nickname,
+                  User::AccessLevel::Authorized);
 
-        m_user_rep.Insert(*user);
+        m_user_rep.Insert(user);
 
-        if (!user->GetId()) {
+        if (!user.GetId()) {
             throw CreateException();
         }
-        return *user->GetId();
+        return *user.GetId();
     }
 
     UserResponseDTO UserUseCase::Update(uint32_t user_id,
@@ -88,15 +88,15 @@ namespace music_share {
         users.reserve(nicknames.size());
 
         for (const string& nickname : nicknames) {
-            vector<User> result_search = m_user_rep.FindByNickname(nickname);
+            vector<User> found_users = m_user_rep.FindByNickname(nickname);
             users.insert(users.end(),
-                         result_search.begin(),
-                         result_search.end());
+                         found_users.begin(),
+                         found_users.end());
         }
 
-         if (users.empty()) {
-             throw InvalidDataException();
-         }
+        if (users.empty()) {
+            return {};
+        }
 
          vector<UserResponseDTO> users_dto;
          users_dto.reserve(users.size());

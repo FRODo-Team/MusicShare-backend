@@ -36,22 +36,22 @@ namespace music_share {
             throw ExistException();
         }
 
-        auto chat = make_unique<Chat>(user_id,
-                                                    chat_request_dto.target_id);
+        Chat chat(user_id,
+                chat_request_dto.target_id);
 
-        m_chat_rep.Insert(*chat);
+        m_chat_rep.Insert(chat);
 
-        if (!chat->GetId()) {
+        if (!chat.GetId()) {
             throw CreateException();
         }
-        return *chat->GetId();
+        return *chat.GetId();
     }
 
     vector<ChatResponseDTO> ChatUseCase::GetByIdOfOneUser(uint32_t id) const {
         vector<Chat> chats = m_chat_rep.FindByUserId(id);
 
         if (chats.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<ChatResponseDTO> chats_dto;

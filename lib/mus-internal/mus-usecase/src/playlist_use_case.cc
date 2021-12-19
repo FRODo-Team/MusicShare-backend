@@ -30,16 +30,16 @@ namespace  music_share {
 
     uint32_t PlaylistUseCase::Create(uint32_t user_id,
                                      const PlaylistRequestDTO& playlist_dto) {
-        auto playlist = make_unique<Playlist>(playlist_dto.name,
-                                                                user_id,
-                                                                playlist_dto.song_ids);
+        Playlist playlist (playlist_dto.name,
+                           user_id,
+                           playlist_dto.song_ids);
 
-        m_playlist_rep.Insert(*playlist);
+        m_playlist_rep.Insert(playlist);
 
-        if (!playlist->GetId()) {
+        if (!playlist.GetId()) {
             throw CreateException();
         }
-        return *playlist->GetId();
+        return *playlist.GetId();
     }
 
     void PlaylistUseCase::DeleteById(uint32_t user_id,
@@ -94,7 +94,7 @@ namespace  music_share {
         vector<Playlist> playlists = m_playlist_rep.FindByUserId(user_id);
 
         if (playlists.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<PlaylistResponseDTO> playlists_dto;
@@ -132,7 +132,7 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw InvalidDataException();
+            return {};
         }
 
         return playlist->GetSongIds();
