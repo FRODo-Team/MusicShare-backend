@@ -20,8 +20,8 @@ public:
 
     virtual SongResponseDTO GetById(uint32_t id) const = 0;
 
-    virtual std::vector<SongResponseDTO> GetByArtistAndTitle(const std::optional<std::string> artist,
-                                                             const std::optional<std::string> title) const = 0;
+    virtual std::vector<SongResponseDTO> GetByArtistAndTitle(const std::optional<std::string> artist = {},
+                                                             const std::optional<std::string> title = {}) const = 0;
 
     virtual ~ISongUseCase() = default;
 };

@@ -22,7 +22,7 @@ namespace music_share {
 
         uint32_t SendMessage(const MessageRequestDTO& message_dto, uint32_t chat_id,
                              uint32_t user_id,
-                             std::optional<std::string> datetime = std::nullopt) override;
+                             std::optional<std::string> datetime) override;
 
         std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
                                                         uint32_t chat_id) const override;
