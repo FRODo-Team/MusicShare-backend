@@ -19,6 +19,9 @@ public:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseInitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test database setup script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
@@ -30,6 +33,9 @@ public:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseDeinitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test database teardown script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
@@ -48,12 +54,12 @@ const std::string TestUserRepositoryPostgres::s_ConnectionString =
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestUserRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-    std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+    std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 
@@ -190,7 +196,7 @@ TEST_F(TestUserRepositoryPostgres, FindByNickname) {
     // TODO(sunz): move somewhere to fixture
     music_share::DatabaseObject db(s_ConnectionString);
     db.ExecuteQuery(
-            "INSERT INTO mus_user(username, email, password_hash, nickname, access_level)"
+            "INSERT INTO mus_user(username, email, password_hash, nickname, access_level) "
             "VALUES"
                 "('username3', 'mail3@mail.ru', '321', 'PopularNickname', 1), "
                 "('username4', 'mail4@mail.ru', '321', 'PopularNickname', 1), "
@@ -313,4 +319,61 @@ TEST_F(TestUserRepositoryPostgres, FindByEmailNotExisting) {
 
     // assert
     ASSERT_FALSE(actualUser.has_value());
+}
+
+TEST_F(TestUserRepositoryPostgres, CheckIfUserHasPlaylists) {
+    // arrange
+    // TODO(sunz): move somewhere to fixture
+    music_share::DatabaseObject db(s_ConnectionString);
+    db.ExecuteQuery(
+            "INSERT INTO mus_playlist(title, creator_id) "
+            "VALUES"
+            "('veryCoooolplaylistBraaaa', 1), "
+            "('classic', 3)");
+
+    db.ExecuteQuery(
+            "INSERT INTO mus_song(title, artist, duration, url, year, album, genre) "
+            "VALUES "
+            "('Better Off Alone', 'Alice Deejay', '2.56', 'https://www.youtube.com/watch?v=Lgs9QUtWc3M', 1998, 'Unknown', 'trance'), "
+            "('Better Off Alone', 'Alice Deejay', '2.56', '/somepath', 1998, 'Unknown', 'Unknown'), "
+            "('Smooth Criminal', 'Alient Ant Farm', '3.33', '/music/nostalgic', 2001, 'Unknown', 'Punk')");
+
+    db.ExecuteQuery(
+            "INSERT INTO mus_playlist_has_song(playlist_id, song_id) "
+            "VALUES"
+            "(1, 1), "
+            "(1, 2), "
+            "(2, 1), "
+            "(2, 2), "
+            "(1, 3)");
+
+    db.ExecuteQuery(
+            "INSERT INTO mus_user_has_playlist(user_id, playlist_id)"
+            "VALUES"
+            "(1, 1), "
+            "(1, 2), "
+            "(3, 1)");
+
+    const std::vector<uint32_t> expectedUserPlaylistIds = { 1, 2 };
+
+    auto repo = std::make_unique<UserRepositoryPostgres>(s_ConnectionString);
+    auto user = repo->Find(1);
+
+    ASSERT_TRUE(user.has_value());
+    ASSERT_EQ(expectedUserPlaylistIds.size(), user->playlist_ids.size());
+    for (size_t i = 0; i < user->playlist_ids.size(); ++i) {
+        ASSERT_EQ(expectedUserPlaylistIds[i], user->playlist_ids[i]);
+    }
+}
+
+TEST_F(TestUserRepositoryPostgres, FetchAllNoLimit) {
+    // Arrange
+    const size_t expectedUserCount = 5;
+
+    // act
+    auto repo = std::make_unique<UserRepositoryPostgres>(s_ConnectionString);
+    std::vector<User> actualUsers = repo->FetchAll();
+
+    // Assert
+    ASSERT_EQ(actualUsers.size(), expectedUserCount);
 }

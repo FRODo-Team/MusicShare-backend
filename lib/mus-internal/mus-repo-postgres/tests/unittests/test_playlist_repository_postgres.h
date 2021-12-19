@@ -17,6 +17,9 @@ protected:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseInitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test database setup script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
@@ -37,6 +40,9 @@ protected:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseDeinitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test teardown setup script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
