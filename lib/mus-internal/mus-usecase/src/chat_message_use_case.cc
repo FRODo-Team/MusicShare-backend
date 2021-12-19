@@ -103,7 +103,8 @@ namespace music_share {
                                       message.GetChatId(),
                                       message.GetSenderId(),
                                       message.GetContent(),
-                                      message.GetDatetime());
+                                      message.GetDatetime(),
+                                      message.GetPlaylistId());
         }
 
         return messages_dto;
