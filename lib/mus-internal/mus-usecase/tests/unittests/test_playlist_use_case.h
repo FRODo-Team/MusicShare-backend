@@ -195,7 +195,6 @@ TEST_F(TestPlaylistUseCase, GetByUserIdSuccess) {
               playlist_response_expected.songs_count);
     EXPECT_EQ(playlist_response[0].title,
               playlist_response_expected.title);
-
 }
 
 TEST_F(TestPlaylistUseCase, GetByUserIdInvalidData) {
@@ -204,8 +203,9 @@ TEST_F(TestPlaylistUseCase, GetByUserIdInvalidData) {
     EXPECT_CALL(*playlist_rep, FindByUserId(1))
             .WillOnce(Return(playlists));
 
-    EXPECT_THROW(playlist_usecase->GetByUserId(1),
-                 InvalidDataException);
+    vector<PlaylistResponseDTO> playlists_response = playlist_usecase->GetByUserId(1);
+
+    EXPECT_TRUE(playlists_response.empty());
 }
 
 TEST_F(TestPlaylistUseCase, GetByUserIdNullPointer) {
@@ -277,6 +277,7 @@ TEST_F(TestPlaylistUseCase, GetSongsInvalidData) {
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(nullopt));
 
-    EXPECT_THROW(playlist_usecase->GetSongs(1),
-                 InvalidDataException);
+    vector<uint32_t> song_ids = playlist_usecase->GetSongs(1);
+
+    EXPECT_TRUE(song_ids.empty());
 }

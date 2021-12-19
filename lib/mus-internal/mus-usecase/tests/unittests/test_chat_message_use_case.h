@@ -15,6 +15,7 @@
 #include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
+#include "matcher/nullopt_matcher.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -42,6 +43,7 @@ public:
     MOCK_METHOD1(Insert, void(ChatMessage&));
     MOCK_METHOD1(Update, void(const ChatMessage&));
     MOCK_METHOD1(Delete, void(const ChatMessage&));
+    MOCK_METHOD2(FindByUserId, vector<ChatMessage>(uint32_t, optional<string>));
 };
 
 MATCHER_P(ChatMessageEqualement, other,
@@ -80,6 +82,19 @@ TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
                                                 "datetime"), id_expected);
 }
 
+TEST_F(TestChatMessageUseCase, SendMessageEmptyDate) {
+    uint32_t id_expected = 1;
+
+    EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
+            .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
+                chat_message_out = *this->chat_message;
+            }));
+
+    EXPECT_EQ(chat_message_usecase->SendMessage(*message_request,
+                                                1,1,
+                                                nullopt), id_expected);
+}
+
 TEST_F(TestChatMessageUseCase, SendMessageException) {
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .Times(AtLeast(1));
@@ -99,7 +114,8 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesSuccess) {
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
 
-    vector<MessageResponseDTO> message_response = chat_message_usecase->GetUserMessages(1, 1);
+    vector<MessageResponseDTO> message_response = chat_message_usecase->GetUserMessages(1,
+                                                                                        1);
 
     EXPECT_EQ(message_response.size(), 1);
     EXPECT_EQ(message_response[0].datetime, message_response_expected.datetime);
@@ -114,8 +130,10 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesInvalidData) {
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
 
-    EXPECT_THROW(chat_message_usecase->GetUserMessages(1, 1),
-                 InvalidDataException);
+    vector<MessageResponseDTO> messages_response = chat_message_usecase->GetUserMessages(1,
+                                                                                         1);
+
+    EXPECT_TRUE(messages_response.empty());
 }
 
 TEST_F(TestChatMessageUseCase, GetUserMessagesNullPointer) {
@@ -128,5 +146,53 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesNullPointer) {
             .WillOnce(Return(messages));
 
     EXPECT_THROW(chat_message_usecase->GetUserMessages(1, 1),
+                 NullPointerException);
+}
+
+TEST_F(TestChatMessageUseCase, GetByUserIdSuccess) {
+    MessageResponseDTO message_response_expected(1, 1,
+                                                 1, "message",
+                                                 "datetime");
+    vector<ChatMessage> messages;
+    messages.push_back(*chat_message);
+
+    EXPECT_CALL(*chat_message_rep, FindByUserId(1,
+                                                NulloptEqualement(nullopt)))
+            .WillOnce(Return(messages));
+
+    vector<MessageResponseDTO> message_response = chat_message_usecase->GetByUserId(1,
+                                                                                    nullopt);
+
+    EXPECT_EQ(message_response.size(), 1);
+    EXPECT_EQ(message_response[0].datetime, message_response_expected.datetime);
+    EXPECT_EQ(message_response[0].id, message_response_expected.id);
+    EXPECT_EQ(message_response[0].chat_id, message_response_expected.chat_id);
+    EXPECT_EQ(message_response[0].content, message_response_expected.content);
+}
+
+TEST_F(TestChatMessageUseCase, GetByUserIdInvalidData) {
+    vector<ChatMessage> messages;
+
+    EXPECT_CALL(*chat_message_rep, FindByUserId(1,
+                                                NulloptEqualement(nullopt)))
+            .WillOnce(Return(messages));
+
+    vector<MessageResponseDTO> messages_response = chat_message_usecase->GetByUserId(1,
+                                                                                     nullopt);
+
+    EXPECT_TRUE(messages_response.empty());
+}
+
+TEST_F(TestChatMessageUseCase, GetByUserIdNullPointer) {
+    vector<ChatMessage> messages;
+    messages.emplace_back(1, "datetime",
+                          "message", 1,
+                          nullopt);
+
+    EXPECT_CALL(*chat_message_rep, FindByUserId(1,
+                                                NulloptEqualement(nullopt)))
+                .WillOnce(Return(messages));
+
+    EXPECT_THROW(chat_message_usecase->GetByUserId(1, nullopt),
                  NullPointerException);
 }

@@ -121,7 +121,9 @@ TEST_F(TestChatUseCase, GetByIdOfOneUserInvalidData) {
     EXPECT_CALL(*chat_rep, FindByUserId(1))
             .WillOnce(Return(chats));
 
-    EXPECT_THROW(chat_usecase->GetByIdOfOneUser(1), InvalidDataException);
+    vector<ChatResponseDTO> chats_response = chat_usecase->GetByIdOfOneUser(1);
+
+    EXPECT_TRUE(chats_response.empty());
 }
 
 TEST_F(TestChatUseCase, GetByIdOfOneUserNullPointer) {
@@ -151,10 +153,8 @@ TEST_F(TestChatUseCase, GetByIdOfTwoUserSuccess) {
 }
 
 TEST_F(TestChatUseCase, GetByIdOfTwoUserInvalidData) {
-    vector<Chat> chats;
+    EXPECT_CALL(*chat_rep, FindByIdsOfUserPair(1, 2))
+            .WillOnce(Return(nullopt));
 
-    EXPECT_CALL(*chat_rep, FindByUserId(1))
-            .WillOnce(Return(chats));
-
-    EXPECT_THROW(chat_usecase->GetByIdOfOneUser(1), InvalidDataException);
+    EXPECT_THROW(chat_usecase->GetByIdOfTwoUser(1, 2), InvalidDataException);
 }
