@@ -78,11 +78,15 @@ CREATE TABLE IF NOT EXISTS mus_chat_message(
     datetime TIMESTAMP,
     content VARCHAR(512),
     chat_id INT,
+    playlist_id INT,
 
     CONSTRAINT fk_sender
         FOREIGN KEY(sender_id) REFERENCES mus_user(id)
         ON DELETE SET NULL,
     CONSTRAINT fk_chat
         FOREIGN KEY(chat_id) REFERENCES mus_chat(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_playlist
+        FOREIGN  KEY(playlist_id) REFERENCES mus_playlist(id)
+        ON DELETE SET NULL
 );

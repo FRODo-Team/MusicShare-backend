@@ -50,6 +50,7 @@ ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
     std::string datetime;
     std::string content;
     uint32_t chat_id;
+    std::optional<uint32_t> playlist_id = { };
 
     for (const auto& field: row) {
         if (field.name() == std::string{ "id" }) {
@@ -62,10 +63,12 @@ ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
             content = field.as<std::string>();
         } else if (field.name() == std::string{ "chat_id" }) {
             chat_id = field.as<uint32_t>();
+        } else if (field.name() == std::string{ "playlist_id" }) {
+            playlist_id = field.as<uint32_t>();
         }
     }
 
-    return { sender_id, datetime, content, chat_id, id };
+    return { sender_id, datetime, content, chat_id, id, playlist_id };
 }
 
 SqlObject ChatMessageRepositoryPostgres::SqlMapper::ToSqlObject(
@@ -79,6 +82,10 @@ SqlObject ChatMessageRepositoryPostgres::SqlMapper::ToSqlObject(
     result["chat_id"] = SqlUtils::ValueToSqlFormat(domain.GetChatId());
     if (domain.GetId().has_value()) {
         result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
+    }
+    if (domain.GetPlaylistId().has_value()) {
+        result["playlist_id"] =
+                SqlUtils::ValueToSqlFormat(domain.GetPlaylistId().value());
     }
 
     return result;

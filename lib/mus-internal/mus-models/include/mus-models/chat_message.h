@@ -14,7 +14,8 @@ public:
                 const std::string& datetime,
                 const std::string& content,
                 uint32_t chat_id,
-                std::optional<uint32_t> id = { });
+                std::optional<uint32_t> id = { },
+                std::optional<uint32_t> playlist_id = { });
 
     ChatMessage(const ChatMessage&) = default;
     ChatMessage(const ChatMessage& other, uint32_t id);
@@ -28,6 +29,7 @@ public:
     const std::string& GetDatetime() const { return m_datetime; }
     const std::string& GetContent() const { return m_content; }
     uint32_t GetChatId() const { return m_chat_id; }
+    std::optional<uint32_t> GetPlaylistId() const { return m_playlist_id; }
 
     void SetDatetime(const std::string& datetime);
     void SetContent(const std::string& content);
@@ -39,6 +41,7 @@ private:
     std::string m_content;
     uint32_t m_chat_id;
     std::optional<uint32_t> m_id;
+    std::optional<uint32_t> m_playlist_id;
 };
 
 } // namespace music_share

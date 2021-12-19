@@ -59,14 +59,14 @@ VALUES
     (1, 3),
     (3, 4);
 
-INSERT INTO mus_chat_message(sender_id, datetime, content, chat_id)
+INSERT INTO mus_chat_message(sender_id, datetime, content, chat_id, playlist_id)
 VALUES
-    (1, '2018-1-05 14:01:10-08', 'look at this duuuuude', 1),
-    (1, '2019-3-05 14:01:10-08', 'look at this dude again', 1),
-    (1, '2020-7-05 14:01:10-08', 'look at this dude', 3),
-    (1, '2021-10-05 14:01:10-08', 'DUUUUUUUUUUDE!', 3),
-    (3, '2021-10-05 14:01:10-08', 'this if fine playlist though', 4),
-    (3, '2021-10-05 14:01:10-08', 'look at this duuuuuuuuude', 3),
-    (3, '2021-8-05 14:01:10-08', 'i am not a big fun of this genre, you know...', 3),
-    (1, '2021-8-05 14:01:10-08', 'bruh....', 1),
-    (4, '2021-8-05 14:01:10-08', 'look at this duuuuuuuuude', 4);
+    (1, '2018-1-05 14:01:10-08', 'look at this duuuuude', 1, 1),
+    (1, '2019-3-05 14:01:10-08', 'look at this dude again', 1, 1),
+    (1, '2020-7-05 14:01:10-08', 'look at this dude', 3, 2),
+    (1, '2021-10-05 14:01:10-08', 'DUUUUUUUUUUDE!', 3, 2),
+    (3, '2021-10-05 14:01:10-08', 'this if fine playlist though', 4, 3),
+    (3, '2021-10-05 14:01:10-08', 'look at this duuuuuuuuude', 3, 4),
+    (3, '2021-8-05 14:01:10-08', 'i am not a big fun of this genre, you know...', 3, 4),
+    (1, '2021-8-05 14:01:10-08', 'bruh....', 1, 3),
+    (4, '2021-8-05 14:01:10-08', 'look at this duuuuuuuuude', 4, 2);
