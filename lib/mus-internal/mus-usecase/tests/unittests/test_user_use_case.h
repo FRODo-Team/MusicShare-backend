@@ -14,6 +14,7 @@
 #include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
+#include "matcher/nullopt_matcher.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -43,6 +44,7 @@ public:
     MOCK_METHOD1(Insert, void(User&));
     MOCK_METHOD1(Update, void(const User&));
     MOCK_METHOD1(Delete, void(const User&));
+    MOCK_METHOD1(FetchAll, vector<User>(optional<uint32_t>));
 };
 
 MATCHER_P(UserEqualement, other, "Equality matcher for type User") {
@@ -59,6 +61,10 @@ protected:
                                  "hash", "user",
                                  User::AccessLevel::Authorized,
                                  1);
+        user_null = make_shared<User>("user", "user@mail.ru",
+                                 "hash", "user",
+                                 User::AccessLevel::Authorized,
+                                 nullopt);
 
         user_request = make_shared<UserRequestDTO>("user", "hash",
                                         "user", "user@mail.ru");
@@ -69,6 +75,7 @@ protected:
     shared_ptr<UserUseCase> user_usecase;
     shared_ptr<MockUserRepository> user_rep;
     shared_ptr<User> user;
+    shared_ptr<User> user_null;
     shared_ptr<UserRequestDTO> user_request;
 };
 
@@ -155,22 +162,19 @@ TEST_F(TestUserUseCase, GetByUsernameSuccess) {
 
 TEST_F(TestUserUseCase, GetByUsernameNotExist) {
     EXPECT_CALL(*user_rep, FindByUsername("user"))
-            .WillOnce(Return(std::nullopt));
+            .WillOnce(Return(nullopt));
 
     EXPECT_THROW(user_usecase->GetByUsername("user"), InvalidDataException);
 }
 
 TEST_F(TestUserUseCase, GetByUsernameNullPointer) {
     EXPECT_CALL(*user_rep, FindByUsername("user"))
-            .WillOnce(Return(User("user", "user@mail.ru",
-                                        "hash", "user",
-                                        User::AccessLevel::Authorized,
-                                        nullopt)));
+            .WillOnce(Return(*user_null));
 
     EXPECT_THROW(user_usecase->GetByUsername("user"), NullPointerException);
 }
 
-TEST_F(TestUserUseCase, GetByNicknameSuccess) {
+TEST_F(TestUserUseCase, GetByNicknamesSuccess) {
     UserResponseDTO user_response_expected(1,
                                            "user",
                                            "user");
@@ -180,44 +184,68 @@ TEST_F(TestUserUseCase, GetByNicknameSuccess) {
     EXPECT_CALL(*user_rep, FindByNickname("user"))
             .WillOnce(Return(users));
 
-    vector<string> user_request;
-    user_request.emplace_back("user");
+    vector<string> nicknames;
+    nicknames.emplace_back("user");
 
-    vector<UserResponseDTO> user_response = user_usecase->GetByNicknames(user_request);
+    vector<UserResponseDTO> user_response = user_usecase->GetByNicknames(nicknames);
 
     EXPECT_EQ(user_response[0].nickname, user_response_expected.nickname);
     EXPECT_EQ(user_response[0].username, user_response_expected.username);
     EXPECT_EQ(user_response[0].id, user_response_expected.id);
 }
 
-TEST_F(TestUserUseCase, GetByNicknameNotExist) {
+TEST_F(TestUserUseCase, GetByNicknamesNotExist) {
     vector<User> users;
 
     EXPECT_CALL(*user_rep, FindByNickname("user"))
             .WillOnce(Return(users));
 
-    vector<string> user_request;
-    user_request.emplace_back("user");
+    vector<string> nicknames;
+    nicknames.emplace_back("user");
 
-    EXPECT_THROW(user_usecase->GetByNicknames(user_request),
-                                                InvalidDataException);
+    vector<UserResponseDTO> users_response = user_usecase->GetByNicknames(nicknames);
+
+    EXPECT_TRUE(users_response.empty());
+
 }
 
-TEST_F(TestUserUseCase, GetByNicknameNullPointer) {
+TEST_F(TestUserUseCase, GetByNicknamesNullPointer) {
     vector<User> users;
-    users.emplace_back(User("user", "user@mail.ru",
-                                  "hash", "user",
-                                  User::AccessLevel::Authorized,
-                                  nullopt));
+    users.emplace_back(*user_null);
 
     EXPECT_CALL(*user_rep, FindByNickname("user"))
             .WillOnce(Return(users));
 
-    vector<string> user_request;
-    user_request.emplace_back("user");
+    vector<string> nicknames;
+    nicknames.emplace_back("user");
 
-    EXPECT_THROW(user_usecase->GetByNicknames(user_request),
+    EXPECT_THROW(user_usecase->GetByNicknames(nicknames),
                  NullPointerException);
+}
+
+TEST_F(TestUserUseCase, GetByNicknamesEmptyRequest) {
+    vector<UserResponseDTO> user_response_expected;
+    user_response_expected.emplace_back(1, "user", "user");
+    user_response_expected.emplace_back(2, "user2", "user2");
+    vector<User> users;
+    users.emplace_back(*user);
+    users.emplace_back("user2", "user2@mail.ru",
+                       "password", "user2",
+                       music_share::User::AccessLevel::Authorized, 2);
+
+    EXPECT_CALL(*user_rep, FetchAll(NulloptEqualement(nullopt)))
+                .WillOnce(Return(users));
+
+    vector<string> nicknames;
+
+    vector<UserResponseDTO> user_response = user_usecase->GetByNicknames(nicknames);
+
+    EXPECT_EQ(user_response[0].nickname, user_response_expected[0].nickname);
+    EXPECT_EQ(user_response[0].username, user_response_expected[0].username);
+    EXPECT_EQ(user_response[0].id, user_response_expected[0].id);
+    EXPECT_EQ(user_response[1].nickname, user_response_expected[1].nickname);
+    EXPECT_EQ(user_response[1].username, user_response_expected[1].username);
+    EXPECT_EQ(user_response[1].id, user_response_expected[1].id);
 }
 
 TEST_F(TestUserUseCase, GetByIdSuccess) {
@@ -244,10 +272,7 @@ TEST_F(TestUserUseCase, GetByIdNotExist) {
 
 TEST_F(TestUserUseCase, GetByIdNullPointer) {
     EXPECT_CALL(*user_rep, Find(1))
-            .WillOnce(Return(User("user", "user@mail.ru",
-                                  "hash", "user",
-                                  User::AccessLevel::Authorized,
-                                  nullopt)));
+            .WillOnce(Return(*user_null));
 
     EXPECT_THROW(user_usecase->GetById(1), NullPointerException);
 }
