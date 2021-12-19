@@ -5,6 +5,7 @@
 
 #include <tuple>
 #include <cstdint>
+#include <optional>
 #include <string>
 
 struct MessageResponseDTO {
@@ -20,13 +21,15 @@ struct MessageResponseDTO {
     uint32_t sender_id;
     std::string content;
     std::string datetime;
+    std::optional<uint32_t> playlist_id;
 
     constexpr static auto properties = std::tuple(
         music_share::reflectable::Property(&MessageResponseDTO::id, "id"),
         music_share::reflectable::Property(&MessageResponseDTO::chat_id, "chatId"),
         music_share::reflectable::Property(&MessageResponseDTO::sender_id, "senderId"),
         music_share::reflectable::Property(&MessageResponseDTO::content, "content"),
-        music_share::reflectable::Property(&MessageResponseDTO::datetime, "datetime")
+        music_share::reflectable::Property(&MessageResponseDTO::datetime, "datetime"),
+        music_share::reflectable::Property(&MessageResponseDTO::playlist_id, "playlistId")
     );
 };
 
