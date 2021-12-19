@@ -12,6 +12,7 @@
 using std::ctime;
 using std::make_unique;
 using std::optional;
+using std::nullopt;
 using std::string;
 using std::vector;
 using std::time_t;
@@ -42,7 +43,9 @@ namespace music_share {
         ChatMessage message(user_id,
                             *datetime,
                             message_dto.content,
-                            chat_id);
+                            chat_id,
+                            nullopt,
+                            message_dto.playlist_id);
         m_chat_message_rep.Insert(message);
 
         if (!message.GetId()) {
@@ -71,7 +74,8 @@ namespace music_share {
                                       message.GetChatId(),
                                       message.GetSenderId(),
                                       message.GetContent(),
-                                      message.GetDatetime());
+                                      message.GetDatetime(),
+                                      message.GetPlaylistId());
         }
 
         return messages_dto;
