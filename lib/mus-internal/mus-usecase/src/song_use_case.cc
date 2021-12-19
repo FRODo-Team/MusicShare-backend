@@ -42,11 +42,25 @@ namespace music_share {
                                song->GetUrl());
     }
 
-    vector<SongResponseDTO> SongUseCase::GetByTitle(const string& title) const {
-        vector<Song> songs = m_song_rep.FindByTitle(title);
+    vector<SongResponseDTO> SongUseCase::GetByArtistAndTitle(const optional<string>& artist,
+                                                            const optional<string>& title) const {
+        vector<Song> songs;
+
+        if (!title && !artist) {
+            songs = m_song_rep.FetchAll();
+        }
+        if (!title && artist) {
+            songs = m_song_rep.FindByArtist(*artist);
+        }
+        if (title && !artist) {
+            songs = m_song_rep.FindByTitle(*title);
+        }
+        if (title && artist) {
+            songs = m_song_rep.FindByArtist(*artist);
+        }
 
         if (songs.empty()) {
-            throw InvalidDataException();
+            return {};
         }
 
         vector<SongResponseDTO> songs_dto;
@@ -55,27 +69,8 @@ namespace music_share {
             if (!song.GetId()) {
                 throw NullPointerException();
             }
-            songs_dto.emplace_back(*song.GetId(),
-                                   song.GetTitle(),
-                                   song.GetArtist(),
-                                   song.GetUrl());
-        }
-
-        return songs_dto;
-    }
-
-    vector<SongResponseDTO> SongUseCase::GetByArtist(const string& artist) const {
-        vector<Song> songs = m_song_rep.FindByArtist(artist);
-
-        if (songs.empty()) {
-            throw InvalidDataException();
-        }
-
-        vector<SongResponseDTO> songs_dto;
-        songs_dto.reserve(songs.size());
-        for (const Song& song : songs) {
-            if (!song.GetId()) {
-                throw NullPointerException();
+            if (title && artist && *title != song.GetTitle()) {
+                continue;
             }
             songs_dto.emplace_back(*song.GetId(),
                                    song.GetTitle(),
