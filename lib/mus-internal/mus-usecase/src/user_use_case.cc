@@ -85,13 +85,17 @@ namespace music_share {
 
     vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) const {
         vector<User> users;
-        users.reserve(nicknames.size());
 
-        for (const string& nickname : nicknames) {
-            vector<User> found_users = m_user_rep.FindByNickname(nickname);
-            users.insert(users.end(),
-                         found_users.begin(),
-                         found_users.end());
+        if (nicknames.empty()) {
+            users = m_user_rep.FetchAll();
+        } else {
+            users.reserve(nicknames.size());
+            for (const string& nickname : nicknames) {
+                vector<User> found_users = m_user_rep.FindByNickname(nickname);
+                users.insert(users.end(),
+                             found_users.begin(),
+                             found_users.end());
+            }
         }
 
         if (users.empty()) {
