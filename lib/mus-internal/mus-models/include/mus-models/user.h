@@ -36,9 +36,6 @@ public:
     const std::string& GetPasswordHash() const { return m_password_hash; }
     const std::string& GetNickname() const { return m_nickname; }
     AccessLevel GetAccessLevel() const { return m_access_level; }
-    const std::vector<uint32_t>& GetPlaylistIds() const { return m_playlist_ids; }
-
-    std::vector<uint32_t>& GetPlaylistIds() { return m_playlist_ids; }
 
     void SetUsername(const std::string& username);
     void SetEmail(const std::string& email);
@@ -46,13 +43,14 @@ public:
     void SetNickname(const std::string& nickname);
     void SetAccessLevel(AccessLevel access_level);
 
+    std::vector<uint32_t> playlist_ids;
+
 private:
     std::string m_username;             // Уникален
     std::string m_email;
     std::string m_password_hash;
     std::string m_nickname;             // Отображаемое имя. Может быть неуникально.
     AccessLevel m_access_level;
-    std::vector<uint32_t> m_playlist_ids;
     std::optional<uint32_t> m_id;
 
     static constexpr uint32_t kNicknameMaxLength = 30;

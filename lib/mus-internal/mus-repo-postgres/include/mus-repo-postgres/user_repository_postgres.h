@@ -19,6 +19,7 @@ public:
     void Update(const User& obj) override;
     void Delete(const User& obj) override;
 
+    std::vector<User> FetchAll(std::optional<uint32_t> limit={ }) override;
     std::optional<User> FindByUsername(const std::string& username) override;
     std::optional<User> FindByEmail(const std::string& email) override;
     std::vector<User> FindByNickname(const std::string& nickname) override;

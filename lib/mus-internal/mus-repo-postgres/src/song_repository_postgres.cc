@@ -24,6 +24,25 @@ void SongRepositoryPostgres::Delete(const Song& song) {
     return m_crud_repository.Delete(song);
 }
 
+std::vector<Song> SongRepositoryPostgres::FetchAll(
+        std::optional<uint32_t> limit)
+{
+    std::string query = "SELECT * FROM " + m_table_name + " ";
+    if (limit.has_value()) {
+        query += " LIMIT " + SqlUtils::ValueToSqlFormat(limit.value());
+    }
+
+    pqxx::result response = m_crud_repository.ExecuteQuery(query);
+
+    std::vector<Song> result;
+    for (const auto& row: response) {
+        Song s = SqlMapper::ToDomainObject(row);
+        result.push_back(s);
+    }
+
+    return result;
+}
+
 std::vector<Song> SongRepositoryPostgres::FindByTitle(
         const std::string& title)
 {
