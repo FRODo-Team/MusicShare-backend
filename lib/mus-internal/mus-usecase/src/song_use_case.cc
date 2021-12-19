@@ -42,8 +42,8 @@ namespace music_share {
                                song->GetUrl());
     }
 
-    vector<SongResponseDTO> SongUseCase::GetByArtistAndTitle(const optional<string>& artist,
-                                                            const optional<string>& title) const {
+    vector<SongResponseDTO> SongUseCase::GetByArtistAndTitle(const optional<string> artist,
+                                                            const optional<string> title) const {
         vector<Song> songs;
 
         if (!title && !artist) {

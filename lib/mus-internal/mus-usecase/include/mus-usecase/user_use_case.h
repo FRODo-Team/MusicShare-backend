@@ -26,7 +26,7 @@ namespace music_share {
 
         UserResponseDTO GetByUsername(const std::string& username) const override;
 
-        std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) const override;
+        std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string> nicknames) const override;
 
         UserResponseDTO GetById(uint32_t id) const override;
 

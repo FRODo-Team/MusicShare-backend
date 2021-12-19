@@ -83,7 +83,7 @@ namespace music_share {
                                user->GetNickname());
     }
 
-    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string>& nicknames) const {
+    vector<UserResponseDTO> UserUseCase::GetByNicknames(const vector<string> nicknames) const {
         vector<User> users;
 
         if (nicknames.empty()) {

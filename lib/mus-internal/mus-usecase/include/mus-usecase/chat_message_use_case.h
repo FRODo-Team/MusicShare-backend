@@ -27,6 +27,9 @@ namespace music_share {
         std::vector<MessageResponseDTO> GetUserMessages(uint32_t user_id,
                                                         uint32_t chat_id) const override;
 
+        std::vector<MessageResponseDTO> GetByUserId(uint32_t user_id,
+                                                    std::optional<std::string> since_datetime) const override;
+
         ~ChatMessageUseCase() = default;
 
     private:

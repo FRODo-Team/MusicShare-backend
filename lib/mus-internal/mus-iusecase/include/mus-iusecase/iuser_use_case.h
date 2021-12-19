@@ -24,7 +24,7 @@ public:
 
     virtual UserResponseDTO GetByUsername(const std::string& username) const = 0;
 
-    virtual std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string>& nicknames) const = 0;
+    virtual std::vector<UserResponseDTO> GetByNicknames(const std::vector<std::string> nicknames) const = 0;
 
     virtual UserResponseDTO GetById(uint32_t id) const = 0;
 
