@@ -20,6 +20,9 @@ public:
     void Delete(const ChatMessage& obj) override;
 
     std::vector<ChatMessage> FindByChatId(uint32_t chat_id) override;
+    std::vector<ChatMessage> FindByUserId(
+            uint32_t user_id,
+            std::optional<std::string> since_datetime) override;
 
 private:
     class SqlMapper {
@@ -29,6 +32,7 @@ private:
     };
 
     RepositoryPostgres<ChatMessage, SqlMapper> m_crud_repository;
+
     const std::string& m_table_name;
 };
 

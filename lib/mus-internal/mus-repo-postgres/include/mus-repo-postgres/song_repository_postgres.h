@@ -20,6 +20,7 @@ public:
     void Update(const Song& obj) override;
     void Delete(const Song& obj) override;
 
+    std::vector<Song> FetchAll(std::optional<uint32_t> limit = { }) override;
     std::vector<Song> FindByTitle(const std::string& title) override;
     std::vector<Song> FindByArtist(const std::string& artist) override;
 

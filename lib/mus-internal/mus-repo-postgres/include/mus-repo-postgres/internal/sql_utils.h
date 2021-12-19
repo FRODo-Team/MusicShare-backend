@@ -22,6 +22,39 @@ public:
         if constexpr(std::is_same_v<T, std::string>) {
             return { "'" + value + "'" };
         }
+        assert(false);
+    }
+
+    // Приводит values в строку значений в формате, нужном для SQL-запроса
+    // пример, если T - std::string
+    // in:  std::vector<std::string> { "test", "hello", "world" }
+    // out: std::string "('test', 'hello', 'world')"
+    template<typename T>
+    static std::string ValuesToSqlFormat(const std::vector<T>& values,
+                                         bool arrange_brackets=false) noexcept {
+        if (values.empty()) {
+            return { "" };
+        }
+
+        std::string result;
+        if (arrange_brackets) {
+            result += "(";
+        }
+
+        const T& last = *(values.crbegin());
+
+        for (const auto& value: values) {
+            result += ValueToSqlFormat(value);
+            if (value != last) {
+                result += ", ";
+            } else {
+                if (arrange_brackets) {
+                    result += ")";
+                }
+            }
+        }
+
+        return result;
     }
 
     static std::pair<std::string, std::string> SqlObjectToQueryableInsertStrings(

@@ -1,4 +1,5 @@
 #include "mus-repo-postgres/chat_message_repository_postgres.h"
+#include "mus-repo-postgres/chat_repository_postgres.h"
 
 namespace music_share {
 
@@ -42,6 +43,40 @@ std::vector<ChatMessage> ChatMessageRepositoryPostgres::FindByChatId(
     return result;
 }
 
+std::vector<ChatMessage> ChatMessageRepositoryPostgres::FindByUserId(
+        uint32_t user_id, std::optional<std::string> since_datetime)
+{
+    auto chat_repository = std::make_unique<ChatRepositoryPostgres>(
+            m_crud_repository.GetConnectionString());
+
+    std::vector<Chat> user_chats = chat_repository->FindByUserId(user_id);
+    std::vector<uint32_t> user_chat_ids(user_chats.size());
+    for (size_t i = 0; i < user_chats.size(); ++i) {
+        user_chat_ids[i] = user_chats[i].GetId().value();
+    }
+
+    std::string user_chats_sql = SqlUtils::ValuesToSqlFormat(user_chat_ids,
+                                                             true);
+    std::string query =
+            "SELECT * FROM " + m_table_name + " "
+            "WHERE chat_id IN " + user_chats_sql;
+
+    if (since_datetime.has_value()) {
+        query + " AND datetime > " + SqlUtils::ValueToSqlFormat(since_datetime);
+    }
+
+    pqxx::result response = m_crud_repository.ExecuteQuery(query);
+
+    std::vector<ChatMessage> result;
+    for (const auto& row: response) {
+        ChatMessage cm = SqlMapper::ToDomainObject(row);
+        result.push_back(cm);
+    }
+
+    return result;
+}
+
+
 ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
         const pqxx::row &row)
 {
@@ -50,6 +85,7 @@ ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
     std::string datetime;
     std::string content;
     uint32_t chat_id;
+    std::optional<uint32_t> playlist_id = { };
 
     for (const auto& field: row) {
         if (field.name() == std::string{ "id" }) {
@@ -62,10 +98,12 @@ ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
             content = field.as<std::string>();
         } else if (field.name() == std::string{ "chat_id" }) {
             chat_id = field.as<uint32_t>();
+        } else if (field.name() == std::string{ "playlist_id" }) {
+            playlist_id = field.as<uint32_t>();
         }
     }
 
-    return { sender_id, datetime, content, chat_id, id };
+    return { sender_id, datetime, content, chat_id, id, playlist_id };
 }
 
 SqlObject ChatMessageRepositoryPostgres::SqlMapper::ToSqlObject(
@@ -79,6 +117,10 @@ SqlObject ChatMessageRepositoryPostgres::SqlMapper::ToSqlObject(
     result["chat_id"] = SqlUtils::ValueToSqlFormat(domain.GetChatId());
     if (domain.GetId().has_value()) {
         result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
+    }
+    if (domain.GetPlaylistId().has_value()) {
+        result["playlist_id"] =
+                SqlUtils::ValueToSqlFormat(domain.GetPlaylistId().value());
     }
 
     return result;

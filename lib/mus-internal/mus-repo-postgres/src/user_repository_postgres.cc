@@ -23,13 +23,13 @@ std::optional<User> UserRepositoryPostgres::Find(uint32_t id) {
 
     pqxx::result response = m_crud_repository.ExecuteQuery(query);
 
-    std::vector<uint32_t> playlist_ids;
+    std::vector<uint32_t> fetched_playlist_ids;
     for (const auto& row: response) {
         auto playlist_id = row[0].as<uint32_t>();
-        playlist_ids.push_back(playlist_id);
+        fetched_playlist_ids.push_back(playlist_id);
     }
 
-    user->GetPlaylistIds() = playlist_ids;
+    user->playlist_ids = fetched_playlist_ids;
     return user;
 }
 
@@ -39,7 +39,7 @@ void UserRepositoryPostgres::Insert(User& out_obj) {
     const uint32_t user_id = out_obj.GetId().value();
 
     // TODO: rewrite in single query.
-    for (uint32_t playlist_id: out_obj.GetPlaylistIds()) {
+    for (uint32_t playlist_id: out_obj.playlist_ids) {
         std::string query =
                 "INSERT INTO " +  std::string(kUserHasPlaylistTableName) + " " +
                 "(user_id, playlist_id) VALUES(" +
@@ -56,7 +56,7 @@ void UserRepositoryPostgres::Update(const User& obj) {
     const uint32_t user_id = obj.GetId().value();
 
     // TODO: rewrite in single query.
-    for (uint32_t playlist_id: obj.GetPlaylistIds()) {
+    for (uint32_t playlist_id: obj.playlist_ids) {
         std::string query =
                 "INSERT INTO " +  std::string(kUserHasPlaylistTableName) + " " +
                 "(user_id, playlist_id) VALUES(" +
@@ -69,6 +69,27 @@ void UserRepositoryPostgres::Update(const User& obj) {
 
 void UserRepositoryPostgres::Delete(const User& obj) {
     return m_crud_repository.Delete(obj);
+}
+
+std::vector<User> UserRepositoryPostgres::FetchAll(
+        std::optional<uint32_t> limit)
+{
+    std::string query = "SELECT id FROM " + m_table_name;
+    if (limit.has_value()) {
+        query += " LIMIT " + SqlUtils::ValueToSqlFormat(limit.value());
+    }
+
+    std::vector<User> result;
+
+    pqxx::result response = m_crud_repository.ExecuteQuery(query);
+    for (const auto& row: response) {
+        assert(row[0].name() == std::string{ "id" });
+        const auto id = row[0].as<uint32_t>();
+        std::optional<User> u = Find(id);
+        result.push_back(*u);
+    }
+
+    return result;
 }
 
 std::optional<User> UserRepositoryPostgres::FindByUsername(

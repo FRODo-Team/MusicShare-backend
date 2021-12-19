@@ -10,6 +10,7 @@ namespace music_share {
 
 class ISongRepository : public IRepository<Song> {
 public:
+    virtual std::vector<Song> FetchAll(std::optional<uint32_t> limit = { }) = 0;
     virtual std::vector<Song> FindByTitle(const std::string& title) = 0;
     virtual std::vector<Song> FindByArtist(const std::string& artist) = 0;
 };

@@ -10,6 +10,7 @@ namespace music_share {
 
 class IUserRepository : public IRepository<User> {
 public:
+    virtual std::vector<User> FetchAll(std::optional<uint32_t> limit = { }) = 0;
     virtual std::vector<User> FindByNickname(const std::string& nickname) = 0;
     virtual std::optional<User> FindByUsername(const std::string& username) = 0;
     virtual std::optional<User> FindByEmail(const std::string& email) = 0;

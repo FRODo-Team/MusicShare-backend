@@ -15,6 +15,9 @@ public:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseInitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test database setup script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
@@ -26,6 +29,9 @@ public:
         DatabaseObject dbo(s_ConnectionString);
         for (const auto& filepath: s_TestDatabaseDeinitSqlScripts) {
             std::ifstream file(filepath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to read test database teardown script");
+            }
             std::stringstream buffer;
             buffer << file.rdbuf();
             std::string query = buffer.str();
@@ -44,13 +50,13 @@ const std::string TestChatMessageRepositoryPostgres::s_ConnectionString =
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestChatMessageRepositoryPostgres::s_TestDatabaseInitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" },
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/v0002_021221_MUS-28_populate.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0001_021221_MUS-28_create_tables.sql" },
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/v0002_021221_MUS-28_populate.sql" }
 };
 
 // TODO: Написать конфиг файл для такого рода вещей
 const std::vector<std::string> TestChatMessageRepositoryPostgres::s_TestDatabaseDeinitSqlScripts = {
-        std::string{ "/home/sunz/uni/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
+        std::string{ "/home/sunz/uni/parkmail-cpp/MusicShare-backend/db/postgres/migrations/u0001_021221_MUS-28_create_tables.sql" }
 };
 
 TEST_F(TestChatMessageRepositoryPostgres, FindNotExistingChatMessage) {
