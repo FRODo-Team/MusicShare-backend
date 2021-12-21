@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "mus-delivery/handler/songhandler.h"
 
 #include <cstring>

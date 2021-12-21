@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "http/server/exception/exception.h"
 #include "http/server/exception/notfound.h"
 #include "http/server/exception/badrequest.h"

@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "mus-delivery/handler/chatmessagehandler.h"
 
 #include <cstring>

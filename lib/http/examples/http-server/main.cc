@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include <memory>
 #include <set>
 #include <iostream>

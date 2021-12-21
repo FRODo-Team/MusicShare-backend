@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #ifndef MUS_HTTP_UTIL_H_
 #define MUS_HTTP_UTIL_H_
 

@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "util.h"
 
 namespace music_share {

@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "http/common/querystring.h"
 
 #include <cctype>
