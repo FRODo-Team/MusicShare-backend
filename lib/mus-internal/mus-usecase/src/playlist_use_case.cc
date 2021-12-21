@@ -47,7 +47,7 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw InvalidDataException();
+            return;
         }
         if (playlist->GetCreatorId() != user_id) {
             throw AccessException();
@@ -80,7 +80,7 @@ namespace  music_share {
         optional<Playlist> playlist = m_playlist_rep.Find(playlist_id);
 
         if (!playlist) {
-            throw InvalidDataException();
+            return;
         }
         if (playlist->GetCreatorId() != user_id) {
             throw AccessException();

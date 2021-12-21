@@ -111,8 +111,7 @@ TEST_F(TestPlaylistUseCase, DeleteInvalidData) {
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(nullopt));
 
-    EXPECT_THROW(playlist_usecase->DeleteById(1, 1),
-                 InvalidDataException);
+    playlist_usecase->DeleteById(1, 1);
 }
 
 TEST_F(TestPlaylistUseCase, DeleteAccessException) {
@@ -163,8 +162,7 @@ TEST_F(TestPlaylistUseCase, DeleteSongInvalidData) {
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(nullopt));
 
-    EXPECT_THROW(playlist_usecase->DeleteSongById(1, 1, 1),
-                 InvalidDataException);
+    playlist_usecase->DeleteSongById(1, 1, 1);
 }
 
 TEST_F(TestPlaylistUseCase, DeleteSongAccessException) {
