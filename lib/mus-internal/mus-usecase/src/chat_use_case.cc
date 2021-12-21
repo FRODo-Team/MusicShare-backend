@@ -1,3 +1,4 @@
+// Oweners: Darya Vlaskina, ML-13
 #include "mus-usecase/chat_use_case.h"
 
 #include <memory>

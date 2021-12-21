@@ -1,3 +1,4 @@
+// Oweners: Darya Vlaskina, ML-13
 #include "mus-usecase/auth_use_case.h"
 
 namespace music_share {
