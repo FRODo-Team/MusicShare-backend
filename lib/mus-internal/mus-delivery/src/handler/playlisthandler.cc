@@ -31,7 +31,12 @@ void PlaylistHandler::Config(http::server::router::Router& router) {
 
     router.POST(http::server::router::Route(
         prefix,
-        [this, prefix](http::common::Request request, auto params) {
+        [this](http::common::Request request, auto params) {
+            std::string path = request
+                .target()
+                .substr(0, request.target().find('?'))
+                .to_string();
+
             uint32_t playlist_id = CreatePlaylist(
                 ::atoi(params["id"].c_str()),
                 nlohmann::json::parse(request.body())
@@ -41,7 +46,7 @@ void PlaylistHandler::Config(http::server::router::Router& router) {
             http::common::Response response;
             response.result(http::common::status::created);
             response.set(http::common::header::location,
-                         prefix + "/" + std::to_string(playlist_id));
+                         path + "/" + std::to_string(playlist_id));
 
             return response;
         }

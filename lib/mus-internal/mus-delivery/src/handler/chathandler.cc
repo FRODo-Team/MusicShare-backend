@@ -43,7 +43,12 @@ void ChatHandler::Config(http::server::router::Router& router) {
 
     router.POST(http::server::router::Route(
         prefix,
-        [this, prefix](http::common::Request request, auto params) {
+        [this](http::common::Request request, auto params) {
+            std::string path = request
+                .target()
+                .substr(0, request.target().find('?'))
+                .to_string();
+
             uint32_t id = Create(1,
                 nlohmann::json::parse(request.body())
                     .template get<ChatRequestDTO>()
@@ -52,7 +57,7 @@ void ChatHandler::Config(http::server::router::Router& router) {
             http::common::Response response;
             response.result(http::common::status::created);
             response.set(http::common::header::location,
-                         prefix + "/" + std::to_string(id));
+                         path + "/" + std::to_string(id));
             return response;
         }
     ));
