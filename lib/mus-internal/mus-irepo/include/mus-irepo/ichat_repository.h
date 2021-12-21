@@ -10,6 +10,7 @@ namespace music_share {
 
 class IChatRepository : public IRepository<Chat> {
 public:
+    virtual ~IChatRepository() = default;
     /* Возвращает список всех чатов конкретного пользователя. */
     virtual std::vector<Chat> FindByUserId(uint32_t user_id) = 0;
 

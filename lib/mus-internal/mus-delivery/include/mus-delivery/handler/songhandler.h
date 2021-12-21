@@ -2,7 +2,7 @@
 #define MUS_MUSINTERNAL_MUSDELIVERY_HANDLER_SONGHANDLER_H_
 
 #include <memory>  // std::shared_ptr
-#include <vector>  // std::vector
+#include <optional>  // std::optional
 
 #include "mus-iusecase/isong_use_case.h"
 #include "http/server/router/router.h"
@@ -19,8 +19,8 @@ public:
     GetById(uint32_t id);
 
     std::vector<SongResponseDTO>
-    GetByTitleOrArtist(const std::vector<std::string>& titles,
-                       const std::vector<std::string>& artists);
+    GetByTitleOrArtist(const std::optional<std::string>& titles,
+                       const std::optional<std::string>& artists);
 private:
     [[maybe_unused]] ISongUseCase& m_usecase;
 };

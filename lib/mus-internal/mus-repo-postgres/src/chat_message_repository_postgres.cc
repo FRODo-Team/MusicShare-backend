@@ -62,7 +62,7 @@ std::vector<ChatMessage> ChatMessageRepositoryPostgres::FindByUserId(
             "WHERE chat_id IN " + user_chats_sql;
 
     if (since_datetime.has_value()) {
-        query + " AND datetime > " + SqlUtils::ValueToSqlFormat(since_datetime);
+        query += " AND datetime > " + SqlUtils::ValueToSqlFormat(*since_datetime);
     }
 
     pqxx::result response = m_crud_repository.ExecuteQuery(query);

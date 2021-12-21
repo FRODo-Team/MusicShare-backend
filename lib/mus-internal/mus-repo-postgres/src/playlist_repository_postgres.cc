@@ -63,6 +63,7 @@ void PlaylistRepositoryPostgres::Update(const Playlist& obj) {
                 "VALUES(" + playlist_id  + ", " +
                 SqlUtils::ValueToSqlFormat(song_ids[i]) + ")" + " " +
                 "ON CONFLICT DO NOTHING";
+        m_crud_repository.ExecuteQuery(query);
     }
 }
 

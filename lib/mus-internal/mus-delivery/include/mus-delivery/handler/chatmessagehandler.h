@@ -2,6 +2,7 @@
 #define MUS_MUSINTERNAL_MUSDELIVERY_HANDLER_CHATMESSAGEHANDLER_H_
 
 #include <memory>  // std::shared_ptr
+#include <optional>  // std::optional
 #include <vector>  // std::vector
 
 #include "mus-iusecase/ichat_message_use_case.h"
@@ -22,6 +23,8 @@ public:
     GetUserMessages(uint32_t user_id,
                     uint32_t chat_id);
 
+    std::vector<MessageResponseDTO>
+    GetMessagesByUser(uint32_t user_id, std::optional<std::string> since_date);
 private:
     [[maybe_unused]] IChatMessageUseCase& m_usecase;
 };

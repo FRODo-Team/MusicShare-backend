@@ -10,6 +10,7 @@ namespace music_share {
 
 class IChatMessageRepository : public IRepository<ChatMessage> {
 public:
+    virtual ~IChatMessageRepository() = default;
     /* Возвращает список всех сообщений, отправленных обоими пользователями
      * в чате-диалоге друг с другом.
      */

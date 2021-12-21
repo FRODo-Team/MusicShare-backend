@@ -8,6 +8,7 @@ namespace music_share {
 template<class T>
 class IRepository {
 public:
+    virtual ~IRepository() = default;
     virtual std::optional<T> Find(uint32_t id) = 0;
 
     /* В процессе вставки объекта-сущности в базу данных, предполагается, что
