@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 

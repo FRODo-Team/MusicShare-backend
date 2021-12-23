@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_MODELS_CHAT_MESSAGE_H_
 #define MUS_INTERNAL_MUS_MODELS_CHAT_MESSAGE_H_
 

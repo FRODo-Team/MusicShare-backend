@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include "mus-repo-postgres/internal/database_object.h"
 
 namespace music_share {

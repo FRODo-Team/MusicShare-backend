@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include "mus-repo-postgres/chat_message_repository_postgres.h"
 #include "mus-repo-postgres/chat_repository_postgres.h"
 
