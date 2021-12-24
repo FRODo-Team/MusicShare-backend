@@ -29,7 +29,7 @@ std::optional<Session> SessionRepositoryPostgres::FindBySessionKey(
 {
     std::string key_sql = SqlUtils::ValueToSqlFormat(key);
     std::string query =
-            "SELECT * FROM " + std::string(kTableName) +
+            "SELECT * FROM " + std::string(kTableName) + " "
             "WHERE session_key=" + key_sql;
 
     pqxx::result response = m_crud_repository.ExecuteQuery(query);
@@ -70,11 +70,11 @@ SqlObject SessionRepositoryPostgres::SqlMapper::ToSqlObject(
     SqlObject result;
 
     if (domain.GetId().has_value()) {
-        result["id"] = domain.GetId().value();
+        result["id"] = SqlUtils::ValueToSqlFormat(domain.GetId().value());
     }
-    result["user_id"] = domain.GetUserId();
-    result["session_key"] = domain.GetSessionKey();
-    result["date_expires"] = domain.GetDateExpires();
+    result["user_id"] = SqlUtils::ValueToSqlFormat(domain.GetUserId());
+    result["session_key"] = SqlUtils::ValueToSqlFormat(domain.GetSessionKey());
+    result["datetime_expires"] = SqlUtils::ValueToSqlFormat(domain.GetDateExpires());
 
     return result;
 }
