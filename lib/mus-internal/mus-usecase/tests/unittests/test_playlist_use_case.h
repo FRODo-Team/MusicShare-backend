@@ -8,6 +8,7 @@
 
 #include "mus-iusecase/iplaylist_use_case.h"
 #include "mus-irepo/iplaylist_repository.h"
+#include "mus-iusecase/isong_use_case.h"
 #include "mus-usecase/playlist_use_case.h"
 #include "mus-dto/playlist_request_dto.h"
 #include "mus-usecase/exception/access_exception.h"
@@ -33,8 +34,17 @@ using music_share::ExistException;
 using music_share::InvalidDataException;
 using music_share::NullPointerException;
 using music_share::IPlaylistRepository;
+using music_share::ISongUseCase;
 using music_share::Playlist;
 using music_share::PlaylistUseCase;
+
+class MockSongUseCase : public ISongUseCase {
+public:
+    MOCK_CONST_METHOD1(GetById, SongResponseDTO(uint32_t));
+    MOCK_CONST_METHOD2(GetByArtistAndTitle,
+                       vector<SongResponseDTO>(const optional<string>,
+                                               const optional<string>));
+};
 
 class MockPlaylistRepository : public IPlaylistRepository {
 public:
@@ -55,25 +65,27 @@ class TestPlaylistUseCase : public ::testing::Test {
 protected:
     void SetUp() {
         playlist_rep = make_shared<MockPlaylistRepository>();
-        playlist_usecase = make_shared<PlaylistUseCase>(*playlist_rep);
+        song_usecase = make_shared<MockSongUseCase>();
+        playlist_usecase = make_shared<PlaylistUseCase>(*playlist_rep,
+                                                        *song_usecase);
 
-        vector<uint32_t> song_ids(2, 2);
+        vector<uint32_t> song_ids(1, 1);
+        song_dto = make_shared<PlaylistSongRequestDTO>(song_ids);
         playlist = make_shared<Playlist>("playlist", 1,
                                          song_ids, 1);
 
         playlist_request = make_shared<PlaylistRequestDTO>("playlist",
-                                                           song_ids);
-
-        song = make_shared<PlaylistSongRequestDTO>(song_ids);
+                                                           *song_dto);
     }
 
     void TearDown() { }
 
     shared_ptr<PlaylistUseCase> playlist_usecase;
     shared_ptr<MockPlaylistRepository> playlist_rep;
+    shared_ptr<MockSongUseCase> song_usecase;
     shared_ptr<Playlist> playlist;
     shared_ptr<PlaylistRequestDTO> playlist_request;
-    shared_ptr<PlaylistSongRequestDTO> song;
+    shared_ptr<PlaylistSongRequestDTO> song_dto;
 };
 
 TEST_F(TestPlaylistUseCase, CreateSuccess) {
@@ -129,14 +141,14 @@ TEST_F(TestPlaylistUseCase, AddSongSuccess) {
     EXPECT_CALL(*playlist_rep, Update(PlaylistEqualement(*playlist)))
             .Times(AtLeast(1));
 
-    playlist_usecase->AddSongById(*song, 1, 1);
+    playlist_usecase->AddSongById(*song_dto, 1, 1);
 }
 
 TEST_F(TestPlaylistUseCase, AddSongInvalidData) {
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(nullopt));
 
-    EXPECT_THROW(playlist_usecase->AddSongById(*song, 1, 1),
+    EXPECT_THROW(playlist_usecase->AddSongById(*song_dto, 1, 1),
                  InvalidDataException);
 }
 
@@ -144,7 +156,7 @@ TEST_F(TestPlaylistUseCase, AddSongAccessException) {
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(*playlist));
 
-    EXPECT_THROW(playlist_usecase->AddSongById(*song, 1, 2),
+    EXPECT_THROW(playlist_usecase->AddSongById(*song_dto, 1, 2),
                  AccessException);
 }
 
@@ -175,11 +187,17 @@ TEST_F(TestPlaylistUseCase, DeleteSongAccessException) {
 
 TEST_F(TestPlaylistUseCase, GetByUserIdSuccess) {
     vector<Playlist> playlists;
-    playlists.emplace_back(*playlist);
+    playlists.push_back(*playlist);
+    std::vector<SongResponseDTO> songs_dto;
+    songs_dto.emplace_back(1, "song",
+                           "artist", "path");
     PlaylistResponseDTO playlist_response_expected(1, 1,
-                                                   2,
-                                                   "playlist");
+                                                   1,
+                                                   "playlist",
+                                                   songs_dto);
 
+    EXPECT_CALL(*song_usecase, GetById(1))
+            .WillOnce(Return(songs_dto[0]));
     EXPECT_CALL(*playlist_rep, FindByUserId(1))
             .WillOnce(Return(playlists));
 
@@ -193,6 +211,12 @@ TEST_F(TestPlaylistUseCase, GetByUserIdSuccess) {
               playlist_response_expected.songs_count);
     EXPECT_EQ(playlist_response[0].title,
               playlist_response_expected.title);
+    EXPECT_EQ(playlist_response[0].title,
+              playlist_response_expected.title);
+    EXPECT_EQ(playlist_response[0].songs_dto[0].id,
+              songs_dto[0].id);
+    EXPECT_EQ(playlist_response[0].songs_dto[0].path,
+              songs_dto[0].path);
 }
 
 TEST_F(TestPlaylistUseCase, GetByUserIdInvalidData) {
@@ -220,12 +244,18 @@ TEST_F(TestPlaylistUseCase, GetByUserIdNullPointer) {
 }
 
 TEST_F(TestPlaylistUseCase, GetByIdSuccess) {
+    std::vector<SongResponseDTO> songs_dto;
+    songs_dto.emplace_back(1, "song",
+                        "artist", "path");
     PlaylistResponseDTO playlist_response_expected(1, 1,
-                                                   2,
-                                                   "playlist");
+                                                   1,
+                                                   "playlist",
+                                                   songs_dto);
 
     EXPECT_CALL(*playlist_rep, Find(1))
             .WillOnce(Return(*playlist));
+    EXPECT_CALL(*song_usecase, GetById(1))
+            .WillOnce(Return(songs_dto[0]));
 
     PlaylistResponseDTO playlist_response = playlist_usecase->GetById(1);
 
@@ -236,7 +266,10 @@ TEST_F(TestPlaylistUseCase, GetByIdSuccess) {
               playlist_response_expected.songs_count);
     EXPECT_EQ(playlist_response.title,
               playlist_response_expected.title);
-
+    EXPECT_EQ(playlist_response.songs_dto[0].id,
+              songs_dto[0].id);
+    EXPECT_EQ(playlist_response.songs_dto[0].path,
+              songs_dto[0].path);
 }
 
 TEST_F(TestPlaylistUseCase, GetByIdInvalidData) {
@@ -256,26 +289,4 @@ TEST_F(TestPlaylistUseCase, GetByIdNullPointer) {
 
     EXPECT_THROW(playlist_usecase->GetById(1),
                  NullPointerException);
-}
-
-TEST_F(TestPlaylistUseCase, GetSongsSuccess) {
-    vector<uint32_t> song_response_expected(2, 2);
-
-    EXPECT_CALL(*playlist_rep, Find(1))
-            .WillOnce(Return(*playlist));
-
-    vector<uint32_t> songs_response = playlist_usecase->GetSongs(1);
-
-    EXPECT_EQ(song_response_expected.size(), songs_response.size());
-    EXPECT_EQ(song_response_expected[0], songs_response[0]);
-    EXPECT_EQ(song_response_expected[1], songs_response[1]);
-}
-
-TEST_F(TestPlaylistUseCase, GetSongsInvalidData) {
-    EXPECT_CALL(*playlist_rep, Find(1))
-            .WillOnce(Return(nullopt));
-
-    vector<uint32_t> song_ids = playlist_usecase->GetSongs(1);
-
-    EXPECT_TRUE(song_ids.empty());
 }
