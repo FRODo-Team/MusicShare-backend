@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "mus-iusecase/iplaylist_use_case.h"
+#include "mus-iusecase/isong_use_case.h"
 #include "mus-irepo/iplaylist_repository.h"
 
 namespace music_share {
@@ -14,7 +15,7 @@ namespace music_share {
     public:
         PlaylistUseCase() = delete;
 
-        explicit PlaylistUseCase(IPlaylistRepository& playlist_rep);
+        PlaylistUseCase(IPlaylistRepository& playlist_rep, ISongUseCase& song_usecase);
 
         PlaylistUseCase(const PlaylistUseCase& playlist_use_case);
 
@@ -37,12 +38,13 @@ namespace music_share {
 
         PlaylistResponseDTO GetById(uint32_t id) const override;
 
-        std::vector<uint32_t> GetSongs(uint32_t playlist_id) const override;
-
         ~PlaylistUseCase() = default;
 
     private:
-        IPlaylistRepository &m_playlist_rep;
+        std::vector<SongResponseDTO> GetSongs(const std::vector<uint32_t>& song_ids) const;
+
+        IPlaylistRepository& m_playlist_rep;
+        ISongUseCase& m_song_usecase;
     };
 
 }  // namespace music_share
