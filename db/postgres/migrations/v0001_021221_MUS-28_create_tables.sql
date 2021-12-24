@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS mus_user(
     id SERIAL PRIMARY KEY,
     username VARCHAR(30),
     email VARCHAR(255),
-    password_hash VARCHAR(128),
+    password_hash VARCHAR(256),
     nickname VARCHAR(30),
     access_level INT
 );
