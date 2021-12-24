@@ -90,3 +90,14 @@ CREATE TABLE IF NOT EXISTS mus_chat_message(
         FOREIGN  KEY(playlist_id) REFERENCES mus_playlist(id)
         ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS mus_session(
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    datetime_expires TIMESTAMP,
+    session_key VARCHAR(128) UNIQUE NOT NULL,
+
+    CONSTRAINT fk_user
+        FOREIGN KEY(user_id) REFERENCES mus_user(id)
+        ON DELETE CASCADE
+);

@@ -5,3 +5,4 @@ DROP TABLE IF EXISTS mus_playlist_has_song;
 DROP TABLE IF EXISTS mus_playlist;
 DROP TABLE IF EXISTS mus_song;
 DROP TABLE IF EXISTS mus_user;
+DROP TABLE IF EXISTS mus_session;
