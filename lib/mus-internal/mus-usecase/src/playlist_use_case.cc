@@ -146,7 +146,7 @@ namespace  music_share {
 
         transform(song_ids.begin(), song_ids.end(),
                        back_inserter(songs_dto),
-                       [this](auto song_id) {
+                       [this](uint32_t song_id) {
                            return m_song_usecase.GetById(song_id);
         });
 
