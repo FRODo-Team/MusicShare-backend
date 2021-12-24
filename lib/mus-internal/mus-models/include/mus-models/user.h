@@ -56,7 +56,7 @@ private:
     static constexpr uint32_t kNicknameMaxLength = 30;
     static constexpr uint32_t kEmailMaxLength = 254;        // RFC3696 Errata ID 1690 standard set 254 characters for email as maximum
     static constexpr uint32_t kUsernameMaxLength = 30;
-    static constexpr uint32_t kPasswordHashMaxLength = 30;
+    static constexpr uint32_t kPasswordHashMaxLength = 256;
 };
 
 } // namespace music_share
