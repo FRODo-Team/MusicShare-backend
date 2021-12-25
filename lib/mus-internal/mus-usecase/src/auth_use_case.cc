@@ -6,20 +6,22 @@
 namespace music_share {
 
 std::optional<IAuthUseCase::SessionData> AuthUseCase::Authenticate(
-        const std::string& username,
-        const std::string& password)
+        const AuthRequestDTO& auth_dto)
 {
-    std::optional<User> user = m_user_repository.FindByUsername(username);
+    std::optional<User> user = m_user_repository.FindByUsername(auth_dto.username);
     if (!user) {
         return { };
     }
 
-    const std::string hashed_password = HashPassword(password);
+    const std::string hashed_password =
+            utility::Crypto::HashAndSalt(auth_dto.password);
+
     if (hashed_password != user->GetPasswordHash()) {
         return { };
     }
 
-    const std::string session_key = GenerateSessionKey();
+    const std::string session_key =
+            utility::Random::GenerateString(Session::SessionKeyLength);
 
     // TODO: Сгенерировать нормальную дату
     const std::string datetime_expires = "2022-01-30 19:30:00";
@@ -48,15 +50,6 @@ std::optional<uint32_t> AuthUseCase::ValidateSessionKey(
 
     // TODO: проверить дату окончания сессии
     return session->GetUserId();
-}
-
-std::string AuthUseCase::GenerateSessionKey() {
-    return utility::Random::GenerateString(Session::SessionKeyLength);
-}
-
-std::string AuthUseCase::HashPassword(const std::string& plain_password) {
-    std::string salted_password = plain_password + "DefinitelyNotSalt";
-    return utility::Crypto::HashString_SHA256(salted_password);
 }
 
 }  // namespace music_share

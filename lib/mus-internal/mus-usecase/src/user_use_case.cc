@@ -40,7 +40,7 @@ namespace music_share {
         }
 
         std::string hashed_password =
-                utility::Crypto::HashString_SHA256(user_dto.password);
+                utility::Crypto::HashAndSalt(user_dto.password);
 
         User user(user_dto.username,
                   user_dto.email,
