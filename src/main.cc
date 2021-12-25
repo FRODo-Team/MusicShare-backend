@@ -1,10 +1,12 @@
 #include "http/server.h"
 #include "config-parser/config.h"
+#include "mus-repo-postgres/session_repository_postgres.h"
 #include "mus-repo-postgres/user_repository_postgres.h"
 #include "mus-repo-postgres/song_repository_postgres.h"
 #include "mus-repo-postgres/playlist_repository_postgres.h"
 #include "mus-repo-postgres/chat_repository_postgres.h"
 #include "mus-repo-postgres/chat_message_repository_postgres.h"
+#include "mus-usecase/auth_use_case.h"
 #include "mus-usecase/user_use_case.h"
 #include "mus-usecase/song_use_case.h"
 #include "mus-usecase/playlist_use_case.h"
@@ -37,23 +39,25 @@ int main(void) {
         db_conf["database"].Get<std::string>()
     );
 
+    SessionRepositoryPostgres session_repo(c);
     UserRepositoryPostgres user_repo(c);
     SongRepositoryPostgres song_repo(c);
     PlaylistRepositoryPostgres playlist_repo(c);
     ChatRepositoryPostgres chat_repo(c);
     ChatMessageRepositoryPostgres chat_message_repo(c);
 
+    AuthUseCase auth_usecase(session_repo, user_repo);
     UserUseCase user_usecase(user_repo);
     SongUseCase song_usecase(song_repo);
-    PlaylistUseCase playlist_usecase(playlist_repo);
+    PlaylistUseCase playlist_usecase(playlist_repo, song_usecase);
     ChatUseCase chat_usecase(chat_repo);
     ChatMessageUseCase chat_message_usecase(chat_message_repo);
 
-    delivery::UserHandler user_handler(user_usecase);
+    delivery::UserHandler user_handler(user_usecase, auth_usecase);
     delivery::SongHandler song_handler(song_usecase);
-    delivery::PlaylistHandler playlist_handler(playlist_usecase);
-    delivery::ChatHandler chat_handler(chat_usecase);
-    delivery::ChatMessageHandler chat_message_handler(chat_message_usecase);
+    delivery::PlaylistHandler playlist_handler(playlist_usecase, auth_usecase);
+    delivery::ChatHandler chat_handler(chat_usecase, auth_usecase);
+    delivery::ChatMessageHandler chat_message_handler(chat_message_usecase, auth_usecase);
 
     user_handler.Config(server.Router());
     song_handler.Config(server.Router());

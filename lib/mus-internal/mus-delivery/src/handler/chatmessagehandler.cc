@@ -7,11 +7,14 @@
 #include "http/server/router.h"
 #include "http/common.h"
 #include "serializer.h"
+#include "mus-delivery/middleware/authrequiredmiddleware.h"
 
 namespace music_share::delivery {
 
-ChatMessageHandler::ChatMessageHandler(IChatMessageUseCase& usecase)
-    : m_usecase(usecase) {}
+ChatMessageHandler::ChatMessageHandler(IChatMessageUseCase& usecase,
+                                       IAuthUseCase& auth)
+    : m_usecase(usecase)
+    , m_auth(auth) {}
 
 void ChatMessageHandler::Config(http::server::router::Router& router) {
     std::string prefix = "/api/v1/chats/:chat_id([0-9]+)/messages";
@@ -19,14 +22,17 @@ void ChatMessageHandler::Config(http::server::router::Router& router) {
     router.GET(http::server::router::Route(
         prefix,
         [this](auto, auto params) {
-            auto body = GetUserMessages(1, atoi(params["chat_id"].c_str()));
+            auto body = GetUserMessages(
+                ::atoi(params["user_id"].c_str()),
+                ::atoi(params["chat_id"].c_str())
+            );
 
             http::common::Response response;
             response.set(http::common::header::content_type,
                          "application/json");
             response.body() = nlohmann::json(body).dump();
             return response;
-        }
+        }, { middleware::AuthRequiredMiddlewareBuilder::Create(m_auth) }
     ));
 
     router.POST(http::server::router::Route(
@@ -35,17 +41,17 @@ void ChatMessageHandler::Config(http::server::router::Router& router) {
             (void)SendMessage(
                 nlohmann::json::parse(request.body())
                     .template get<MessageRequestDTO>(),
-                atoi(params["chat_id"].c_str()),
-                1
+                ::atoi(params["chat_id"].c_str()),
+                ::atoi(params["user_id"].c_str())
             );
 
             http::common::Response response;
             return response;
-        }
+        }, { middleware::AuthRequiredMiddlewareBuilder::Create(m_auth) }
     ));
 
     router.GET(http::server::router::Route(
-        "/api/v1/users/:id([0-9]+)/messages",
+        "/api/v1/users/messages",
         [this](http::common::Request request, auto params) {
             auto qs = http::common::QueryString::fromString(
                 request.target()
@@ -65,7 +71,7 @@ void ChatMessageHandler::Config(http::server::router::Router& router) {
             }
 
             auto body = GetMessagesByUser(
-                atoi(params["id"].c_str()),
+                ::atoi(params["user_id"].c_str()),
                 since_date
             );
 
@@ -74,7 +80,7 @@ void ChatMessageHandler::Config(http::server::router::Router& router) {
                          "application/json");
             response.body() = nlohmann::json(body).dump();
             return response;
-        }
+        }, { middleware::AuthRequiredMiddlewareBuilder::Create(m_auth) }
     ));
 }
 

@@ -10,7 +10,9 @@
 
 namespace music_share::delivery {
 
-UserHandler::UserHandler(IUserUseCase& usecase) : m_usecase(usecase) {}
+UserHandler::UserHandler(IUserUseCase& usecase, IAuthUseCase& auth)
+    : m_usecase(usecase)
+    , m_auth(auth) {}
 
 void UserHandler::Config(http::server::router::Router& router) {
     std::string prefix = "/api/v1/users";
@@ -93,41 +95,51 @@ void UserHandler::Config(http::server::router::Router& router) {
             return response;
         }, {}
     ));
+
+    router.POST(http::server::router::Route(
+        "/api/v1/auth",
+        [this](http::common::Request request, auto params) {
+            auto session_data = Authenticate(
+                nlohmann::json::parse(request.body())
+                    .template get<AuthRequestDTO>()
+            );
+
+            http::common::Response response;
+            if (!session_data) {
+                response.result(http::common::status::bad_request);
+                return response;
+            }
+
+            http::common::SetCookie(response, "token",
+                                    session_data->session_key);
+            return response;
+        }
+    ));
 }
 
 std::vector<UserResponseDTO>
 UserHandler::GetUsers(const std::vector<std::string>& nicknames) {
     return m_usecase.GetByNicknames(nicknames);
-
-    //std::vector<UserResponseDTO> res;
-
-    //std::ranges::transform(
-        //nicknames,
-        //back_inserter(res),
-        //[](auto it) {
-            //return UserResponseDTO(1, "", it);
-        //}
-    //);
-
-    //return res;
 }
 
 uint32_t
 UserHandler::CreateUser(const UserRequestDTO& request) {
     return m_usecase.Create(request);
-    //return request.username;
 }
 
 UserResponseDTO
 UserHandler::GetUserById(uint32_t id) {
     return m_usecase.GetById(id);
-    //return UserResponseDTO(id, "", "");
 }
 
 UserResponseDTO
 UserHandler::UpdateUserById(uint32_t id, const UserRequestDTO& request) {
     return m_usecase.Update(id, request);
-    //return UserResponseDTO(id, "", "");
+}
+
+std::optional<IAuthUseCase::SessionData>
+UserHandler::Authenticate(const AuthRequestDTO& request) {
+    return m_auth.Authenticate(request);
 }
 
 }  // namespace music_share::delivery

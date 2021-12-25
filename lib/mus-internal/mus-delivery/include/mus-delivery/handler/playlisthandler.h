@@ -6,13 +6,14 @@
 #include <vector>  // std::vector
 
 #include "mus-iusecase/iplaylist_use_case.h"
+#include "mus-iusecase/iauth_use_case.h"
 #include "http/server/router/router.h"
 
 namespace music_share::delivery {
 
 class PlaylistHandler final {
 public:
-    PlaylistHandler(IPlaylistUseCase& usecase);
+    PlaylistHandler(IPlaylistUseCase& usecase, IAuthUseCase& auth);
     void Config(http::server::router::Router& router);
 
     std::vector<PlaylistResponseDTO>
@@ -22,13 +23,10 @@ public:
     CreatePlaylist(uint32_t author_id, const PlaylistRequestDTO& request);
 
     PlaylistResponseDTO
-    GetById(uint32_t author_id, uint32_t playlist_id);
+    GetById(uint32_t playlist_id);
 
     void
     DeleteById(uint32_t author_id, uint32_t playlist_id);
-
-    std::vector<uint32_t>
-    GetSongsById(uint32_t author_id, uint32_t playlist_id);
 
     void
     AddSongById(uint32_t author_id, uint32_t playlist_id,
@@ -39,6 +37,7 @@ public:
                    uint32_t song_id);
 private:
     [[maybe_unused]] IPlaylistUseCase& m_usecase;
+    IAuthUseCase& m_auth;
 };
 
 }  // namespace music_share::delivery

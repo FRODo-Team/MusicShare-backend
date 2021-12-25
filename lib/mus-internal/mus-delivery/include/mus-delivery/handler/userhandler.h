@@ -6,13 +6,14 @@
 #include <vector>  // std::vector
 
 #include "mus-iusecase/iuser_use_case.h"
+#include "mus-iusecase/iauth_use_case.h"
 #include "http/server/router/router.h"
 
 namespace music_share::delivery {
 
 class UserHandler final {
 public:
-    UserHandler(IUserUseCase& usecase);
+    UserHandler(IUserUseCase& usecase, IAuthUseCase& auth);
     void Config(http::server::router::Router& router);
 
     std::vector<UserResponseDTO>
@@ -26,8 +27,12 @@ public:
 
     UserResponseDTO
     UpdateUserById(uint32_t id, const UserRequestDTO& request);
+
+    std::optional<IAuthUseCase::SessionData>
+    Authenticate(const AuthRequestDTO& request);
 private:
     [[maybe_unused]] IUserUseCase& m_usecase;
+    IAuthUseCase& m_auth;
 };
 
 }  // namespace music_share::delivery

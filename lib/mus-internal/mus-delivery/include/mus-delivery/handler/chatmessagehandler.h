@@ -7,13 +7,14 @@
 #include <vector>  // std::vector
 
 #include "mus-iusecase/ichat_message_use_case.h"
+#include "mus-iusecase/iauth_use_case.h"
 #include "http/server/router/router.h"
 
 namespace music_share::delivery {
 
 class ChatMessageHandler final {
 public:
-    ChatMessageHandler(IChatMessageUseCase& usecase);
+    ChatMessageHandler(IChatMessageUseCase& usecase, IAuthUseCase& m_auth);
     void Config(http::server::router::Router& router);
 
     uint32_t
@@ -28,6 +29,7 @@ public:
     GetMessagesByUser(uint32_t user_id, std::optional<std::string> since_date);
 private:
     [[maybe_unused]] IChatMessageUseCase& m_usecase;
+    IAuthUseCase& m_auth;
 };
 
 }  // namespace music_share::delivery

@@ -1,4 +1,4 @@
-// Oweners: Faris Nabiev, WEB-12
+// Owners: Faris Nabiev, WEB-12
 #ifndef MUS_HTTP_SERVER_MIDDLEWARE_MIDDLEWARE_H_
 #define MUS_HTTP_SERVER_MIDDLEWARE_MIDDLEWARE_H_
 
