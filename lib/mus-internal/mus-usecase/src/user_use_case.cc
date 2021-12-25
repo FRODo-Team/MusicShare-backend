@@ -1,5 +1,6 @@
 // Oweners: Darya Vlaskina, ML-13
 #include "mus-usecase/user_use_case.h"
+#include "mus-utility/crypto.h"
 
 #include <memory>
 #include <optional>
@@ -39,9 +40,12 @@ namespace music_share {
             throw ExistException();
         }
 
+        std::string hashed_password =
+                utility::Crypto::HashString_SHA256(user_dto.password);
+
         User user(user_dto.username,
                   user_dto.email,
-                  user_dto.password,
+                  hashed_password,
                   user_dto.nickname,
                   User::AccessLevel::Authorized);
 

@@ -19,4 +19,4 @@ struct PlaylistSongRequestDTO {
     );
 };
 
-#endif  // MUS_INTERNAL_MUS_DTO_SONG_REQUEST_DTO_H_
+#endif  // MUS_INTERNAL_MUS_DTO_PLAYLIST_SONG_REQUEST_DTO_H_
