@@ -2,6 +2,9 @@
 #ifndef MUS_INTERNAL_MUS_MODELS_SESSION_H_
 #define MUS_INTERNAL_MUS_MODELS_SESSION_H_
 
+#include <optional>
+#include <string>
+
 namespace music_share {
 
 class Session {
