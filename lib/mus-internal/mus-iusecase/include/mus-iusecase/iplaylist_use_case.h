@@ -35,8 +35,6 @@ public:
 
     virtual PlaylistResponseDTO GetById(uint32_t id) const = 0;
 
-    virtual std::vector<uint32_t> GetSongs(uint32_t playlist_id) const = 0;
-
     virtual ~IPlaylistUseCase() = default;
 };
 
