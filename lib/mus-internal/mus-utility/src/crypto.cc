@@ -23,4 +23,9 @@ std::string Crypto::HashString_SHA256(const std::string& s) {
     return ss.str();
 }
 
+std::string Crypto::HashAndSalt(const std::string& s) {
+    std::string salted = s + std::string{ kSalt };
+    return HashString_SHA256(salted);
+}
+
 } // namespace music_share::utility

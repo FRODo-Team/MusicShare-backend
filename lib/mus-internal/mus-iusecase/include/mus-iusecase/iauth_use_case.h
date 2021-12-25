@@ -4,7 +4,8 @@
 
 #include <optional>
 #include <utility>
-#include "mus-dto/user_request_dto.h"
+#include "mus-dto/auth_request_dto.h"
+
 
 namespace music_share {
 
@@ -17,9 +18,7 @@ public:
     };
 
     virtual
-    std::optional<SessionData> Authenticate(
-            const std::string& username,
-            const std::string& password) = 0;
+    std::optional<SessionData> Authenticate(const AuthRequestDTO& auth_dto) = 0;
 
     // Возвращает идентификатор пользователя, если сессионный ключ валиден
     virtual

@@ -19,16 +19,12 @@ public:
     ~AuthUseCase() override = default;
 
     std::optional<SessionData> Authenticate(
-            const std::string& username,
-            const std::string& password) override;
+            const AuthRequestDTO& auth_dto) override;
 
     std::optional<uint32_t> ValidateSessionKey(
             const std::string& session_key) override;
 
 private:
-    static std::string GenerateSessionKey();
-    static std::string HashPassword(const std::string& plain_password);
-
     ISessionRepository& m_session_repository;
     IUserRepository& m_user_repository;
 };
