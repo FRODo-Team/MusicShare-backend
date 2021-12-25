@@ -12,6 +12,6 @@ if(WITH_TESTS)
     add_subdirectory(tests)
 endif()
 
-target_link_libraries(mus-usecase mus-iusecase)
+target_link_libraries(mus-usecase mus-iusecase mus-utility)
 target_include_directories(mus-usecase PUBLIC include)
 target_include_directories(mus-usecase PRIVATE src)
