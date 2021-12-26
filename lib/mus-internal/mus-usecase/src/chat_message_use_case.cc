@@ -16,17 +16,22 @@ using std::nullopt;
 using std::string;
 using std::vector;
 using std::time_t;
+using std::pair;
 
 namespace music_share {
 
-    ChatMessageUseCase::ChatMessageUseCase(IChatMessageRepository& chat_message_rep)
-                                            : m_chat_message_rep(chat_message_rep) { }
+    ChatMessageUseCase::ChatMessageUseCase(IChatMessageRepository& chat_message_rep,
+                                           IChatRepository& chat_rep)
+                                            : m_chat_message_rep(chat_message_rep),
+                                            m_chat_rep(chat_rep) { }
 
     ChatMessageUseCase::ChatMessageUseCase(const ChatMessageUseCase& chat_message_use_case)
-                                            : m_chat_message_rep(chat_message_use_case.m_chat_message_rep) { }
+                                            : m_chat_message_rep(chat_message_use_case.m_chat_message_rep),
+                                              m_chat_rep(chat_message_use_case.m_chat_rep){ }
 
     ChatMessageUseCase& ChatMessageUseCase::operator=(const ChatMessageUseCase& chat_message_use_case) {
         m_chat_message_rep = chat_message_use_case.m_chat_message_rep;
+        m_chat_rep = chat_message_use_case.m_chat_rep;
         return *this;
     }
 
@@ -83,6 +88,15 @@ namespace music_share {
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
                                                                    uint32_t chat_id) const {
+        optional<Chat> chat = m_chat_rep.Find(chat_id);
+        if (!chat) {
+            return {};
+        }
+        pair<uint32_t, uint32_t> user_ids = chat->GetUserIds();
+        if (user_id != user_ids.first && user_id != user_ids.second) {
+            throw AccessException();
+        }
+
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {
@@ -93,9 +107,6 @@ namespace music_share {
         messages_dto.reserve(messages.size());
 
         for (const ChatMessage& message : messages) {
-            if (message.GetSenderId() != user_id) {
-                continue;
-            }
             if (!message.GetId()) {
                 throw NullPointerException();
             }
