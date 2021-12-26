@@ -27,7 +27,6 @@ public:
 
 protected:
     std::string m_connection_string;
-    pqxx::connection m_connection;
 };
 
 } // namespace music_share
