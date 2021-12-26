@@ -39,6 +39,14 @@ namespace music_share {
                                              uint32_t chat_id,
                                              uint32_t user_id,
                                              optional<string> datetime) {
+        optional<bool> check_result = CheckAccess(chat_id, user_id);
+        if (!check_result) {
+            return {};
+        }
+        if (!*check_result) {
+            throw AccessException();
+        }
+
         if (!datetime) {
             auto time = std::chrono::system_clock::now();
             time_t end_time = std::chrono::system_clock::to_time_t(time);
@@ -88,12 +96,11 @@ namespace music_share {
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
                                                                    uint32_t chat_id) const {
-        optional<Chat> chat = m_chat_rep.Find(chat_id);
-        if (!chat) {
+        optional<bool> check_result = CheckAccess(chat_id, user_id);
+        if (!check_result) {
             return {};
         }
-        pair<uint32_t, uint32_t> user_ids = chat->GetUserIds();
-        if (user_id != user_ids.first && user_id != user_ids.second) {
+        if (!*check_result) {
             throw AccessException();
         }
 
@@ -119,6 +126,21 @@ namespace music_share {
         }
 
         return messages_dto;
+    }
+
+    optional<bool> ChatMessageUseCase::CheckAccess(uint32_t chat_id,
+                                                   uint32_t user_id) const {
+        optional<Chat> chat = m_chat_rep.Find(chat_id);
+        if (!chat) {
+            return {};
+        }
+
+        pair<uint32_t, uint32_t> user_ids = chat->GetUserIds();
+        if (user_id != user_ids.first && user_id != user_ids.second) {
+            return false;
+        }
+
+        return true;
     }
 
 }  // namespace music_share

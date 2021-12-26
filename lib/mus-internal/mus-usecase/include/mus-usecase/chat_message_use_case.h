@@ -35,6 +35,8 @@ namespace music_share {
         ~ChatMessageUseCase() = default;
 
     private:
+        std::optional<bool> CheckAccess(uint32_t chat_id, uint32_t user_id) const;
+
         IChatMessageRepository& m_chat_message_rep;
         IChatRepository& m_chat_rep;
     };
