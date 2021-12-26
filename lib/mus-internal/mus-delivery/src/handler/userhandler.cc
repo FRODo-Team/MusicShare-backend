@@ -110,8 +110,13 @@ void UserHandler::Config(http::server::router::Router& router) {
                 return response;
             }
 
+            auto body = GetUserById(session_data->user_id);
+
             http::common::SetCookie(response, "token",
                                     session_data->session_key);
+            response.set(http::common::header::content_type,
+                         "application/json");
+            response.body() = nlohmann::json(body).dump();
             return response;
         }
     ));

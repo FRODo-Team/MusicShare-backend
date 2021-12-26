@@ -94,9 +94,6 @@ namespace music_share {
         messages_dto.reserve(messages.size());
 
         for (const ChatMessage& message : messages) {
-            if (message.GetSenderId() != user_id) {
-                continue;
-            }
             if (!message.GetId()) {
                 throw NullPointerException();
             }
