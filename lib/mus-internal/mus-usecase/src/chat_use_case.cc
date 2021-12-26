@@ -15,17 +15,23 @@ using std::make_unique;
 using std::nullopt;
 using std::optional;
 using std::vector;
+using std::pair;
+using std::string;
 
 namespace music_share {
 
-    ChatUseCase::ChatUseCase(IChatRepository &chat_rep)
-                            : m_chat_rep(chat_rep) { }
+    ChatUseCase::ChatUseCase(IChatRepository &chat_rep,
+                             IUserUseCase &user_usecase)
+                            : m_chat_rep(chat_rep),
+                            m_user_usecase(user_usecase) { }
 
     ChatUseCase::ChatUseCase(const ChatUseCase &chat_use_case)
-                            : m_chat_rep(chat_use_case.m_chat_rep) { }
+                            : m_chat_rep(chat_use_case.m_chat_rep),
+                              m_user_usecase(chat_use_case.m_user_usecase){ }
 
     ChatUseCase& ChatUseCase::operator=(const ChatUseCase &chat_use_case) {
         m_chat_rep = chat_use_case.m_chat_rep;
+        m_user_usecase = chat_use_case.m_user_usecase;
         return *this;
     }
 
@@ -61,9 +67,12 @@ namespace music_share {
             if (!chat.GetId()) {
                 throw NullPointerException();
             }
+            pair<string, string> nicknames = GetUsersNicknames(chat.GetUserIds().first,
+                                                      chat.GetUserIds().second);
             chats_dto.emplace_back(*chat.GetId(),
                                 chat.GetUserIds().first,
-                                chat.GetUserIds().second);
+                                chat.GetUserIds().second,
+                                nicknames);
         }
 
         return chats_dto;
@@ -78,9 +87,21 @@ namespace music_share {
             throw InvalidDataException();
         }
 
+        pair<string, string> nicknames = GetUsersNicknames( chat->GetUserIds().first,
+                                                            chat->GetUserIds().second);
         return ChatResponseDTO(*chat->GetId(),
                                chat->GetUserIds().first,
-                               chat->GetUserIds().second);
+                               chat->GetUserIds().second,
+                               nicknames);
+    }
+
+    pair<string, string> ChatUseCase::GetUsersNicknames(uint32_t user_first_id,
+                                                        uint32_t user_second_id) const {
+        UserResponseDTO user_first = m_user_usecase.GetById(user_first_id);
+        UserResponseDTO user_second = m_user_usecase.GetById(user_second_id);
+
+        return make_pair(user_first.nickname,
+                        user_second.nickname);
     }
 
 }  // namespace music_share

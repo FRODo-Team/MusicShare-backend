@@ -17,17 +17,22 @@ using std::nullopt;
 using std::string;
 using std::vector;
 using std::time_t;
+using std::pair;
 
 namespace music_share {
 
-    ChatMessageUseCase::ChatMessageUseCase(IChatMessageRepository& chat_message_rep)
-                                            : m_chat_message_rep(chat_message_rep) { }
+    ChatMessageUseCase::ChatMessageUseCase(IChatMessageRepository& chat_message_rep,
+                                           IChatRepository& chat_rep)
+                                            : m_chat_message_rep(chat_message_rep),
+                                            m_chat_rep(chat_rep) { }
 
     ChatMessageUseCase::ChatMessageUseCase(const ChatMessageUseCase& chat_message_use_case)
-                                            : m_chat_message_rep(chat_message_use_case.m_chat_message_rep) { }
+                                            : m_chat_message_rep(chat_message_use_case.m_chat_message_rep),
+                                              m_chat_rep(chat_message_use_case.m_chat_rep){ }
 
     ChatMessageUseCase& ChatMessageUseCase::operator=(const ChatMessageUseCase& chat_message_use_case) {
         m_chat_message_rep = chat_message_use_case.m_chat_message_rep;
+        m_chat_rep = chat_message_use_case.m_chat_rep;
         return *this;
     }
 
@@ -35,6 +40,14 @@ namespace music_share {
                                              uint32_t chat_id,
                                              uint32_t user_id,
                                              optional<string> datetime) {
+        optional<bool> check_result = CheckAccess(chat_id, user_id);
+        if (!check_result) {
+            return {};
+        }
+        if (!*check_result) {
+            throw AccessException();
+        }
+
         if (!datetime) {
             auto time = std::chrono::system_clock::now();
             time_t end_time = std::chrono::system_clock::to_time_t(time);
@@ -84,6 +97,14 @@ namespace music_share {
 
     vector<MessageResponseDTO> ChatMessageUseCase::GetUserMessages(uint32_t user_id,
                                                                    uint32_t chat_id) const {
+        optional<bool> check_result = CheckAccess(chat_id, user_id);
+        if (!check_result) {
+            return {};
+        }
+        if (!*check_result) {
+            throw AccessException();
+        }
+
         vector<ChatMessage> messages = m_chat_message_rep.FindByChatId(chat_id);
 
         if (messages.empty()) {
@@ -106,6 +127,21 @@ namespace music_share {
         }
 
         return messages_dto;
+    }
+
+    optional<bool> ChatMessageUseCase::CheckAccess(uint32_t chat_id,
+                                                   uint32_t user_id) const {
+        optional<Chat> chat = m_chat_rep.Find(chat_id);
+        if (!chat) {
+            return {};
+        }
+
+        pair<uint32_t, uint32_t> user_ids = chat->GetUserIds();
+        if (user_id != user_ids.first && user_id != user_ids.second) {
+            return false;
+        }
+
+        return true;
     }
 
 }  // namespace music_share

@@ -6,6 +6,7 @@
 
 #include "mus-iusecase/ichat_use_case.h"
 #include "mus-irepo/ichat_repository.h"
+#include "mus-iusecase/iuser_use_case.h"
 
 namespace music_share {
 
@@ -13,7 +14,8 @@ namespace music_share {
     public:
         ChatUseCase() = delete;
 
-        explicit ChatUseCase(IChatRepository &chat_rep);
+        explicit ChatUseCase(IChatRepository &chat_rep,
+                             IUserUseCase &user_usecase);
 
         ChatUseCase(const ChatUseCase &chat_use_case);
 
@@ -30,7 +32,11 @@ namespace music_share {
         ~ChatUseCase() = default;
 
     private:
+        std::pair<std::string, std::string> GetUsersNicknames(uint32_t user_first_id,
+                                                              uint32_t user_second_id) const;
+
         IChatRepository &m_chat_rep;
+        IUserUseCase &m_user_usecase;
     };
 
 }  // namespace music_share

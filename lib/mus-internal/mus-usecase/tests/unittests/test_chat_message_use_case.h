@@ -9,6 +9,7 @@
 
 #include "mus-iusecase/ichat_message_use_case.h"
 #include "mus-irepo/ichat_message_repository.h"
+#include "mus-irepo/ichat_repository.h"
 #include "mus-usecase/chat_message_use_case.h"
 #include "mus-dto/message_request_dto.h"
 #include "mus-dto/message_response_dto.h"
@@ -17,6 +18,8 @@
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 #include "matcher/nullopt_matcher.h"
+#include "mock/mock_chat_repository.h"
+#include "mock/mock_chat_message_repository.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -28,6 +31,7 @@ using std::optional;
 using std::shared_ptr;
 using std::string;
 using std::vector;
+using std::make_pair;
 
 using music_share::CreateException;
 using music_share::ExistException;
@@ -36,16 +40,8 @@ using music_share::NullPointerException;
 using music_share::IChatMessageRepository;
 using music_share::ChatMessage;
 using music_share::ChatMessageUseCase;
-
-class MockChatMessageRepository : public IChatMessageRepository {
-public:
-    MOCK_METHOD1(FindByChatId, vector<ChatMessage>(uint32_t));
-    MOCK_METHOD1(Find, optional<ChatMessage>(uint32_t));
-    MOCK_METHOD1(Insert, void(ChatMessage&));
-    MOCK_METHOD1(Update, void(const ChatMessage&));
-    MOCK_METHOD1(Delete, void(const ChatMessage&));
-    MOCK_METHOD2(FindByUserId, vector<ChatMessage>(uint32_t, optional<string>));
-};
+using music_share::IChatRepository;
+using music_share::Chat;
 
 MATCHER_P(ChatMessageEqualement, other,
           "Equality matcher for type ChatMessage") {
@@ -56,23 +52,30 @@ class TestChatMessageUseCase : public ::testing::Test {
 protected:
     void SetUp() {
         chat_message_rep = make_shared<MockChatMessageRepository>();
-        chat_message_usecase = make_shared<ChatMessageUseCase>(*chat_message_rep);
+        chat_rep = make_shared<MockChatRepository>();
+        chat_message_usecase = make_shared<ChatMessageUseCase>(*chat_message_rep,
+                                                               *chat_rep);
         chat_message = make_shared<ChatMessage>(1, "datetime",
                                                 "message", 1, 1);
         message_request = make_shared<MessageRequestDTO>("message");
+        chat = make_shared<Chat>(make_pair(1, 2), 1);
     }
 
     void TearDown() { }
 
     shared_ptr<ChatMessageUseCase> chat_message_usecase;
     shared_ptr<MockChatMessageRepository> chat_message_rep;
+    shared_ptr<MockChatRepository> chat_rep;
     shared_ptr<ChatMessage> chat_message;
     shared_ptr<MessageRequestDTO> message_request;
+    shared_ptr<Chat> chat;
 };
 
 TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
     uint32_t id_expected = 1;
 
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
                 chat_message_out = *this->chat_message;
@@ -86,6 +89,8 @@ TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
 TEST_F(TestChatMessageUseCase, SendMessageEmptyDate) {
     uint32_t id_expected = 1;
 
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
                 chat_message_out = *this->chat_message;
@@ -97,6 +102,8 @@ TEST_F(TestChatMessageUseCase, SendMessageEmptyDate) {
 }
 
 TEST_F(TestChatMessageUseCase, SendMessageException) {
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .Times(AtLeast(1));
 
@@ -114,6 +121,8 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesSuccess) {
 
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
 
     vector<MessageResponseDTO> message_response = chat_message_usecase->GetUserMessages(1,
                                                                                         1);
@@ -130,6 +139,8 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesInvalidData) {
 
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
 
     vector<MessageResponseDTO> messages_response = chat_message_usecase->GetUserMessages(1,
                                                                                          1);
@@ -143,6 +154,8 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesNullPointer) {
                           "message", 1,
                           nullopt);
 
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
 

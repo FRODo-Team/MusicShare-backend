@@ -16,6 +16,7 @@
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 #include "matcher/nullopt_matcher.h"
+#include "mock/mock_user_repository.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -35,18 +36,6 @@ using music_share::NullPointerException;
 using music_share::IUserRepository;
 using music_share::User;
 using music_share::UserUseCase;
-
-class MockUserRepository : public IUserRepository {
-public:
-    MOCK_METHOD1(FindByNickname, vector<User>(const string&));
-    MOCK_METHOD1(FindByUsername, optional<User>(const string&));
-    MOCK_METHOD1(FindByEmail, optional<User>(const string&));
-    MOCK_METHOD1(Find, optional<User>(uint32_t));
-    MOCK_METHOD1(Insert, void(User&));
-    MOCK_METHOD1(Update, void(const User&));
-    MOCK_METHOD1(Delete, void(const User&));
-    MOCK_METHOD1(FetchAll, vector<User>(optional<uint32_t>));
-};
 
 MATCHER_P(UserEqualement, other, "Equality matcher for type User") {
     return arg.GetUsername() == other.GetUsername();
