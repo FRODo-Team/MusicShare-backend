@@ -16,6 +16,7 @@
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 #include "matcher/nullopt_matcher.h"
+#include "mock/mock_song_repository.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -36,17 +37,6 @@ using music_share::NullPointerException;
 using music_share::ISongRepository;
 using music_share::Song;
 using music_share::SongUseCase;
-
-class MockSongRepository : public ISongRepository {
-public:
-    MOCK_METHOD1(FindByTitle, vector<Song>(const string&));
-    MOCK_METHOD1(FindByArtist, vector<Song>(const string&));
-    MOCK_METHOD1(Find, optional<Song>(uint32_t));
-    MOCK_METHOD1(Insert, void(Song&));
-    MOCK_METHOD1(Update, void(const Song&));
-    MOCK_METHOD1(Delete, void(const Song&));
-    MOCK_METHOD1(FetchAll, vector<Song>(optional<uint32_t>));
-};
 
 class TestSongUseCase : public ::testing::Test {
 protected:

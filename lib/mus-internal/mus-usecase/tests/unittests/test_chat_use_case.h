@@ -14,6 +14,7 @@
 #include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
+#include "mock/mock_chat_repository.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -33,16 +34,6 @@ using music_share::NullPointerException;
 using music_share::IChatRepository;
 using music_share::Chat;
 using music_share::ChatUseCase;
-
-class MockChatRepository : public IChatRepository {
-public:
-    MOCK_METHOD1(FindByUserId, vector<Chat>(uint32_t));
-    MOCK_METHOD2(FindByIdsOfUserPair, optional<Chat>(uint32_t, uint32_t));
-    MOCK_METHOD1(Find, optional<Chat>(uint32_t));
-    MOCK_METHOD1(Insert, void(Chat&));
-    MOCK_METHOD1(Update, void(const Chat&));
-    MOCK_METHOD1(Delete, void(const Chat&));
-};
 
 MATCHER_P(ChatEqualement, other, "Equality matcher for type Chat") {
     return arg.GetUserIds().first == other.GetUserIds().first;
