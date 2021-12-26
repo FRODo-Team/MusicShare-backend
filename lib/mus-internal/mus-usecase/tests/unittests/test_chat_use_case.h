@@ -14,6 +14,8 @@
 #include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
+#include "mock/mock_chat_repository.h"
+#include "mock/mock_user_usecase.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -34,16 +36,6 @@ using music_share::IChatRepository;
 using music_share::Chat;
 using music_share::ChatUseCase;
 
-class MockChatRepository : public IChatRepository {
-public:
-    MOCK_METHOD1(FindByUserId, vector<Chat>(uint32_t));
-    MOCK_METHOD2(FindByIdsOfUserPair, optional<Chat>(uint32_t, uint32_t));
-    MOCK_METHOD1(Find, optional<Chat>(uint32_t));
-    MOCK_METHOD1(Insert, void(Chat&));
-    MOCK_METHOD1(Update, void(const Chat&));
-    MOCK_METHOD1(Delete, void(const Chat&));
-};
-
 MATCHER_P(ChatEqualement, other, "Equality matcher for type Chat") {
     return arg.GetUserIds().first == other.GetUserIds().first;
 }
@@ -52,7 +44,8 @@ class TestChatUseCase : public ::testing::Test {
 protected:
     void SetUp() {
         chat_rep = make_shared<MockChatRepository>();
-        chat_usecase = make_shared<ChatUseCase>(*chat_rep);
+        user_usecase = make_shared<MockUserUseCase>();
+        chat_usecase = make_shared<ChatUseCase>(*chat_rep, *user_usecase);
         chat = make_shared<Chat>(1, 2, 1);
         chat_request = make_shared<ChatRequestDTO>(2);
     }
@@ -60,6 +53,7 @@ protected:
     void TearDown() { }
 
     shared_ptr<ChatUseCase> chat_usecase;
+    shared_ptr<MockUserUseCase> user_usecase;
     shared_ptr<MockChatRepository> chat_rep;
     shared_ptr<Chat> chat;
     shared_ptr<ChatRequestDTO> chat_request;
@@ -97,13 +91,23 @@ TEST_F(TestChatUseCase, CreateExistChat) {
 }
 
 TEST_F(TestChatUseCase, GetByIdOfOneUserSuccess) {
-    ChatResponseDTO chats_response_expected(1, 1, 2);
+    ChatResponseDTO chats_response_expected(1, 1,
+                                            2,
+                                            make_pair("user1", "user2"));
 
     vector<Chat> chats;
     chats.push_back(*chat);
 
     EXPECT_CALL(*chat_rep, FindByUserId(1))
             .WillOnce(Return(chats));
+    EXPECT_CALL(*user_usecase, GetById(1))
+            .WillOnce(Return(UserResponseDTO(1,
+                                             "user",
+                                             "user1")));
+    EXPECT_CALL(*user_usecase, GetById(2))
+            .WillOnce(Return(UserResponseDTO(2,
+                                             "user",
+                                             "user2")));
 
     vector<ChatResponseDTO> chats_response = chat_usecase->GetByIdOfOneUser(1);
 
@@ -138,10 +142,20 @@ TEST_F(TestChatUseCase, GetByIdOfOneUserNullPointer) {
 }
 
 TEST_F(TestChatUseCase, GetByIdOfTwoUserSuccess) {
-    ChatResponseDTO chats_response_expected(1, 1, 2);
+    ChatResponseDTO chats_response_expected(1, 1,
+                                            2,
+                                            make_pair("user1", "user2"));
 
     EXPECT_CALL(*chat_rep, FindByIdsOfUserPair(1, 2))
             .WillOnce(Return(*chat));
+    EXPECT_CALL(*user_usecase, GetById(1))
+            .WillOnce(Return(UserResponseDTO(1,
+                                             "user",
+                                             "user1")));
+    EXPECT_CALL(*user_usecase, GetById(2))
+            .WillOnce(Return(UserResponseDTO(2,
+                                             "user",
+                                             "user2")));
 
     ChatResponseDTO chats_response = chat_usecase->GetByIdOfTwoUser(1, 2);
 

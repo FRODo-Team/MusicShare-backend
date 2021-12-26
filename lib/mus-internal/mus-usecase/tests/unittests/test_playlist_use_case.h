@@ -16,6 +16,8 @@
 #include "mus-usecase/exception/exist_exception.h"
 #include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
+#include "mock/mock_playlist_repository.h"
+#include "mock/mock_song_usecase.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -37,25 +39,6 @@ using music_share::IPlaylistRepository;
 using music_share::ISongUseCase;
 using music_share::Playlist;
 using music_share::PlaylistUseCase;
-
-class MockSongUseCase : public ISongUseCase {
-public:
-    MOCK_CONST_METHOD1(GetById, SongResponseDTO(uint32_t));
-    MOCK_CONST_METHOD2(GetByArtistAndTitle,
-                       vector<SongResponseDTO>(const optional<string>,
-                                               const optional<string>));
-};
-
-class MockPlaylistRepository : public IPlaylistRepository {
-public:
-    MOCK_METHOD1(FindByTitle, vector<Playlist>(const string&));
-    MOCK_METHOD1(FindByCreatorId, vector<Playlist>(uint32_t));
-    MOCK_METHOD1(FindByUserId, vector<Playlist>(uint32_t));
-    MOCK_METHOD1(Find, optional<Playlist>(uint32_t));
-    MOCK_METHOD1(Insert, void(Playlist&));
-    MOCK_METHOD1(Update, void(const Playlist&));
-    MOCK_METHOD1(Delete, void(const Playlist&));
-};
 
 MATCHER_P(PlaylistEqualement, other, "Equality matcher for type Playlist") {
     return arg.GetTitle() == other.GetTitle();
