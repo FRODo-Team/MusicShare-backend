@@ -57,6 +57,7 @@ protected:
         chat_message = make_shared<ChatMessage>(1, "datetime",
                                                 "message", 1, 1);
         message_request = make_shared<MessageRequestDTO>("message");
+        chat = make_shared<Chat>(make_pair(1, 2), 1);
     }
 
     void TearDown() { }
@@ -66,11 +67,14 @@ protected:
     shared_ptr<MockChatRepository> chat_rep;
     shared_ptr<ChatMessage> chat_message;
     shared_ptr<MessageRequestDTO> message_request;
+    shared_ptr<Chat> chat;
 };
 
 TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
     uint32_t id_expected = 1;
 
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
                 chat_message_out = *this->chat_message;
@@ -84,6 +88,8 @@ TEST_F(TestChatMessageUseCase, SendMessageSuccess) {
 TEST_F(TestChatMessageUseCase, SendMessageEmptyDate) {
     uint32_t id_expected = 1;
 
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .WillOnce(Invoke([this](ChatMessage& chat_message_out) {
                 chat_message_out = *this->chat_message;
@@ -95,6 +101,8 @@ TEST_F(TestChatMessageUseCase, SendMessageEmptyDate) {
 }
 
 TEST_F(TestChatMessageUseCase, SendMessageException) {
+    EXPECT_CALL(*chat_rep, Find(1))
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, Insert(ChatMessageEqualement(*chat_message)))
             .Times(AtLeast(1));
 
@@ -109,12 +117,11 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesSuccess) {
                                                  "datetime");
     vector<ChatMessage> messages;
     messages.push_back(*chat_message);
-    Chat chat(make_pair(1, 2), 1);
 
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
     EXPECT_CALL(*chat_rep, Find(1))
-            .WillOnce(Return(chat));
+            .WillOnce(Return(*chat));
 
     vector<MessageResponseDTO> message_response = chat_message_usecase->GetUserMessages(1,
                                                                                         1);
@@ -128,12 +135,11 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesSuccess) {
 
 TEST_F(TestChatMessageUseCase, GetUserMessagesInvalidData) {
     vector<ChatMessage> messages;
-    Chat chat(make_pair(1, 2), 1);
 
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
     EXPECT_CALL(*chat_rep, Find(1))
-            .WillOnce(Return(chat));
+            .WillOnce(Return(*chat));
 
     vector<MessageResponseDTO> messages_response = chat_message_usecase->GetUserMessages(1,
                                                                                          1);
@@ -146,10 +152,9 @@ TEST_F(TestChatMessageUseCase, GetUserMessagesNullPointer) {
     messages.emplace_back(1, "datetime",
                           "message", 1,
                           nullopt);
-    Chat chat(make_pair(1, 2), 1);
 
     EXPECT_CALL(*chat_rep, Find(1))
-            .WillOnce(Return(chat));
+            .WillOnce(Return(*chat));
     EXPECT_CALL(*chat_message_rep, FindByChatId(1))
             .WillOnce(Return(messages));
 
