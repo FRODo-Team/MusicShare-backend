@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "mus-iusecase/ichat_message_use_case.h"
+#include "mus-iusecase/iplaylist_use_case.h"
 #include "mus-irepo/ichat_message_repository.h"
 #include "mus-irepo/ichat_repository.h"
 
@@ -17,7 +18,8 @@ namespace music_share {
         ChatMessageUseCase() = delete;
 
         ChatMessageUseCase(IChatMessageRepository& chat_message_rep,
-                           IChatRepository& chat_rep);
+                           IChatRepository& chat_rep,
+                           IPlaylistUseCase& playlist_usecase);
 
         ChatMessageUseCase(const ChatMessageUseCase& chat_message_use_case);
 
@@ -37,9 +39,11 @@ namespace music_share {
 
     private:
         std::optional<bool> CheckAccess(uint32_t chat_id, uint32_t user_id) const;
+        std::optional<PlaylistResponseDTO> GetPlaylist(std::optional<uint32_t> playlist_id) const;
 
         IChatMessageRepository& m_chat_message_rep;
         IChatRepository& m_chat_rep;
+        IPlaylistUseCase& m_playlist_usecase;
     };
 
 }  // namespace music_share
