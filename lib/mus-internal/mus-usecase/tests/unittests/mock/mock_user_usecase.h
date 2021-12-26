@@ -1,5 +1,5 @@
-#ifndef MUS_MOCK_USER_USECASE_H
-#define MUS_MOCK_USER_USECASE_H
+#ifndef MUS_INTERNAL_MOCK_MOCK_USER_USECASE_H
+#define MUS_INTERNAL_MOCK_MOCK_USER_USECASE_H
 
 #include <gmock/gmock.h>
 #include <optional>
@@ -26,4 +26,4 @@ public:
     MOCK_CONST_METHOD1(GetById, UserResponseDTO(uint32_t));
 };
 
-#endif //MUS_MOCK_USER_USECASE_H
+#endif  // MUS_INTERNAL_MOCK_MOCK_USER_USECASE_H
