@@ -6,7 +6,6 @@
 
 #include "mus-usecase/exception/access_exception.h"
 #include "mus-usecase/exception/create_exception.h"
-#include "mus-usecase/exception/invalid_data_exception.h"
 #include "mus-usecase/exception/null_pointer_exception.h"
 
 using std::ctime;
@@ -21,17 +20,21 @@ using std::pair;
 namespace music_share {
 
     ChatMessageUseCase::ChatMessageUseCase(IChatMessageRepository& chat_message_rep,
-                                           IChatRepository& chat_rep)
+                                           IChatRepository& chat_rep,
+                                           IPlaylistUseCase& playlist_usecase)
                                             : m_chat_message_rep(chat_message_rep),
-                                            m_chat_rep(chat_rep) { }
+                                            m_chat_rep(chat_rep),
+                                            m_playlist_usecase(playlist_usecase) { }
 
     ChatMessageUseCase::ChatMessageUseCase(const ChatMessageUseCase& chat_message_use_case)
                                             : m_chat_message_rep(chat_message_use_case.m_chat_message_rep),
-                                              m_chat_rep(chat_message_use_case.m_chat_rep){ }
+                                              m_chat_rep(chat_message_use_case.m_chat_rep),
+                                              m_playlist_usecase(chat_message_use_case.m_playlist_usecase) { }
 
     ChatMessageUseCase& ChatMessageUseCase::operator=(const ChatMessageUseCase& chat_message_use_case) {
         m_chat_message_rep = chat_message_use_case.m_chat_message_rep;
         m_chat_rep = chat_message_use_case.m_chat_rep;
+        m_playlist_usecase = chat_message_use_case.m_playlist_usecase;
         return *this;
     }
 
@@ -83,12 +86,13 @@ namespace music_share {
             if (!message.GetId()) {
                 throw NullPointerException();
             }
+            optional<PlaylistResponseDTO> playlist_dto = GetPlaylist(message.GetPlaylistId());
             messages_dto.emplace_back(*message.GetId(),
                                       message.GetChatId(),
                                       message.GetSenderId(),
                                       message.GetContent(),
                                       message.GetDatetime(),
-                                      message.GetPlaylistId());
+                                      playlist_dto);
         }
 
         return messages_dto;
@@ -117,12 +121,13 @@ namespace music_share {
             if (!message.GetId()) {
                 throw NullPointerException();
             }
+            optional<PlaylistResponseDTO> playlist_dto = GetPlaylist(message.GetPlaylistId());
             messages_dto.emplace_back(*message.GetId(),
                                       message.GetChatId(),
                                       message.GetSenderId(),
                                       message.GetContent(),
                                       message.GetDatetime(),
-                                      message.GetPlaylistId());
+                                      playlist_dto);
         }
 
         return messages_dto;
@@ -141,6 +146,14 @@ namespace music_share {
         }
 
         return true;
+    }
+
+    optional<PlaylistResponseDTO> ChatMessageUseCase::GetPlaylist(optional<uint32_t> playlist_id) const {
+        if (!playlist_id) {
+            return nullopt;
+        }
+
+        return m_playlist_usecase.GetById(*playlist_id);
     }
 
 }  // namespace music_share

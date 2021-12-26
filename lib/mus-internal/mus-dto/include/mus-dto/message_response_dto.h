@@ -2,6 +2,7 @@
 #define MUS_INTERNAL_MUS_DTO_MESSAGE_RESPONSE_DTO_H_
 
 #include "reflectable/reflectable.h"
+#include "mus-dto/playlist_response_dto.h"
 
 #include <tuple>
 #include <cstdint>
@@ -13,10 +14,10 @@ struct MessageResponseDTO {
                        uint32_t sender_id_,
                        const std::string& content_,
                        const std::string& datetime_,
-                       std::optional<uint32_t> playlist_id_ = {})
+                       std::optional<PlaylistResponseDTO> playlist_ = {})
                        : id(id_), chat_id(chat_id_), sender_id(sender_id_),
                        content(content_), datetime(datetime_),
-                       playlist_id(playlist_id_)
+                         playlist(playlist_)
                        {}
 
     uint32_t id;
@@ -24,7 +25,7 @@ struct MessageResponseDTO {
     uint32_t sender_id;
     std::string content;
     std::string datetime;
-    std::optional<uint32_t> playlist_id;
+    std::optional<PlaylistResponseDTO> playlist;
 
     constexpr static auto properties = std::tuple(
         music_share::reflectable::Property(&MessageResponseDTO::id, "id"),
@@ -32,7 +33,7 @@ struct MessageResponseDTO {
         music_share::reflectable::Property(&MessageResponseDTO::sender_id, "senderId"),
         music_share::reflectable::Property(&MessageResponseDTO::content, "content"),
         music_share::reflectable::Property(&MessageResponseDTO::datetime, "datetime"),
-        music_share::reflectable::Property(&MessageResponseDTO::playlist_id, "playlistId")
+        music_share::reflectable::Property(&MessageResponseDTO::playlist, "playlist")
     );
 };
 

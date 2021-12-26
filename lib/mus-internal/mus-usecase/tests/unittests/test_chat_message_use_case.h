@@ -19,6 +19,7 @@
 #include "matcher/nullopt_matcher.h"
 #include "mock/mock_chat_repository.h"
 #include "mock/mock_chat_message_repository.h"
+#include "mock/mock_playlist_usecase.h"
 
 using ::testing::AtLeast;
 using testing::Invoke;
@@ -51,9 +52,11 @@ class TestChatMessageUseCase : public ::testing::Test {
 protected:
     void SetUp() {
         chat_message_rep = make_shared<MockChatMessageRepository>();
+        playlist_usecase = make_shared<MockPlaylistUseCase>();
         chat_rep = make_shared<MockChatRepository>();
         chat_message_usecase = make_shared<ChatMessageUseCase>(*chat_message_rep,
-                                                               *chat_rep);
+                                                               *chat_rep,
+                                                               *playlist_usecase);
         chat_message = make_shared<ChatMessage>(1, "datetime",
                                                 "message", 1, 1);
         message_request = make_shared<MessageRequestDTO>("message");
@@ -64,6 +67,7 @@ protected:
 
     shared_ptr<ChatMessageUseCase> chat_message_usecase;
     shared_ptr<MockChatMessageRepository> chat_message_rep;
+    shared_ptr<MockPlaylistUseCase> playlist_usecase;
     shared_ptr<MockChatRepository> chat_rep;
     shared_ptr<ChatMessage> chat_message;
     shared_ptr<MessageRequestDTO> message_request;
