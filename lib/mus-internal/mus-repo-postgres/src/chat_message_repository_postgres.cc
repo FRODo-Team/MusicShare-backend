@@ -100,7 +100,9 @@ ChatMessage ChatMessageRepositoryPostgres::SqlMapper::ToDomainObject(
         } else if (field.name() == std::string{ "chat_id" }) {
             chat_id = field.as<uint32_t>();
         } else if (field.name() == std::string{ "playlist_id" }) {
-            playlist_id = field.as<uint32_t>();
+            if (!field.is_null()) {
+                playlist_id = field.as<uint32_t>();
+            }
         }
     }
 

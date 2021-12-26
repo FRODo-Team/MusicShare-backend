@@ -101,11 +101,17 @@ Song SongRepositoryPostgres::SqlMapper::ToDomainObject(const pqxx::row& row) {
         } else if (field.name() == std::string{ "url" }) {
             url = field.as<std::string>();
         } else if (field.name() == std::string{ "year" }) {
-            year = field.as<uint32_t>();
+            if (!field.is_null()) {
+                year = field.as<uint32_t>();
+            }
         } else if (field.name() == std::string{ "album" }) {
-            album = field.as<std::string>();
+            if (!field.is_null()) {
+                album = field.as<std::string>();
+            }
         } else if (field.name() == std::string{ "genre" }) {
-            genre = field.as<std::string>();
+            if (!field.is_null()) {
+                genre = field.as<std::string>();
+            }
         } else if (field.name() == std::string{ "id" }) {
             id = field.as<uint32_t>();
         }
