@@ -50,8 +50,10 @@ int main(void) {
     UserUseCase user_usecase(user_repo);
     SongUseCase song_usecase(song_repo);
     PlaylistUseCase playlist_usecase(playlist_repo, song_usecase);
-    ChatUseCase chat_usecase(chat_repo);
-    ChatMessageUseCase chat_message_usecase(chat_message_repo);
+    ChatUseCase chat_usecase(chat_repo, user_usecase);
+    ChatMessageUseCase chat_message_usecase(chat_message_repo,
+                                            chat_repo,
+                                            playlist_usecase);
 
     delivery::UserHandler user_handler(user_usecase, auth_usecase);
     delivery::SongHandler song_handler(song_usecase);
