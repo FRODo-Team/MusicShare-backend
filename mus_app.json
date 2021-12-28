@@ -1,0 +1,11 @@
+{
+    "host": "localhost",
+    "port": 8000,
+    "db": {
+        "host": "localhost",
+        "port": 5432,
+        "user": "program",
+        "password": "test",
+        "database": "mus_test"
+    }
+}
