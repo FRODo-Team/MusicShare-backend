@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "http/server/middleware/internalservererror.h"
 
 #include <exception>

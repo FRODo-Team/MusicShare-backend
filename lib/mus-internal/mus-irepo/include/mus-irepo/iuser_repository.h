@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_IREPO_IUSER_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IUSER_REPOSITORY_H_
 
@@ -10,6 +11,7 @@ namespace music_share {
 
 class IUserRepository : public IRepository<User> {
 public:
+    virtual ~IUserRepository() = default;
     virtual std::vector<User> FetchAll(std::optional<uint32_t> limit = { }) = 0;
     virtual std::vector<User> FindByNickname(const std::string& nickname) = 0;
     virtual std::optional<User> FindByUsername(const std::string& username) = 0;

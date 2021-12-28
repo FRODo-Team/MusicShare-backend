@@ -1,5 +1,6 @@
-#ifndef MUS_INTERNAL_MUS_DTO_PLAYLIST_SONG_REQUEST_DTO_H_
-#define MUS_INTERNAL_MUS_DTO_PLAYLIST_SONG_REQUEST_DTO_H_
+// Oweners: Darya Vlaskina, ML-13
+#ifndef MUS_INTERNAL_MUS_DTO_SONG_REQUEST_DTO_H_
+#define MUS_INTERNAL_MUS_DTO_SONG_REQUEST_DTO_H_
 
 #include "reflectable/reflectable.h"
 

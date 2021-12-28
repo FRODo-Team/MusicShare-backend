@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include "mus-models/chat.h"
 
 namespace music_share {

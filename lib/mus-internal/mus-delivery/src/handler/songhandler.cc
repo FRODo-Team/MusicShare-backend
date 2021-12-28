@@ -1,7 +1,9 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "mus-delivery/handler/songhandler.h"
 
 #include <cstring>
 #include <ranges>
+#include <vector>
 
 #include "http/server/router.h"
 #include "http/common.h"
@@ -36,7 +38,17 @@ void SongHandler::Config(http::server::router::Router& router) {
                            std::back_inserter(artists),
                            [](auto it) { return it.second; });
 
-            auto body = GetByTitleOrArtist(titles, artists);
+            std::optional<std::string> title;
+            std::optional<std::string> artist;
+
+            if (!titles.empty()) {
+                title = titles[0];
+            }
+            if (!artists.empty()) {
+                artist = artists[0];
+            }
+
+            auto body = GetByTitleOrArtist(title, artist);
             http::common::Response response;
             response.set(http::common::header::content_type,
                          "application/json");
@@ -69,9 +81,9 @@ SongHandler::GetById(uint32_t id) {
 }
 
 std::vector<SongResponseDTO>
-SongHandler::GetByTitleOrArtist(const std::vector<std::string>& titles,
-                                const std::vector<std::string>& artists) {
-    return m_usecase.GetByArtist(artists[0]);
+SongHandler::GetByTitleOrArtist(const std::optional<std::string>& title,
+                                const std::optional<std::string>& artist) {
+    return m_usecase.GetByArtistAndTitle(artist, title);
     //return {SongResponseDTO(1, "", "", "")};
 }
 

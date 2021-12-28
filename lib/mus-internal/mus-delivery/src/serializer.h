@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #ifndef MUS_MUSINTERNAL_MUSDELIVERY_SERIALIZER_H_
 #define MUS_MUSINTERNAL_MUSDELIVERY_SERIALIZER_H_
 
@@ -40,6 +41,25 @@ struct adl_serializer<T> {
         );
 
         return music_share::reflectable::construct_from_tuple<T>(initializer);
+    }
+};
+
+template <typename T>
+struct adl_serializer<std::optional<T>> {
+    static void to_json(json& j, const std::optional<T>& opt) {
+        if (opt.has_value()) {
+            j = *opt;
+        } else {
+            j = nullptr;
+        }
+    }
+
+    static void from_json(const json& j, std::optional<T>& opt) {
+        if (j.is_null()) {
+            opt = std::nullopt;
+        } else {
+            opt = j.get<T>();
+        }
     }
 };
 

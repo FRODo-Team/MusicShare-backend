@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include <cassert>
 #include "mus-repo-postgres/user_repository_postgres.h"
 

@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_IREPO_ICHAT_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_ICHAT_REPOSITORY_H_
 
@@ -10,6 +11,7 @@ namespace music_share {
 
 class IChatRepository : public IRepository<Chat> {
 public:
+    virtual ~IChatRepository() = default;
     /* Возвращает список всех чатов конкретного пользователя. */
     virtual std::vector<Chat> FindByUserId(uint32_t user_id) = 0;
 

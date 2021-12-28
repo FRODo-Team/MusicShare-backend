@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_REPO_POSTGRES_DB_UTILS_H_
 #define MUS_INTERNAL_MUS_REPO_POSTGRES_DB_UTILS_H_
 

@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include <gtest/gtest.h>
 
 int main(int argc, char** argv) {

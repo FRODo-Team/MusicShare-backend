@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #ifndef MUS_CONFIGPARSER_CONFIG_H_
 #define MUS_CONFIGPARSER_CONFIG_H_
 

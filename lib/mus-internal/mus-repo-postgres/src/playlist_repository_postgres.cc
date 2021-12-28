@@ -1,4 +1,8 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include "mus-repo-postgres/playlist_repository_postgres.h"
+
+#include <set>
+#include <algorithm>
 
 namespace music_share {
 
@@ -55,14 +59,48 @@ void PlaylistRepositoryPostgres::Update(const Playlist& obj) {
     const auto& song_ids = obj.GetSongIds();
     const std::string playlist_id = SqlUtils::ValueToSqlFormat(obj.GetId().value());
 
-    // TODO (sunz): Rewrite in single query.
-    for (size_t i = 0; i < song_ids.size(); ++i) {
+    std::string query_songs =
+            "SELECT song_id FROM " + std::string(kPlaylistHasSongTableName) + " "
+            "WHERE playlist_id=" + playlist_id;
+
+    auto response = m_crud_repository.ExecuteQuery(query_songs);
+    std::set<uint32_t> stored_songs;
+    for (const auto& row: response) {
+        stored_songs.insert(row[0].as<uint32_t>());
+    }
+
+    std::set<uint32_t> actual_songs;
+    for (uint32_t id: song_ids) {
+        actual_songs.insert(id);
+    }
+
+    std::set<uint32_t> deleted_songs;
+    std::set<uint32_t> inserted_songs;
+
+    std::set_difference(
+            stored_songs.begin(), stored_songs.end(),
+            actual_songs.begin(), actual_songs.end(),
+            std::inserter(deleted_songs, deleted_songs.end()));
+    std::set_difference(
+            actual_songs.begin(), actual_songs.end(),
+            stored_songs.begin(), stored_songs.end(),
+            std::inserter(inserted_songs, inserted_songs.end()));
+
+    for (uint32_t song_id: inserted_songs) {
         std::string query =
                 "INSERT INTO " + std::string(kPlaylistHasSongTableName) +
                 "(playlist_id, song_id)" +
                 "VALUES(" + playlist_id  + ", " +
-                SqlUtils::ValueToSqlFormat(song_ids[i]) + ")" + " " +
-                "ON CONFLICT DO NOTHING";
+                SqlUtils::ValueToSqlFormat(song_id) + ")";
+        m_crud_repository.ExecuteQuery(query);
+    }
+
+    for (uint32_t song_id: deleted_songs) {
+        std::string query =
+                "DELETE FROM " + std::string(kPlaylistHasSongTableName) + " "
+                "WHERE playlist_id=" + playlist_id + " "
+                "AND song_id=" + SqlUtils::ValueToSqlFormat(song_id);
+        m_crud_repository.ExecuteQuery(query);
     }
 }
 
@@ -120,7 +158,7 @@ std::vector<Playlist> PlaylistRepositoryPostgres::FindByCreatorId(
 std::vector<Playlist> PlaylistRepositoryPostgres::FindByUserId(
         uint32_t user_id)
 {
-    std::string query =
+    /*std::string query =
             "SELECT playlist_id FROM " + std::string(kUserHasPlaylistTableName) + " " +
             "WHERE user_id=" + SqlUtils::ValueToSqlFormat(user_id);
 
@@ -129,6 +167,18 @@ std::vector<Playlist> PlaylistRepositoryPostgres::FindByUserId(
     std::vector<Playlist> result;
     for (const auto& row: response) {
         assert(row[0].name() == std::string{ "playlist_id" });
+        auto playlist_id = row[0].as<uint32_t>();
+        std::optional<Playlist> playlist = Find(playlist_id);
+        assert(playlist.has_value());
+        result.push_back(*playlist);
+    }*/
+
+    std::string query = "SELECT id FROM " + m_table_name +
+            " WHERE creator_id=" + SqlUtils::ValueToSqlFormat(user_id);
+    pqxx::result response = m_crud_repository.ExecuteQuery(query);
+    std::vector<Playlist> result;
+    for (const auto& row: response) {
+        assert(row[0].name() == std::string{ "id" });
         auto playlist_id = row[0].as<uint32_t>();
         std::optional<Playlist> playlist = Find(playlist_id);
         assert(playlist.has_value());

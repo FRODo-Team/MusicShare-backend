@@ -11,9 +11,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 add_subdirectory(src)
 add_subdirectory(examples)
 
-if(WITH_TESTS)
-    add_subdirectory(tests)
-endif()
+#if(WITH_TESTS)
+    #add_subdirectory(tests)
+#endif()
 
 add_library(http SHARED ${SOURCES})
 

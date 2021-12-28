@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include "mus-models/playlist.h"
 
 namespace music_share {

@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IREPOSITORY_H_
 
@@ -8,6 +9,7 @@ namespace music_share {
 template<class T>
 class IRepository {
 public:
+    virtual ~IRepository() = default;
     virtual std::optional<T> Find(uint32_t id) = 0;
 
     /* В процессе вставки объекта-сущности в базу данных, предполагается, что

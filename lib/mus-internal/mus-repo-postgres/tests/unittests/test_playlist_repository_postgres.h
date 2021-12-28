@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #include <gtest/gtest.h>
 #include <memory>
 #include <fstream>

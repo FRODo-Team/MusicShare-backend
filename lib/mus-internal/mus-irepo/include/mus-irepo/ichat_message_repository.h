@@ -1,3 +1,4 @@
+// Owners: Rostislav Vivcharuk, WEB-12
 #ifndef MUS_INTERNAL_MUS_IREPO_IMESSAGE_REPOSITORY_H_
 #define MUS_INTERNAL_MUS_IREPO_IMESSAGE_REPOSITORY_H_
 
@@ -10,6 +11,7 @@ namespace music_share {
 
 class IChatMessageRepository : public IRepository<ChatMessage> {
 public:
+    virtual ~IChatMessageRepository() = default;
     /* Возвращает список всех сообщений, отправленных обоими пользователями
      * в чате-диалоге друг с другом.
      */

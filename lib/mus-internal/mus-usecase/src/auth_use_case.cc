@@ -1,3 +1,4 @@
+// Oweners: Darya Vlaskina, ML-13
 #include "mus-usecase/auth_use_case.h"
 #include "mus-utility/random.h"
 #include "mus-utility/crypto.h"

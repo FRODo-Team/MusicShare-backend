@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #include "config-parser/config.h"
 
 #include <algorithm>

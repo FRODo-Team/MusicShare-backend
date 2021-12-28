@@ -1,3 +1,4 @@
+// Oweners: Faris Nabiev, WEB-12
 #ifndef MUS_REFLECATABLE_AUXILIARY_H_
 #define MUS_REFLECATABLE_AUXILIARY_H_
 

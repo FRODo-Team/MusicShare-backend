@@ -1,3 +1,4 @@
+// Owners: Faris Nabiev, WEB-12
 #ifndef MUS_HTTP_COMMON_QUERYSTRING_H_
 #define MUS_HTTP_COMMON_QUERYSTRING_H_
 
